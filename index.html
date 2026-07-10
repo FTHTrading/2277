@@ -1,269 +1,851 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Funding Portal - 2277 N Peachtree Way</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Google Fonts: Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Invoice & Funding Proposal Studio</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="dark-mode">
-  <div class="app-container">
-    
-    <!-- Top Header -->
-    <header class="main-header">
-      <div class="header-logo">
-        <span class="logo-icon"><i data-lucide="building-2"></i></span>
-        <div class="logo-text">
-          <h1>Y3K Real Estate Connections</h1>
-          <p>Sovereign RWA Tokenization & Settlement</p>
-        </div>
-      </div>
-      <div class="header-badge">
-        <span class="pulse-indicator"></span>
-        <span class="badge-text">Interactive Funding Portal</span>
-      </div>
-    </header>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Workspace (Controls & Editors) -->
+        <aside class="sidebar no-print">
+            <header class="sidebar-header">
+                <div class="brand">
+                    <span class="brand-icon">🏠</span>
+                    <h1 class="brand-title">Invoice Studio</h1>
+                </div>
+                <div style="font-size: 11px; color: var(--text-secondary); font-weight: 500; text-transform: uppercase;">
+                    v1.2.0
+                </div>
+            </header>
 
-    <!-- Main Dashboard Grid -->
-    <main class="dashboard-grid">
-      
-      <!-- Left Column: Summary & Overview -->
-      <section class="overview-section card">
-        <div class="card-header">
-          <i data-lucide="info" class="header-icon text-blue"></i>
-          <h2>Project Overview</h2>
-        </div>
-        <div class="property-details">
-          <div class="detail-row">
-            <span class="label">Escrow Reference</span>
-            <span class="value font-mono">REC-2277NP</span>
-          </div>
-          <div class="detail-row">
-            <span class="label">Subject Property</span>
-            <span class="value text-right">2277 N Peachtree Way, Dunwoody GA 30338</span>
-          </div>
-          <div class="detail-row">
-            <span class="label">SPV Entity</span>
-            <span class="value font-mono">Y3K Dunwoody 2277 SPV LLC</span>
-          </div>
-          <div class="detail-row">
-            <span class="label">Remodeling Firm</span>
-            <span class="value">The Real Estate Connections LLC</span>
-          </div>
-        </div>
+            <div class="sidebar-scroll">
+                <!-- Preset Invoices -->
+                <section class="section-card">
+                    <h2 class="section-title">
+                        <span>Invoice Presets</span>
+                        <span style="font-size: 10px; font-weight: normal; color: var(--text-secondary);">Select to load data</span>
+                    </h2>
+                    <div class="preset-selector">
+                        <button type="button" class="preset-btn active" data-preset="original-math">Document Total</button>
+                        <button type="button" class="preset-btn" data-preset="all-items">Full Sum</button>
+                        <button type="button" class="preset-btn" data-preset="flat-contract">Flat Base</button>
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.4;">
+                        Select <strong>Document Total</strong> to load the exact $194,707.00 layout by automatically excluding the basement mold and gutters items that cause the math discrepancy.
+                    </div>
+                </section>
 
-        <hr class="divider">
+                <!-- Property Information -->
+                <section class="section-card">
+                    <h2 class="section-title">Property Profile</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-propertyBedsBaths">Beds / Baths</label>
+                            <input type="text" id="edit-propertyBedsBaths">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-propertyYear">Year Built</label>
+                            <input type="text" id="edit-propertyYear">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-propertySize">Living Area</label>
+                            <input type="text" id="edit-propertySize">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-propertyLot">Lot Size</label>
+                            <input type="text" id="edit-propertyLot">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-propertyValuation">Current Value ($)</label>
+                            <input type="number" id="edit-propertyValuation" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-propertyARV">Estimated ARV ($)</label>
+                            <input type="number" id="edit-propertyARV" min="0">
+                        </div>
+                    </div>
+                </section>
 
-        <div class="financial-metrics">
-          <div class="metric-card">
-            <span class="metric-label">Zestimate (Pre-Remodel)</span>
-            <span class="metric-value font-mono" id="val-zestimate">$524,500</span>
-          </div>
-          <div class="metric-card">
-            <span class="metric-label">Projected ARV</span>
-            <span class="metric-value font-mono text-green" id="val-arv">$725,000</span>
-          </div>
-          <div class="metric-card highlight">
-            <span class="metric-label">Total Construction Cost</span>
-            <span class="metric-value font-mono" id="val-total-cost">$194,707</span>
-          </div>
-          <div class="metric-card">
-            <span class="metric-label">Total Energy Rebates</span>
-            <span class="metric-value font-mono text-blue" id="val-total-rebate">-$20,850</span>
-          </div>
-          <div class="metric-card">
-            <span class="metric-label">Net Construction Cost</span>
-            <span class="metric-value font-mono text-cyan" id="val-net-cost">$173,857</span>
-          </div>
-          <div class="metric-card">
-            <span class="metric-label">Est. Yearly Energy Savings</span>
-            <span class="metric-value font-mono text-yellow" id="val-yearly-saving">$1,640/yr</span>
-          </div>
-        </div>
+                <!-- Draw Schedule Config -->
+                <section class="section-card">
+                    <h2 class="section-title">Draw Schedule Percentages</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-draw1">Draw 1 (%)</label>
+                            <input type="number" id="edit-draw1" min="0" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-draw2">Draw 2 (%)</label>
+                            <input type="number" id="edit-draw2" min="0" max="100">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-draw3">Draw 3 (%)</label>
+                            <input type="number" id="edit-draw3" min="0" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-draw4">Draw 4 (%)</label>
+                            <input type="number" id="edit-draw4" min="0" max="100">
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.4; text-align: right; margin-top: 4px;">
+                        Must sum to 100%. Current sum: <strong id="draw-percentage-sum">100</strong>%
+                    </div>
+                </section>
 
-        <hr class="divider">
+                <!-- Energy Upgrades Settings -->
+                <section class="section-card">
+                    <h2 class="section-title">Energy Rebates Configuration</h2>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.3;">
+                        Configure energy efficiency rebates for State (GEFA HEAR) and Utility (Georgia Power Home Improvement).
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-rebateHVAC">Heat Pump Rebate ($)</label>
+                            <input type="number" id="edit-rebateHVAC" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-rebateElectric">Smart Panel Rebate ($)</label>
+                            <input type="number" id="edit-rebateElectric" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-rebateCrawl">Insulation Rebate ($)</label>
+                            <input type="number" id="edit-rebateCrawl" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-rebatePump">Water Heater Rebate ($)</label>
+                            <input type="number" id="edit-rebatePump" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-rebateWindows">Energy Windows Rebate ($)</label>
+                        <input type="number" id="edit-rebateWindows" min="0">
+                    </div>
+                </section>
 
-        <div class="ltv-ratios">
-          <div class="ltv-box">
-            <span class="ltv-label">Base LTV Ratio</span>
-            <div class="progress-container">
-              <div class="progress-bar bg-blue" id="bar-base-ltv" style="width: 37.1%"></div>
+                <!-- Invoice Meta Settings -->
+                <section class="section-card">
+                    <h2 class="section-title">Invoice Details</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-invoiceNo">Invoice Number</label>
+                            <input type="text" id="edit-invoiceNo">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-status">Status</label>
+                            <select id="edit-status">
+                                <option value="estimate">Estimate / Draft</option>
+                                <option value="unpaid">Unpaid</option>
+                                <option value="paid">Paid</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-projectName">Project Name</label>
+                        <input type="text" id="edit-projectName">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-poNumber">PO / Contract Reference</label>
+                        <input type="text" id="edit-poNumber">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-issueDate">Issue Date</label>
+                            <input type="date" id="edit-issueDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-dueDate">Due Date</label>
+                            <input type="date" id="edit-dueDate">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Client Details -->
+                <section class="section-card">
+                    <h2 class="section-title">Client Information</h2>
+                    <div class="form-group">
+                        <label for="edit-clientName">Client Name</label>
+                        <input type="text" id="edit-clientName">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-clientAddress">Client Address</label>
+                        <textarea id="edit-clientAddress" rows="3"></textarea>
+                    </div>
+                </section>
+
+                <!-- Line Items Manager -->
+                <section class="section-card">
+                    <h2 class="section-title">
+                        <span>Invoice Line Items</span>
+                        <span style="font-size: 11px; color: var(--accent);">Checked items count towards Total</span>
+                    </h2>
+                    <div id="editor-items-list" class="editor-items-list">
+                        <!-- Populated dynamically via app.js -->
+                    </div>
+                    <button type="button" id="add-item" class="add-item-btn">
+                        <span>+</span> Add New Line Item
+                    </button>
+                </section>
+
+                <!-- Adjustments / Financials -->
+                <section class="section-card">
+                    <h2 class="section-title">Adjustments & Payments</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-discount">Discount (%)</label>
+                            <input type="number" id="edit-discount" min="0" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-taxRate">Tax Rate (%)</label>
+                            <input type="number" id="edit-taxRate" min="0" max="100">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-amountPaid">Amount Paid ($)</label>
+                        <input type="number" id="edit-amountPaid" min="0" step="0.01">
+                    </div>
+                </section>
+
+                <!-- Sender Company Details -->
+                <section class="section-card">
+                    <h2 class="section-title">Sender Business Profile</h2>
+                    <div class="form-group">
+                        <label for="edit-senderName">Company Name</label>
+                        <input type="text" id="edit-senderName">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-senderAddress">Business Address</label>
+                        <textarea id="edit-senderAddress" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-senderPayee">Payable Remit To Address</label>
+                        <textarea id="edit-senderPayee" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-senderWebsite">Website Domain</label>
+                        <input type="text" id="edit-senderWebsite">
+                    </div>
+                </section>
+
+                <!-- Wire & Bank Instructions -->
+                <section class="section-card">
+                    <h2 class="section-title">Bank & Wire details</h2>
+                    <div class="form-group">
+                        <label for="edit-bankName">Bank Name</label>
+                        <input type="text" id="edit-bankName">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-bankBranch">Branch Address/Name</label>
+                        <input type="text" id="edit-bankBranch">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-bankPhone">Bank Phone Reference</label>
+                        <input type="text" id="edit-bankPhone">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-bankRouting">Routing Number</label>
+                            <input type="text" id="edit-bankRouting">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-bankAccount">Account Number</label>
+                            <input type="text" id="edit-bankAccount">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Terms & Conditions -->
+                <section class="section-card">
+                    <h2 class="section-title">Terms & Notes</h2>
+                    <div class="form-group">
+                        <label for="edit-terms">Invoice Notes / Legal Terms</label>
+                        <textarea id="edit-terms" rows="3"></textarea>
+                    </div>
+                </section>
             </div>
-            <span class="ltv-value font-mono text-blue" id="val-base-ltv">37.1%</span>
-          </div>
-          <div class="ltv-box">
-            <span class="ltv-label">Projected After-Repair LTV</span>
-            <div class="progress-container">
-              <div class="progress-bar bg-green" id="bar-ar-ltv" style="width: 26.8%"></div>
+
+            <!-- Action Buttons Footer -->
+            <footer class="sidebar-footer">
+                <button type="button" id="print-invoice" class="primary-btn">
+                    <span>🖨️</span> Print / Save to PDF
+                </button>
+                <div class="secondary-actions">
+                    <button type="button" id="export-json" class="secondary-btn">
+                        <span>📤</span> Export JSON
+                    </button>
+                    <label for="import-file" class="secondary-btn" style="margin: 0; cursor: pointer;">
+                        <span>📥</span> Import JSON
+                        <input type="file" id="import-file" accept=".json" style="display: none;">
+                    </label>
+                </div>
+            </footer>
+        </aside>
+
+        <!-- Preview Area Workspace -->
+        <main class="preview-container">
+            <!-- Fixed Preview Toggles -->
+            <div class="preview-controls no-print">
+                <div class="tab-switcher">
+                    <button type="button" class="tab-btn active" data-tab="invoice">Invoice Preview</button>
+                    <button type="button" class="tab-btn" data-tab="proposal">Funding Proposal</button>
+                    <button type="button" class="tab-btn" data-tab="upgrades">Energy Upgrades</button>
+                    <button type="button" class="tab-btn" data-tab="binder">Documents Binder</button>
+                </div>
+                <button type="button" id="theme-toggle" class="icon-badge-btn" title="Toggle Preview Theme">
+                    <span id="theme-icon">🌙</span>
+                </button>
             </div>
-            <span class="ltv-value font-mono text-green" id="val-ar-ltv">26.8%</span>
-          </div>
-        </div>
-      </section>
 
-      <!-- Right Column: Interactive Line Items -->
-      <section class="line-items-section card">
-        <div class="card-header justify-between">
-          <div class="flex items-center">
-            <i data-lucide="list-checks" class="header-icon text-green"></i>
-            <h2>Detailed Scope of Work & Energy Upgrades</h2>
-          </div>
-          <div class="filter-controls">
-            <button class="filter-btn active" id="btn-filter-all">All Items</button>
-            <button class="filter-btn" id="btn-filter-energy">Energy Upgrades Only</button>
-          </div>
-        </div>
-        
-        <p class="section-intro">Toggle remodeling line items below. Energy Star and Zero-Carbon upgrades qualify for federal/state rebates and utility credits, reducing net project cost.</p>
+            <!-- TAB 1: Document Sheet (Invoice View) -->
+            <article id="invoice-sheet" class="invoice-sheet">
+                <!-- Branding Header -->
+                <div class="company-brand-section">
+                    <div class="invoice-logo-container">
+                        <div class="logo-graphic"></div>
+                        <div>
+                            <div id="preview-senderName" class="logo-text-title">The Real Estate Connections LLC</div>
+                            <div class="logo-text-subtitle">Remodeling & Investment</div>
+                        </div>
+                    </div>
+                    <div id="preview-status-badge" class="invoice-status-badge status-paid">
+                        <span>✓</span> Paid
+                    </div>
+                </div>
 
-        <div class="items-table-container">
-          <table class="items-table">
-            <thead>
-              <tr>
-                <th width="40"><input type="checkbox" id="chk-toggle-all" checked></th>
-                <th>Renovation Line Item</th>
-                <th width="90">Base Cost</th>
-                <th width="100">Est. Rebates</th>
-                <th width="90">Net Cost</th>
-                <th width="90">Est. Saving</th>
-              </tr>
-            </thead>
-            <tbody id="items-tbody">
-              <!-- Dynamically populated by JS -->
-            </tbody>
-          </table>
-        </div>
-      </section>
+                <!-- Billing & Invoice Meta Details -->
+                <div class="invoice-details-grid">
+                    <div class="billing-col">
+                        <div class="billing-address-box">
+                            <div class="address-label">Bill From</div>
+                            <div id="preview-senderAddress">
+                                110 Habersham Dr, Suite 140<br>
+                                Fayetteville Ga 30314
+                            </div>
+                        </div>
+                        <div class="billing-address-box">
+                            <div class="address-label">Bill To</div>
+                            <strong id="preview-clientName">Buck Vaughan</strong>
+                            <div id="preview-clientAddress">
+                                2277 North Peachtree Way<br>
+                                Dunwoody Ga 30338
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="meta-col">
+                        <div class="meta-item">
+                            <span>Invoice No:</span>
+                            <span id="preview-invoiceNo">REC-2026-0624</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>Project Name:</span>
+                            <span id="preview-projectName">2277 North Peachtree Way</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>PO / Contract Ref:</span>
+                            <span id="preview-poNumber">REC-2277NP</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>Issue Date:</span>
+                            <span id="preview-issueDate">06/24/2026</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>Due Date:</span>
+                            <span id="preview-dueDate">07/24/2026</span>
+                        </div>
+                    </div>
+                </div>
 
-    </main>
+                <!-- Items Table -->
+                <table class="invoice-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px; text-align: center;">#</th>
+                            <th>Description</th>
+                            <th class="col-qty">Qty</th>
+                            <th class="col-price">Unit Price</th>
+                            <th class="col-total">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="preview-table-body">
+                        <!-- Populated dynamically via app.js -->
+                    </tbody>
+                </table>
 
-    <!-- Bottom Interactive Grid: Draw Schedule & Wiring -->
-    <div class="bottom-grid">
-      
-      <!-- Draw Schedule -->
-      <section class="draw-schedule-section card">
-        <div class="card-header justify-between">
-          <div class="flex items-center">
-            <i data-lucide="calendar-range" class="header-icon text-cyan"></i>
-            <h2>Capital Draw Schedule</h2>
-          </div>
-          <button class="btn-secondary" id="btn-reset-draws"><i data-lucide="rotate-ccw"></i> Reset Defaults</button>
-        </div>
-        <p class="section-intro">Adjust milestones to match field inspections. Total percentage must equal 100%.</p>
+                <!-- Totals and Payment Remittance Info -->
+                <div class="totals-section">
+                    <div class="notes-terms-box">
+                        <div class="notes-terms-title">Payment & Terms</div>
+                        <div id="preview-terms-text">All invoices are payable when received. Thank you for your business!</div>
+                        
+                        <div class="banking-instructions">
+                            <div class="notes-terms-title" style="margin-bottom: 6px; font-size: 10px;">Wire / Bank Routing Details</div>
+                            <div class="banking-row">Make payments payable to: <strong id="preview-senderPayee">Real Estate Connections LLC</strong></div>
+                            <div class="banking-row">Bank Name: <strong id="preview-bankName">Chase Bank</strong></div>
+                            <div class="banking-row">Branch: <strong id="preview-bankBranch">Summit Point Branch, Fayetteville Ga</strong></div>
+                            <div class="banking-row">Bank Phone: <strong id="preview-bankPhone">770-460-2914</strong></div>
+                            <div class="banking-row">Routing #: <strong id="preview-bankRouting">502101025</strong> | Account #: <strong id="preview-bankAccount">932922302</strong></div>
+                        </div>
+                    </div>
 
-        <div class="draw-schedule-container" id="draws-container">
-          <!-- Dynamically populated by JS -->
-        </div>
+                    <div class="totals-box">
+                        <div class="totals-row">
+                            <span>Subtotal:</span>
+                            <span id="preview-subtotal">$0.00</span>
+                        </div>
+                        <div id="preview-discount-row" class="totals-row" style="display: none;">
+                            <span id="preview-discount-label">Discount (0%):</span>
+                            <span id="preview-discount">-$0.00</span>
+                        </div>
+                        <div id="preview-tax-row" class="totals-row" style="display: none;">
+                            <span id="preview-tax-label">Tax (0%):</span>
+                            <span id="preview-tax">$0.00</span>
+                        </div>
+                        <div class="totals-row grand-total">
+                            <span>Total Due:</span>
+                            <span id="preview-total">$0.00</span>
+                        </div>
+                        <div class="totals-row">
+                            <span>Amount Paid:</span>
+                            <span id="preview-paid">$0.00</span>
+                        </div>
+                        <div id="preview-balance-row" class="totals-row">
+                            <span>Balance Due:</span>
+                            <span id="preview-balance">$0.00</span>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="draw-summary-bar" id="draw-summary-bar">
-          <span class="total-pct">Total Allocation: <span id="draw-total-pct-val" class="text-cyan">100%</span></span>
-          <span class="total-amt">Total Amount: <span id="draw-total-amt-val" class="font-mono text-white">$194,707.00</span></span>
-        </div>
-        <div class="error-banner hidden" id="draw-error-banner">
-          <i data-lucide="alert-triangle"></i>
-          <span>Warning: The total draw allocation must equal exactly 100% (currently <span id="draw-current-total-pct">0%</span>).</span>
-        </div>
-      </section>
+                <!-- Footer Details -->
+                <footer class="invoice-footer">
+                    <div>The Real Estate Connections LLC &copy; 2026</div>
+                    <div>Website: <a id="preview-senderWebsite" class="footer-link" target="_blank">TheRealEstateConnection.com</a></div>
+                </footer>
+            </article>
 
-      <!-- Escrow, Action Panel, & Documents -->
-      <section class="action-panel card">
-        <div class="card-header">
-          <i data-lucide="shield-check" class="header-icon text-yellow"></i>
-          <h2>Escrow & Settlement Center</h2>
-        </div>
-        
-        <div class="wiring-instructions">
-          <div class="wiring-header">
-            <h3>Chase Bank Escrow Account</h3>
-            <span class="badge-yellow">Verified Payee</span>
-          </div>
-          <div class="wiring-grid">
-            <div>
-              <span class="wiring-label">Payee</span>
-              <span class="wiring-value">Real Estate Connections LLC</span>
-            </div>
-            <div>
-              <span class="wiring-label">Bank Branch</span>
-              <span class="wiring-value">Summit Point, Fayetteville GA</span>
-            </div>
-            <div>
-              <span class="wiring-label">Routing Number</span>
-              <span class="wiring-value font-mono text-white">#502101025</span>
-            </div>
-            <div>
-              <span class="wiring-label">Account Number</span>
-              <span class="wiring-value font-mono text-white">#932922302</span>
-            </div>
-          </div>
-        </div>
+            <!-- TAB 2: Document Sheet (Funding Proposal View) -->
+            <article id="proposal-sheet" class="invoice-sheet" style="display: none;">
+                <!-- Branding Header -->
+                <div class="company-brand-section">
+                    <div class="invoice-logo-container">
+                        <div class="logo-graphic"></div>
+                        <div>
+                            <div class="logo-text-title">The Real Estate Connections LLC</div>
+                            <div class="logo-text-subtitle">Remodeling & Investment</div>
+                        </div>
+                    </div>
+                    <div class="invoice-status-badge status-estimate" style="font-size: 11px;">
+                        <span>🏛️</span> Funding proposal
+                    </div>
+                </div>
 
-        <hr class="divider">
+                <!-- Title Header -->
+                <div style="border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 24px;">
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: var(--invoice-text); text-transform: uppercase; letter-spacing: 0.5px;">
+                        Remodeling Capital Draw & Loan Proposal
+                    </h2>
+                    <div style="font-size: 12px; color: var(--invoice-text-muted); margin-top: 4px;">
+                        Prepared for Lenders, Escrow Officers, and Project Funders
+                    </div>
+                </div>
 
-        <div class="document-section">
-          <h3>Project Verification & Legal Binder</h3>
-          <div class="document-list">
-            <a href="Detailed_Remodeling_Invoice.docx" class="doc-link" download>
-              <i data-lucide="file-text" class="text-blue"></i>
-              <div class="doc-info">
-                <span class="doc-name">Detailed_Remodeling_Invoice.docx</span>
-                <span class="doc-meta">Word Document • 49 KB</span>
-              </div>
-              <span class="download-icon"><i data-lucide="download"></i></span>
-            </a>
-            <a href="Draft_Operating_Agreement.docx" class="doc-link" download>
-              <i data-lucide="file-text" class="text-green"></i>
-              <div class="doc-info">
-                <span class="doc-name">Draft_Operating_Agreement.docx</span>
-                <span class="doc-meta">Word Document • 25 KB</span>
-              </div>
-              <span class="download-icon"><i data-lucide="download"></i></span>
-            </a>
-            <a href="NOG_LLC_USDT_RWA_Collateral_System.pdf" class="doc-link" download>
-              <i data-lucide="file-text" class="text-red"></i>
-              <div class="doc-info">
-                <span class="doc-name">NOG_LLC_USDT_RWA_Collateral_System.pdf</span>
-                <span class="doc-meta">PDF Document • 17 KB</span>
-              </div>
-              <span class="download-icon"><i data-lucide="download"></i></span>
-            </a>
-            <a href="Never_Give_a_Buck_Meme_Certificate.jpg" class="doc-link" download>
-              <i data-lucide="image" class="text-yellow"></i>
-              <div class="doc-info">
-                <span class="doc-name">Never_Give_a_Buck_Meme_Certificate.jpg</span>
-                <span class="doc-meta">JPEG Image • 214 KB</span>
-              </div>
-              <span class="download-icon"><i data-lucide="download"></i></span>
-            </a>
-          </div>
-        </div>
+                <!-- Property Details Dashboard Grid -->
+                <div class="proposal-property-card" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; padding: 16px; background-color: rgba(0,0,0,0.015); border: 1px solid var(--invoice-border); border-radius: 4px;">
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase;">Year Built</span>
+                        <strong id="prop-year" style="font-size: 15px; color: var(--invoice-text); margin-top: 4px;">1969</strong>
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase;">Living Area</span>
+                        <strong id="prop-size" style="font-size: 15px; color: var(--invoice-text); margin-top: 4px;">2,659 Sq Ft</strong>
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase;">Lot Size</span>
+                        <strong id="prop-lot" style="font-size: 15px; color: var(--invoice-text); margin-top: 4px;">0.96 Acres</strong>
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase;">Beds / Baths</span>
+                        <strong id="prop-beds" style="font-size: 15px; color: var(--invoice-text); margin-top: 4px;">4 Beds, 3 Baths</strong>
+                    </div>
+                </div>
 
-        <hr class="divider">
+                <!-- Main Grid: Info + Metrics -->
+                <div class="invoice-details-grid" style="margin-bottom: 30px;">
+                    <div class="billing-col">
+                        <div class="billing-address-box">
+                            <div class="address-label">Subject Property Address</div>
+                            <strong style="font-size: 15px; color: var(--invoice-text);">2277 North Peachtree Way</strong>
+                            <div>Dunwoody, Georgia 30338</div>
+                        </div>
+                        <div class="billing-address-box">
+                            <div class="address-label">Borrower / Owner</div>
+                            <strong style="color: var(--invoice-text); font-size: 15px;">Buck Vaughan</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="meta-col" style="width: 100%; align-self: stretch;">
+                        <div class="notes-terms-title" style="margin-bottom: 12px; font-size: 11px;">Valuation & Loan-To-Value</div>
+                        <div class="meta-item" style="margin-bottom: 8px;">
+                            <span>Current Est. Value:</span>
+                            <span id="prop-current-val">$524,500</span>
+                        </div>
+                        <div class="meta-item" style="margin-bottom: 8px;">
+                            <span>Projected ARV:</span>
+                            <span id="prop-arv-val">$725,000</span>
+                        </div>
+                        <div class="meta-item" style="border-top: 1px solid var(--invoice-border); padding-top: 8px; margin-bottom: 8px;">
+                            <span>LTV (Current Base):</span>
+                            <strong id="prop-ltv-base" style="color: var(--invoice-text);">0.0%</strong>
+                        </div>
+                        <div class="meta-item">
+                            <span>LTV (After Repair):</span>
+                            <strong id="prop-ltv-arv" style="color: var(--success);">0.0%</strong>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="action-buttons">
-          <button class="btn-primary w-full" id="btn-print-proposal"><i data-lucide="printer"></i> Print / Download PDF Proposal</button>
-          <div class="flex gap-2 mt-2">
-            <a href="invoice.html" target="_blank" class="btn-secondary w-full text-center flex items-center justify-center gap-1"><i data-lucide="external-link"></i> Full Invoice HTML</a>
-            <a href="operating_agreement.html" target="_blank" class="btn-secondary w-full text-center flex items-center justify-center gap-1"><i data-lucide="external-link"></i> Operating Agreement</a>
-          </div>
-        </div>
-      </section>
+                <!-- Draw Schedule Table -->
+                <div class="notes-terms-title" style="margin-bottom: 10px;">Proposed Capital Draw Schedule</div>
+                <table class="invoice-table" style="margin-bottom: 30px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px; text-align: center;">Draw #</th>
+                            <th>Work Phase Description</th>
+                            <th style="width: 100px; text-align: center;">Milestone %</th>
+                            <th style="width: 150px; text-align: right;">Funding Request</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: center; font-weight: 600;">1</td>
+                            <td>
+                                <strong>Initial Mobilization & Deposits</strong>
+                                <div style="font-size: 11px; color: var(--invoice-text-muted); margin-top: 2px;">Kitchen orders, shingles delivery, window orders, dumpster drop-off.</div>
+                            </td>
+                            <td style="text-align: center; font-weight: 500;"><span id="draw-pct-1">25</span>%</td>
+                            <td style="text-align: right; font-weight: 600;" id="draw-amt-1">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; font-weight: 600;">2</td>
+                            <td>
+                                <strong>Rough-ins & Demolition</strong>
+                                <div style="font-size: 11px; color: var(--invoice-text-muted); margin-top: 2px;">Drywall mold remediation, framing repair, plumbing leaks repaired, electrical wiring.</div>
+                            </td>
+                            <td style="text-align: center; font-weight: 500;"><span id="draw-pct-2">30</span>%</td>
+                            <td style="text-align: right; font-weight: 600;" id="draw-amt-2">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; font-weight: 600;">3</td>
+                            <td>
+                                <strong>External & Structural Completion</strong>
+                                <div style="font-size: 11px; color: var(--invoice-text-muted); margin-top: 2px;">Roof shingles installed, windows replaced, soffit boards, HVAC new unit installed.</div>
+                            </td>
+                            <td style="text-align: center; font-weight: 500;"><span id="draw-pct-3">25</span>%</td>
+                            <td style="text-align: right; font-weight: 600;" id="draw-amt-3">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; font-weight: 600;">4</td>
+                            <td>
+                                <strong>Finishes, Hardwoods & Handover</strong>
+                                <div style="font-size: 11px; color: var(--invoice-text-muted); margin-top: 2px;">Tile laundry room, bathrooms tiling, interior painting, driveway paved, tree removal.</div>
+                            </td>
+                            <td style="text-align: center; font-weight: 500;"><span id="draw-pct-4">20</span>%</td>
+                            <td style="text-align: right; font-weight: 600;" id="draw-amt-4">$0.00</td>
+                        </tr>
+                        <tr style="border-top: 2px solid var(--invoice-text); font-weight: bold;">
+                            <td colspan="2" style="text-align: right; font-size: 14px;">Total Construction Loan Request:</td>
+                            <td style="text-align: center; font-size: 14px;">100%</td>
+                            <td style="text-align: right; font-size: 16px; color: var(--invoice-text);" id="draw-total-amt">$0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
 
+                <!-- Bank Info Reminder -->
+                <div class="banking-instructions" style="margin-bottom: 45px;">
+                    <div class="notes-terms-title" style="margin-bottom: 6px; font-size: 10px;">Escrow Wire Disbursal Instructions</div>
+                    <div>Wire draws directly to contractor: <strong id="proposal-payee">Real Estate Connections LLC</strong></div>
+                    <div>Chase Bank | Summit Point Branch | Routing #<strong id="proposal-routing">502101025</strong> | Account #<strong id="proposal-account">932922302</strong></div>
+                </div>
+
+                <!-- Signature block -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: auto; page-break-inside: avoid;">
+                    <div style="display: flex; flex-direction: column; gap: 30px;">
+                        <div style="border-bottom: 1px solid var(--invoice-text-muted); height: 40px;"></div>
+                        <div style="font-size: 11px; color: var(--invoice-text-muted); text-align: center;">
+                            <strong>Buck Vaughan</strong><br>Property Owner / Borrower Signature
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 30px;">
+                        <div style="border-bottom: 1px solid var(--invoice-text-muted); height: 40px;"></div>
+                        <div style="font-size: 11px; color: var(--invoice-text-muted); text-align: center;">
+                            <strong>Bryan Stone, Managing Member</strong><br>The Real Estate Connections LLC Signature
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Details -->
+                <footer class="invoice-footer">
+                    <div>Capital Proposal generated on 06/25/2026</div>
+                    <div>Escrow Reference: <span id="proposal-ref-po">REC-2277NP</span></div>
+                </footer>
+            </article>
+
+            <!-- TAB 3: Document Sheet (Energy Upgrades & Rebates View) -->
+            <article id="upgrades-sheet" class="invoice-sheet" style="display: none;">
+                <!-- Branding Header -->
+                <div class="company-brand-section">
+                    <div class="invoice-logo-container">
+                        <div class="logo-graphic"></div>
+                        <div>
+                            <div class="logo-text-title">The Real Estate Connections LLC</div>
+                            <div class="logo-text-subtitle">Remodeling & Investment</div>
+                        </div>
+                    </div>
+                    <div class="invoice-status-badge status-paid" style="background-color: rgba(16, 185, 129, 0.1); color: var(--success); border-color: rgba(16, 185, 129, 0.2);">
+                        <span>🍀</span> Zero Carbon Upgrades
+                    </div>
+                </div>
+
+                <!-- Title Header -->
+                <div style="border-bottom: 2px solid var(--success); padding-bottom: 8px; margin-bottom: 24px;">
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: var(--invoice-text); text-transform: uppercase; letter-spacing: 0.5px;">
+                        Energy Star &amp; Zero-Carbon Remodeling Report
+                    </h2>
+                    <div style="font-size: 12px; color: var(--invoice-text-muted); margin-top: 4px;">
+                        Remodeling Efficiency Program &amp; Rebate Optimization Analysis
+                    </div>
+                </div>
+
+                <!-- Upgrade Introduction -->
+                <div style="font-size: 13px; color: var(--invoice-text); line-height: 1.6; margin-bottom: 24px; background-color: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.15); padding: 16px; border-radius: 4px;">
+                    <strong>Overview Memo:</strong> The Real Estate Connections LLC is integrating Energy Star and high-efficiency decarbonization upgrades into the 2277 North Peachtree Way project. Under the state of Georgia's federally-funded <strong>Home Energy Rebates</strong> program (administered by GEFA), low-to-moderate income households are eligible for up to <strong>$14,000+</strong> in appliance, weatherization, and electrical panel upgrades. By upgrading major systems, we maximize efficiency, lower utility bills, and achieve a zero-carbon footprint on-site.
+                </div>
+
+                <!-- Upgrades & Rebate Table Comparison -->
+                <div class="notes-terms-title" style="margin-bottom: 10px;">Itemized Upgrade Specifications &amp; Rebates</div>
+                <table class="invoice-table" style="margin-bottom: 30px; font-size: 12px;">
+                    <thead>
+                        <tr>
+                            <th>Work Area</th>
+                            <th>Base Cost</th>
+                            <th>Energy Star / Zero Carbon Upgrade Specification</th>
+                            <th style="width: 130px; text-align: right;">Estimated Rebates</th>
+                            <th style="width: 120px; text-align: right;">Net Upgraded Cost</th>
+                            <th style="width: 100px; text-align: right;">Est. Savings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>HVAC Heat Pump</strong></td>
+                            <td>$8,500.00</td>
+                            <td>High-Efficiency Variable-Speed Electric Heat Pump (Conversion from Gas) &amp; Smart Thermostat</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 600;">-$<span id="prev-rebateHVAC">8,000.00</span></td>
+                            <td style="text-align: right; font-weight: 600;" id="prev-netHVAC">$500.00</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 500;">$450/yr</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Smart Panel &amp; Wiring</strong></td>
+                            <td>$5,500.00</td>
+                            <td>Smart Load-Center Electrical Panel Upgrade &amp; heavy load wiring to support Heat Pumps</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 600;">-$<span id="prev-rebateElectric">5,500.00</span></td>
+                            <td style="text-align: right; font-weight: 600;" id="prev-netElectric">$0.00</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 500;">Required</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Crawl Space Insulation</strong></td>
+                            <td>$3,850.00</td>
+                            <td>Closed-cell vapor barrier, crawl space air-sealing, and R-30 insulation (preventing mold)</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 600;">-$<span id="prev-rebateCrawl">1,600.00</span></td>
+                            <td style="text-align: right; font-weight: 600;" id="prev-netCrawl">$2,250.00</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 500;">$180/yr</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Water Heater &amp; Pump</strong></td>
+                            <td>$5,500.00</td>
+                            <td>Energy Star Heat Pump (Hybrid) Water Heater &amp; intelligent on-demand recirculation pump</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 600;">-$<span id="prev-rebatePump">1,750.00</span></td>
+                            <td style="text-align: right; font-weight: 600;" id="prev-netPump">$3,750.00</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 500;">$330/yr</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Energy Star Windows</strong></td>
+                            <td>$22,000.00</td>
+                            <td>Energy Star Double-Pane Low-E Argon-insulated replacement windows</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 600;">-$<span id="prev-rebateWindows">4,000.00</span></td>
+                            <td style="text-align: right; font-weight: 600;" id="prev-netWindows">$18,000.00</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 500;">$320/yr</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Whole-House LED Upgrade</strong></td>
+                            <td>Included</td>
+                            <td>100% replacement of all interior and exterior fixtures with high-efficacy LEDs</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 600;">Instant Disc.</td>
+                            <td style="text-align: right; font-weight: 600;">$0.00</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 500;">$150/yr</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cool Roof Shingles</strong></td>
+                            <td>$24,000.00</td>
+                            <td>Energy Star rated solar reflective shingles to reduce peak roof heat transmission</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 600;">Included</td>
+                            <td style="text-align: right; font-weight: 600;">$24,000.00</td>
+                            <td style="text-align: right; color: var(--success); font-weight: 500;">$210/yr</td>
+                        </tr>
+                        <tr style="border-top: 2px solid var(--invoice-text); font-weight: bold; font-size: 13px;">
+                            <td>Total System Summary:</td>
+                            <td id="up-total-base">$69,350.00</td>
+                            <td>Comprehensive Decarbonized Home Remodel Package</td>
+                            <td style="text-align: right; color: var(--success);" id="up-total-rebates">-$20,850.00</td>
+                            <td style="text-align: right; color: var(--invoice-text);" id="up-total-net">$48,500.00</td>
+                            <td style="text-align: right; color: var(--success);" id="up-total-savings">$1,640/yr</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Narrative Breakdown by Bryan Stone -->
+                <div class="notes-terms-title" style="margin-bottom: 8px;">Upgrade Benefits &amp; Outline by Bryan Stone</div>
+                <div style="font-size: 11px; color: var(--invoice-text-muted); line-height: 1.6; margin-bottom: 24px;">
+                    <p style="margin-bottom: 8px;">
+                        <strong>1. HVAC Decarbonization Conversion:</strong> We are removing the old fossil-fuel gas furnace and replacing it with a variable-speed Energy Star Heat Pump. Variable-speed heat pumps maintain target indoor temperatures smoothly without cycling on/off constantly, reducing electricity use by up to 50% compared to base electric resistance and preventing up to 4.5 metric tons of CO2 output per year. State HEAR program rebates cover up to $8,000 of the cost for eligible households, supplemented by Georgia Power's electric furnace conversion rebate.
+                    </p>
+                    <p style="margin-bottom: 8px;">
+                        <strong>2. Smart Electrical Infrastructure:</strong> Upgrading the panel to a smart breaker center and pulling heavy wiring is essential to support the electrification of heat pumps, water heaters, and future EV charging stations. State rebates cover 100% of these structural costs up to $4,000 for the panel and $2,500 for the heavy wiring.
+                    </p>
+                    <p style="margin-bottom: 8px;">
+                        <strong>3. Crawl Space Vapor Sealing &amp; Insulation:</strong> Installing crawl space encapsulation plastic, sealing vents, and adding insulation reduces draft and moisture transmission. This permanently eliminates basement dampness and crawl space mold (saving future maintenance costs) and reduces heating/cooling bills by an estimated 15%.
+                    </p>
+                    <p style="margin-bottom: 8px;">
+                        <strong>4. Hybrid Heat Pump Water Heater:</strong> Hybrid heat pump water heaters pull heat from ambient air to warm the domestic water supply, using up to 70% less energy than standard electric heaters. This translates directly to an estimated $330 annual utility saving, qualified for a $1,750 GEFA rebate and $500 Georgia Power rebate.
+                    </p>
+                </div>
+
+                <!-- Footer Details -->
+                <footer class="invoice-footer" style="margin-top: auto;">
+                    <div>The Real Estate Connections LLC &copy; 2026</div>
+                    <div>Website: <a class="footer-link" target="_blank">TheRealEstateConnection.com</a></div>
+                </footer>
+            </article>
+
+            <!-- TAB 4: Document Sheet (Documents & Verification Binder View) -->
+            <article id="binder-sheet" class="invoice-sheet" style="display: none; flex-direction: column;">
+                <!-- Branding Header -->
+                <div class="company-brand-section">
+                    <div class="invoice-logo-container">
+                        <div class="logo-graphic"></div>
+                        <div>
+                            <div class="logo-text-title">The Real Estate Connections LLC</div>
+                            <div class="logo-text-subtitle">Remodeling & Investment</div>
+                        </div>
+                    </div>
+                    <div class="invoice-status-badge status-paid" style="background-color: rgba(59, 130, 246, 0.1); color: var(--accent); border-color: rgba(59, 130, 246, 0.2);">
+                        <span>📁</span> Verification Binder
+                    </div>
+                </div>
+
+                <!-- Title Header -->
+                <div style="border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 24px;">
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: var(--invoice-text); text-transform: uppercase; letter-spacing: 0.5px;">
+                        Documents &amp; Verification Binder
+                    </h2>
+                    <div style="font-size: 12px; color: var(--invoice-text-muted); margin-top: 4px;">
+                        Download original legal files, invoice files, and collateral records.
+                    </div>
+                </div>
+
+                <!-- Documents Grid List -->
+                <div class="binder-grid no-print" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 30px;">
+                    
+                    <!-- Document 1: Invoice -->
+                    <div class="binder-card" style="border: 1px solid var(--invoice-border); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background-color: rgba(0,0,0,0.01);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">📄</span>
+                            <div>
+                                <h4 style="font-size: 14px; font-weight: 700; margin: 0; color: var(--invoice-text);">Detailed Remodeling Invoice</h4>
+                                <p style="font-size: 11px; color: var(--invoice-text-muted); margin: 2px 0 0;">Word Document (.docx) | 20 Line Items</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--invoice-text); line-height: 1.4; margin: 0;">
+                            The official line-itemized remodeling invoice containing all 20 contractor items, pricing breakdown, and Chase Bank escrow details.
+                        </p>
+                        <a href="Detailed_Remodeling_Invoice.docx" download class="primary-btn" style="margin-top: auto; text-decoration: none; text-align: center; justify-content: center; display: inline-flex; font-size: 12px; padding: 8px 16px;">
+                            📥 Download Word Document
+                        </a>
+                    </div>
+
+                    <!-- Document 2: Operating Agreement -->
+                    <div class="binder-card" style="border: 1px solid var(--invoice-border); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background-color: rgba(0,0,0,0.01);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">⚖️</span>
+                            <div>
+                                <h4 style="font-size: 14px; font-weight: 700; margin: 0; color: var(--invoice-text);">Joint Venture Operating Agreement</h4>
+                                <p style="font-size: 11px; color: var(--invoice-text-muted); margin: 2px 0 0;">Word Document (.docx) | Legal Template</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--invoice-text); line-height: 1.4; margin: 0;">
+                            The legal Joint Venture agreement governing the property transfer, capital draws, refinancing targets, and Member distributions.
+                        </p>
+                        <a href="Draft_Operating_Agreement.docx" download class="primary-btn" style="margin-top: auto; text-decoration: none; text-align: center; justify-content: center; display: inline-flex; font-size: 12px; padding: 8px 16px;">
+                            📥 Download Agreement Draft
+                        </a>
+                    </div>
+
+                    <!-- Document 3: Collateral System -->
+                    <div class="binder-card" style="border: 1px solid var(--invoice-border); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background-color: rgba(0,0,0,0.01);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">⛓️</span>
+                            <div>
+                                <h4 style="font-size: 14px; font-weight: 700; margin: 0; color: var(--invoice-text);">USDT + RWA Collateral System</h4>
+                                <p style="font-size: 11px; color: var(--invoice-text-muted); margin: 2px 0 0;">PDF Document (.pdf) | NOG LLC Framework</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--invoice-text); line-height: 1.4; margin: 0;">
+                            The framework detailing the settlement mechanisms, proof layer anchors, and physical property collateral pledge guidelines.
+                        </p>
+                        <a href="NOG_LLC_USDT_RWA_Collateral_System.pdf" download class="primary-btn" style="margin-top: auto; text-decoration: none; text-align: center; justify-content: center; display: inline-flex; font-size: 12px; padding: 8px 16px;">
+                            📥 Download PDF Document
+                        </a>
+                    </div>
+
+                    <!-- Document 4: Meme Certificate -->
+                    <div class="binder-card" style="border: 1px solid var(--invoice-border); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background-color: rgba(0,0,0,0.01);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">🏆</span>
+                            <div>
+                                <h4 style="font-size: 14px; font-weight: 700; margin: 0; color: var(--invoice-text);">Meme Certificate of Sovereign Worth</h4>
+                                <p style="font-size: 11px; color: var(--invoice-text-muted); margin: 2px 0 0;">JPEG Image (.jpg) | "Never Give a Buck"</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--invoice-text); line-height: 1.4; margin: 0;">
+                            A token of historical celebration certifying the absolute sovereign value of Buck Vaughan and the Dunwoody project.
+                        </p>
+                        <a href="Never_Give_a_Buck_Meme_Certificate.jpg" download class="primary-btn" style="margin-top: auto; text-decoration: none; text-align: center; justify-content: center; display: inline-flex; font-size: 12px; padding: 8px 16px;">
+                            📥 Download JPEG Image
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- Footer Details -->
+                <footer class="invoice-footer" style="margin-top: auto;">
+                    <div>The Real Estate Connections LLC &copy; 2026</div>
+                    <div>Website: <a class="footer-link" target="_blank">TheRealEstateConnection.com</a></div>
+                </footer>
+            </article>
+        </main>
     </div>
 
-    <!-- Footer -->
-    <footer class="main-footer">
-      <p>&copy; 2026 The Real Estate Connections LLC &amp; UnyKorn LLC. All rights reserved. Sovereign Real Estate Settlement Infrastructure.</p>
-      <p class="disclaimer">For planning and analysis purposes only. Real-world asset validation is subject to independent audit and compliance checks.</p>
-    </footer>
+    <!-- Toast container -->
+    <div id="toast-container" class="toast-container no-print"></div>
 
-  </div>
-
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

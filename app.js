@@ -1,370 +1,587 @@
-// Initialize Lucide Icons
-lucide.createIcons();
+// Professional Invoice & Funding Proposal Studio State and Logic
 
-// Zestimate and ARV values
-const ZESTIMATE = 524500;
-const BASE_ARV = 725000;
-
-// Renovation Line Items from Invoice & Proposal
-const RENO_ITEMS = [
-  { id: 'item-1', name: 'Kitchen Remodel (cabinetry, countertops, fixtures)', baseCost: 25257, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-2', name: '3-Bathroom Tile & Repaint', baseCost: 15350, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-3', name: 'Basement Floor & Carpet with Hardwood', baseCost: 7500, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-4', name: 'Painting Entire House (Interior)', baseCost: 14500, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-5', name: 'Replace Driveway (Concrete)', baseCost: 13500, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-6', name: 'Remove Mold from Basement Walls', baseCost: 3500, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-7', name: 'Remove Mold from Garage', baseCost: 2500, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-8', name: 'Replace Laundry Room Walls/Floors (Tiling)', baseCost: 7250, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-9', name: 'Upgrade Wood Floors Throughout House', baseCost: 13500, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-10', name: 'Remove Trees Outside, Yard Cleanup & Haul', baseCost: 8500, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-11', name: 'Replace Gutters & Downspouts', baseCost: 5000, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-12', name: 'Install New Soffit (HardiePlank)', baseCost: 8500, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-13', name: 'Install Hand Rails (Staircases)', baseCost: 1500, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  { id: 'item-14', name: 'Basement Wall Water Leak Remediation', baseCost: 7500, isEnergy: false, rebate: 0, saving: 0, selected: true },
-  // Energy Upgrade items
-  { id: 'item-15', name: 'HVAC Heat Pump Conversion (Energy Star)', baseCost: 8500, isEnergy: true, rebate: 8000, saving: 450, selected: true },
-  { id: 'item-16', name: 'Smart Panel & Heavy Load Wiring', baseCost: 5500, isEnergy: true, rebate: 5500, saving: 0, selected: true },
-  { id: 'item-17', name: 'Crawl Space Insulation, Sealing & Vapor Barrier', baseCost: 3850, isEnergy: true, rebate: 1600, saving: 180, selected: true },
-  { id: 'item-18', name: 'Hybrid Heat Pump Water Heater', baseCost: 5500, isEnergy: true, rebate: 1750, saving: 330, selected: true },
-  { id: 'item-19', name: 'Energy Star Replacement Windows (Double-Pane Low-E)', baseCost: 22000, isEnergy: true, rebate: 4000, saving: 320, selected: true },
-  { id: 'item-20', name: 'Whole-House LED Lighting Conversion', baseCost: 0, isEnergy: true, rebate: 0, saving: 150, selected: true },
-  { id: 'item-21', name: 'Energy Star Cool Roof Shingles (Solar Reflective)', baseCost: 24000, isEnergy: true, rebate: 0, saving: 210, selected: true }
-];
-
-// Default Draw Schedule
-const DEFAULT_DRAWS = [
-  { id: 'draw-1', phase: 'Initial Mobilization & Deposits', pct: 25 },
-  { id: 'draw-2', phase: 'Rough-ins & Demolition', pct: 30 },
-  { id: 'draw-3', phase: 'External & Structural Completion', pct: 25 },
-  { id: 'draw-4', phase: 'Finishes, Hardwoods & Handover', pct: 20 }
-];
-
-let draws = JSON.parse(JSON.stringify(DEFAULT_DRAWS));
-let activeFilter = 'all';
-
-// DOM Elements
-const itemsTbody = document.getElementById('items-tbody');
-const chkToggleAll = document.getElementById('chk-toggle-all');
-const btnFilterAll = document.getElementById('btn-filter-all');
-const btnFilterEnergy = document.getElementById('btn-filter-energy');
-const btnResetDraws = document.getElementById('btn-reset-draws');
-const btnPrintProposal = document.getElementById('btn-print-proposal');
-
-// Metrics DOM Elements
-const valTotalCost = document.getElementById('val-total-cost');
-const valTotalRebate = document.getElementById('val-total-rebate');
-const valNetCost = document.getElementById('val-net-cost');
-const valYearlySaving = document.getElementById('val-yearly-saving');
-const valBaseLtv = document.getElementById('val-base-ltv');
-const valArLtv = document.getElementById('val-ar-ltv');
-const barBaseLtv = document.getElementById('bar-base-ltv');
-const barArLtv = document.getElementById('bar-ar-ltv');
-
-// Draw Schedule DOM Elements
-const drawsContainer = document.getElementById('draws-container');
-const drawTotalPctVal = document.getElementById('draw-total-pct-val');
-const drawTotalAmtVal = document.getElementById('draw-total-amt-val');
-const drawErrorBanner = document.getElementById('draw-error-banner');
-const drawCurrentTotalPct = document.getElementById('draw-current-total-pct');
-
-// Formatter utilities
-function formatCurrency(val) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
-}
-
-function formatCurrencyDetailed(val) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val);
-}
-
-// Populate the Line Items Table
-function populateTable() {
-  itemsTbody.innerHTML = '';
-  
-  const itemsToRender = activeFilter === 'all' 
-    ? RENO_ITEMS 
-    : RENO_ITEMS.filter(item => item.isEnergy);
-
-  itemsToRender.forEach(item => {
-    const tr = document.createElement('tr');
-    tr.className = `item-row ${item.selected ? '' : 'excluded'}`;
-    tr.id = `row-${item.id}`;
-    
-    // Checkbox cell
-    const tdCheck = document.createElement('td');
-    const chk = document.createElement('input');
-    chk.type = 'checkbox';
-    chk.checked = item.selected;
-    chk.addEventListener('change', () => toggleItem(item.id, chk.checked));
-    tdCheck.appendChild(chk);
-    
-    // Name cell with Badge
-    const tdName = document.createElement('td');
-    tdName.textContent = item.name;
-    if (item.isEnergy) {
-      const badge = document.createElement('span');
-      badge.className = 'badge-energy';
-      badge.innerHTML = '<i data-lucide="zap" style="width: 10px; height: 10px; display: inline-block; vertical-align: middle; margin-right: 2px;"></i> Energy Star';
-      tdName.appendChild(badge);
+const presets = {
+    "all-items": {
+        title: "Full List Sum ($203,207.00)",
+        items: [
+            { desc: "Remodeling the entire kitchen, everything new and up to date", qty: 1, price: 25257.00, active: true },
+            { desc: "Replace the entire 3-bathroom tile and repaint (sinks, toilets, tile floor, showers, glass doors, tub)", qty: 1, price: 15350.00, active: true },
+            { desc: "Replace floors and carpets in the basement with hardwood", qty: 1, price: 7500.00, active: true },
+            { desc: "Painting the entire house inside", qty: 1, price: 14500.00, active: true },
+            { desc: "Replace all the windows", qty: 1, price: 22000.00, active: true },
+            { desc: "Replace the driveway", qty: 1, price: 13500.00, active: true },
+            { desc: "Remove the mold from the wall in the basement", qty: 1, price: 3500.00, active: true },
+            { desc: "Remove all the mold from the garage", qty: 1, price: 2500.00, active: true },
+            { desc: "Replace the laundry room walls and floors with tile", qty: 1, price: 7250.00, active: true },
+            { desc: "Upgrade wood floors throughout the house", qty: 1, price: 13500.00, active: true },
+            { desc: "Remove all the trees from outside to clean up all the yard and haul away", qty: 1, price: 8500.00, active: true },
+            { desc: "Crawl space plastic to be installed", qty: 1, price: 3850.00, active: true },
+            { desc: "Install a new pump", qty: 1, price: 5500.00, active: true },
+            { desc: "Shingles on the roof and haul away", qty: 1, price: 24000.00, active: true },
+            { desc: "Gutters have to be replaced", qty: 1, price: 5000.00, active: true },
+            { desc: "Installing a new soffit Hardy Plank", qty: 1, price: 8500.00, active: true },
+            { desc: "HVAC new unit", qty: 1, price: 8500.00, active: true },
+            { desc: "Hand Rails", qty: 1, price: 1500.00, active: true },
+            { desc: "Electrical problems", qty: 1, price: 5500.00, active: true },
+            { desc: "Water leak in the basement wall", qty: 1, price: 7500.00, active: true }
+        ],
+        amountPaid: 0,
+        status: "estimate"
+    },
+    "original-math": {
+        title: "Document Total ($194,707.00)",
+        items: [
+            { desc: "Remodeling the entire kitchen, everything new and up to date", qty: 1, price: 25257.00, active: true },
+            { desc: "Replace the entire 3-bathroom tile and repaint (sinks, toilets, tile floor, showers, glass doors, tub)", qty: 1, price: 15350.00, active: true },
+            { desc: "Replace floors and carpets in the basement with hardwood", qty: 1, price: 7500.00, active: true },
+            { desc: "Painting the entire house inside", qty: 1, price: 14500.00, active: true },
+            { desc: "Replace all the windows", qty: 1, price: 22000.00, active: true },
+            { desc: "Replace the driveway", qty: 1, price: 13500.00, active: true },
+            { desc: "Remove the mold from the wall in the basement", qty: 1, price: 3500.00, active: false }, // Excluded to match $194,707
+            { desc: "Remove all the mold from the garage", qty: 1, price: 2500.00, active: true },
+            { desc: "Replace the laundry room walls and floors with tile", qty: 1, price: 7250.00, active: true },
+            { desc: "Upgrade wood floors throughout the house", qty: 1, price: 13500.00, active: true },
+            { desc: "Remove all the trees from outside to clean up all the yard and haul away", qty: 1, price: 8500.00, active: true },
+            { desc: "Crawl space plastic to be installed", qty: 1, price: 3850.00, active: true },
+            { desc: "Install a new pump", qty: 1, price: 5500.00, active: true },
+            { desc: "Shingles on the roof and haul away", qty: 1, price: 24000.00, active: true },
+            { desc: "Gutters have to be replaced", qty: 1, price: 5000.00, active: false }, // Excluded to match $194,707
+            { desc: "Installing a new soffit Hardy Plank", qty: 1, price: 8500.00, active: true },
+            { desc: "HVAC new unit", qty: 1, price: 8500.00, active: true },
+            { desc: "Hand Rails", qty: 1, price: 1500.00, active: true },
+            { desc: "Electrical problems", qty: 1, price: 5500.00, active: true },
+            { desc: "Water leak in the basement wall", qty: 1, price: 7500.00, active: true }
+        ],
+        amountPaid: 194707.00,
+        status: "paid"
+    },
+    "flat-contract": {
+        title: "Base Contract ($189,000.00)",
+        items: [
+            { desc: "Remodeling the entire house per agreement specifications", qty: 1, price: 189000.00, active: true }
+        ],
+        amountPaid: 0,
+        status: "unpaid"
     }
-    
-    // Cost details cells
-    const tdBaseCost = document.createElement('td');
-    tdBaseCost.className = 'font-mono';
-    tdBaseCost.textContent = formatCurrency(item.baseCost);
-    
-    const tdRebate = document.createElement('td');
-    tdRebate.className = 'font-mono text-blue';
-    tdRebate.textContent = item.rebate > 0 ? `-${formatCurrency(item.rebate)}` : '—';
-    
-    const tdNet = document.createElement('td');
-    tdNet.className = 'font-mono';
-    const netVal = item.baseCost - item.rebate;
-    tdNet.textContent = formatCurrency(netVal);
-    
-    const tdSaving = document.createElement('td');
-    tdSaving.className = 'font-mono text-yellow';
-    tdSaving.textContent = item.saving > 0 ? `$${item.saving}/yr` : '—';
-    
-    tr.appendChild(tdCheck);
-    tr.appendChild(tdName);
-    tr.appendChild(tdBaseCost);
-    tr.appendChild(tdRebate);
-    tr.appendChild(tdNet);
-    tr.appendChild(tdSaving);
-    
-    itemsTbody.appendChild(tr);
-  });
-  
-  lucide.createIcons();
-}
+};
 
-// Toggle an item's selected status
-function toggleItem(id, selected) {
-  const item = RENO_ITEMS.find(i => i.id === id);
-  if (item) {
-    item.selected = selected;
+let invoiceState = {
+    activeTab: "invoice",
     
-    // Update visual styling immediately
-    const row = document.getElementById(`row-${id}`);
-    if (row) {
-      if (selected) {
-        row.classList.remove('excluded');
-      } else {
-        row.classList.add('excluded');
-      }
-    }
+    // Invoice Metadata
+    invoiceNo: "REC-2026-0624",
+    issueDate: "2026-06-24",
+    dueDate: "2026-07-24",
+    projectName: "2277 North Peachtree Way Remodeling",
+    poNumber: "REC-2277NP",
+    status: "estimate",
     
-    // Update global state & calculations
-    recalculate();
-  }
-}
+    // Sender Profile
+    senderName: "The Real Estate Connections LLC",
+    senderAddress: "110 Habersham Dr, Suite 140\nFayetteville Ga 30314",
+    senderPayee: "Real Estate Connections LLC\nFayetteville Ga 30276",
+    senderWebsite: "TheRealEstateConnection.com",
+    
+    // Client Profile
+    clientName: "Buck Vaughan",
+    clientAddress: "2277 North Peachtree Way\nDunwoody Ga 30338",
+    
+    // Property Information Profile
+    propertyBedsBaths: "4 Beds, 3 Baths",
+    propertyYear: "1969",
+    propertySize: "2,659 Sq Ft",
+    propertyLot: "0.96 Acres",
+    propertyValuation: 524500,
+    propertyARV: 725000,
+    
+    // Draw Schedule Config
+    draw1: 25,
+    draw2: 30,
+    draw3: 25,
+    draw4: 20,
 
-// Toggle all items
-chkToggleAll.addEventListener('change', (e) => {
-  const checked = e.target.checked;
-  const itemsToToggle = activeFilter === 'all' 
-    ? RENO_ITEMS 
-    : RENO_ITEMS.filter(item => item.isEnergy);
+    // Energy Rebates config
+    rebateHVAC: 8000,
+    rebateElectric: 5500,
+    rebateCrawl: 1600,
+    rebatePump: 1750,
+    rebateWindows: 4000,
     
-  itemsToToggle.forEach(item => {
-    item.selected = checked;
-  });
-  
-  populateTable();
-  recalculate();
-});
+    // Banking Details
+    bankName: "Chase Bank",
+    bankBranch: "Summit Point Branch, Fayetteville Ga",
+    bankPhone: "770-460-2914",
+    bankRouting: "502101025",
+    bankAccount: "932922302",
+    
+    // Financials
+    discount: 0,
+    taxRate: 0,
+    amountPaid: 0,
+    terms: "All invoices are payable when received. Thank you for your business!",
+    
+    // Line Items
+    items: JSON.parse(JSON.stringify(presets["original-math"].items))
+};
 
-// Financial Recalculation
-function recalculate() {
-  let totalCost = 0;
-  let totalRebate = 0;
-  let yearlySaving = 0;
-  
-  RENO_ITEMS.forEach(item => {
-    if (item.selected) {
-      totalCost += item.baseCost;
-      totalRebate += item.rebate;
-      yearlySaving += item.saving;
-    }
-  });
-  
-  const netCost = totalCost - totalRebate;
-  
-  // Calculate LTVs
-  const baseLtvVal = ((totalCost / ZESTIMATE) * 100).toFixed(1);
-  const arLtvVal = ((totalCost / BASE_ARV) * 100).toFixed(1);
-  
-  // Update Metrics Dashboard
-  valTotalCost.textContent = formatCurrency(totalCost);
-  valTotalRebate.textContent = totalRebate > 0 ? `-${formatCurrency(totalRebate)}` : '$0';
-  valNetCost.textContent = formatCurrency(netCost);
-  valYearlySaving.textContent = `$${yearlySaving}/yr`;
-  valBaseLtv.textContent = `${baseLtvVal}%`;
-  valArLtv.textContent = `${arLtvVal}%`;
-  
-  barBaseLtv.style.width = `${Math.min(baseLtvVal, 100)}%`;
-  barArLtv.style.width = `${Math.min(arLtvVal, 100)}%`;
-  
-  // Update Draw Schedule amounts
-  updateDrawAmounts(totalCost);
-}
-
-// Populate the Draw Schedule section
-function populateDrawSchedule() {
-  drawsContainer.innerHTML = '';
-  
-  draws.forEach((draw, index) => {
-    const div = document.createElement('div');
-    div.className = 'draw-item';
+// Initialize Application
+document.addEventListener("DOMContentLoaded", () => {
+    // Bind form elements to state
+    bindInputs();
     
-    const meta = document.createElement('div');
-    meta.className = 'draw-meta';
-    
-    const title = document.createElement('span');
-    title.className = 'draw-title';
-    title.textContent = `Draw #${index + 1}: ${draw.phase}`;
-    
-    const values = document.createElement('div');
-    values.className = 'draw-values';
-    
-    const badge = document.createElement('span');
-    badge.className = 'draw-pct-badge';
-    badge.id = `badge-draw-${index}`;
-    badge.textContent = `${draw.pct}%`;
-    
-    const amt = document.createElement('span');
-    amt.className = 'draw-amount font-mono text-cyan';
-    amt.id = `amt-draw-${index}`;
-    amt.textContent = '$0.00';
-    
-    values.appendChild(badge);
-    values.appendChild(amt);
-    meta.appendChild(title);
-    meta.appendChild(values);
-    
-    const sliderRow = document.createElement('div');
-    sliderRow.className = 'draw-slider-row';
-    
-    const slider = document.createElement('input');
-    slider.type = 'range';
-    slider.min = '0';
-    slider.max = '100';
-    slider.className = 'draw-slider';
-    slider.value = draw.pct;
-    slider.addEventListener('input', (e) => updateDrawPct(index, parseInt(e.target.value), 'slider'));
-    
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.min = '0';
-    input.max = '100';
-    input.className = 'draw-input';
-    input.value = draw.pct;
-    input.addEventListener('input', (e) => {
-      const val = parseInt(e.target.value) || 0;
-      updateDrawPct(index, val, 'input');
+    // Preset toggling
+    document.querySelectorAll(".preset-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const presetKey = e.target.dataset.preset;
+            loadPreset(presetKey);
+            
+            document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+            e.target.classList.add("active");
+        });
     });
+
+    // Tab switching logic
+    document.querySelectorAll(".tab-switcher .tab-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const tab = e.target.dataset.tab;
+            switchTab(tab);
+        });
+    });
+
+    // Add Item Button
+    document.getElementById("add-item").addEventListener("click", () => {
+        invoiceState.items.push({
+            desc: "New Remodeling Item",
+            qty: 1,
+            price: 0.00,
+            active: true
+        });
+        renderItemsEditor();
+        updateInvoice();
+        showToast("New item added to invoice");
+    });
+
+    // Theme toggle button
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const sheet = document.getElementById("invoice-sheet");
+        const proposal = document.getElementById("proposal-sheet");
+        const upgrades = document.getElementById("upgrades-sheet");
+        
+        sheet.classList.toggle("dark-preview");
+        proposal.classList.toggle("dark-preview");
+        upgrades.classList.toggle("dark-preview");
+        
+        const isDark = sheet.classList.contains("dark-preview");
+        document.getElementById("theme-icon").textContent = isDark ? "☀️" : "🌙";
+        showToast(`Theme switched to ${isDark ? 'Dark' : 'Light'} preview`);
+    });
+
+    // Import/Export
+    document.getElementById("export-json").addEventListener("click", exportInvoiceJSON);
+    document.getElementById("import-file").addEventListener("change", importInvoiceJSON);
+    document.getElementById("print-invoice").addEventListener("click", () => {
+        window.print();
+    });
+
+    // Load initial original-math preset details
+    loadPreset("original-math");
+});
+
+function switchTab(tab) {
+    invoiceState.activeTab = tab;
     
-    sliderRow.appendChild(slider);
-    sliderRow.appendChild(input);
+    // Toggle Button UI
+    document.querySelectorAll(".tab-switcher .tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tab);
+    });
+
+    // Toggle Preview Cards Display
+    document.getElementById("invoice-sheet").style.display = (tab === "invoice") ? "flex" : "none";
+    document.getElementById("proposal-sheet").style.display = (tab === "proposal") ? "flex" : "none";
+    document.getElementById("upgrades-sheet").style.display = (tab === "upgrades") ? "flex" : "none";
+    document.getElementById("binder-sheet").style.display = (tab === "binder") ? "flex" : "none";
     
-    div.appendChild(meta);
-    div.appendChild(sliderRow);
-    
-    drawsContainer.appendChild(div);
-  });
+    showToast(`Switched view to ${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
 }
 
-// Update individual draw percentages
-function updateDrawPct(index, value, trigger) {
-  // Bounded check
-  value = Math.max(0, Math.min(100, value));
-  draws[index].pct = value;
-  
-  // Sync sliders and inputs
-  const drawItems = drawsContainer.children;
-  if (drawItems[index]) {
-    const slider = drawItems[index].querySelector('.draw-slider');
-    const input = drawItems[index].querySelector('.draw-input');
-    const badge = document.getElementById(`badge-draw-${index}`);
+function bindInputs() {
+    const fields = [
+        "invoiceNo", "issueDate", "dueDate", "projectName", "poNumber", "status",
+        "senderName", "senderAddress", "senderPayee", "senderWebsite",
+        "clientName", "clientAddress",
+        "propertyBedsBaths", "propertyYear", "propertySize", "propertyLot", "propertyValuation", "propertyARV",
+        "draw1", "draw2", "draw3", "draw4",
+        "rebateHVAC", "rebateElectric", "rebateCrawl", "rebatePump", "rebateWindows",
+        "bankName", "bankBranch", "bankPhone", "bankRouting", "bankAccount",
+        "discount", "taxRate", "amountPaid", "terms"
+    ];
+
+    fields.forEach(field => {
+        const el = document.getElementById(`edit-${field}`);
+        if (!el) return;
+
+        // Set initial value
+        el.value = invoiceState[field];
+
+        // Update state on input
+        el.addEventListener("input", (e) => {
+            let val = e.target.value;
+            if (e.target.type === "number") {
+                val = parseFloat(val) || 0;
+            }
+            invoiceState[field] = val;
+            updateInvoice();
+        });
+    });
+}
+
+function loadPreset(key) {
+    if (!presets[key]) return;
+    const preset = presets[key];
     
-    if (trigger === 'slider') {
-      input.value = value;
+    // Copy items deep
+    invoiceState.items = JSON.parse(JSON.stringify(preset.items));
+    invoiceState.amountPaid = preset.amountPaid;
+    invoiceState.status = preset.status;
+    
+    // Update input UI values
+    document.getElementById("edit-amountPaid").value = preset.amountPaid;
+    document.getElementById("edit-status").value = preset.status;
+    
+    renderItemsEditor();
+    updateInvoice();
+    showToast(`Loaded Preset: ${preset.title}`);
+}
+
+function renderItemsEditor() {
+    const listContainer = document.getElementById("editor-items-list");
+    listContainer.innerHTML = "";
+
+    invoiceState.items.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = `editor-item-card ${item.active ? '' : 'disabled'}`;
+        card.dataset.index = index;
+
+        card.innerHTML = `
+            <div class="editor-item-top">
+                <input type="checkbox" class="editor-item-checkbox" ${item.active ? 'checked' : ''}>
+                <input type="text" class="editor-item-desc" value="${item.desc}" placeholder="Item Description">
+            </div>
+            <div class="editor-item-bottom">
+                <label style="margin: 0; font-size: 10px;">Qty:</label>
+                <input type="number" class="editor-item-qty" min="0" value="${item.qty}">
+                <label style="margin: 0; font-size: 10px;">Cost ($):</label>
+                <input type="number" class="editor-item-price" step="0.01" min="0" value="${item.price.toFixed(2)}">
+                <div class="editor-item-total">$${(item.qty * item.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                <button class="delete-item-btn" title="Delete Item">🗑️</button>
+            </div>
+        `;
+
+        // Event Listeners for item modifications
+        const checkbox = card.querySelector(".editor-item-checkbox");
+        checkbox.addEventListener("change", (e) => {
+            item.active = e.target.checked;
+            card.classList.toggle("disabled", !item.active);
+            updateInvoice();
+        });
+
+        const descInput = card.querySelector(".editor-item-desc");
+        descInput.addEventListener("input", (e) => {
+            item.desc = e.target.value;
+            updateInvoice();
+        });
+
+        const qtyInput = card.querySelector(".editor-item-qty");
+        qtyInput.addEventListener("input", (e) => {
+            item.qty = parseFloat(e.target.value) || 0;
+            card.querySelector(".editor-item-total").textContent = `$${(item.qty * item.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+            updateInvoice();
+        });
+
+        const priceInput = card.querySelector(".editor-item-price");
+        priceInput.addEventListener("input", (e) => {
+            item.price = parseFloat(e.target.value) || 0;
+            card.querySelector(".editor-item-total").textContent = `$${(item.qty * item.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+            updateInvoice();
+        });
+
+        const deleteBtn = card.querySelector(".delete-item-btn");
+        deleteBtn.addEventListener("click", () => {
+            invoiceState.items.splice(index, 1);
+            renderItemsEditor();
+            updateInvoice();
+            showToast("Item deleted");
+        });
+
+        listContainer.appendChild(card);
+    });
+}
+
+function updateInvoice() {
+    // 1. Sync Text/Meta Info to Preview
+    document.getElementById("preview-senderName").textContent = invoiceState.senderName;
+    document.getElementById("preview-senderAddress").innerHTML = invoiceState.senderAddress.replace(/\n/g, "<br>");
+    document.getElementById("preview-senderPayee").innerHTML = invoiceState.senderPayee.replace(/\n/g, "<br>");
+    document.getElementById("preview-senderWebsite").textContent = invoiceState.senderWebsite;
+    document.getElementById("preview-senderWebsite").href = `https://${invoiceState.senderWebsite}`;
+
+    document.getElementById("preview-clientName").textContent = invoiceState.clientName;
+    document.getElementById("preview-clientAddress").innerHTML = invoiceState.clientAddress.replace(/\n/g, "<br>");
+
+    document.getElementById("preview-invoiceNo").textContent = invoiceState.invoiceNo;
+    document.getElementById("preview-projectName").textContent = invoiceState.projectName;
+    document.getElementById("preview-poNumber").textContent = invoiceState.poNumber;
+    
+    // Date formatting helper
+    document.getElementById("preview-issueDate").textContent = formatDate(invoiceState.issueDate);
+    document.getElementById("preview-dueDate").textContent = formatDate(invoiceState.dueDate);
+
+    // Status Badge
+    const badge = document.getElementById("preview-status-badge");
+    badge.className = `invoice-status-badge status-${invoiceState.status}`;
+    if (invoiceState.status === "paid") {
+        badge.innerHTML = "<span>✓</span> Paid";
+    } else if (invoiceState.status === "unpaid") {
+        badge.innerHTML = "<span>⚠</span> Unpaid";
     } else {
-      slider.value = value;
+        badge.innerHTML = "<span>✎</span> Estimate / Draft";
     }
-    badge.textContent = `${value}%`;
-  }
-  
-  // Calculate total cost
-  let totalCost = 0;
-  RENO_ITEMS.forEach(item => {
-    if (item.selected) totalCost += item.baseCost;
-  });
-  
-  updateDrawAmounts(totalCost);
+
+    // 2. Render Line Items Table
+    const tableBody = document.getElementById("preview-table-body");
+    tableBody.innerHTML = "";
+    
+    let subtotal = 0;
+    let indexCount = 1;
+
+    invoiceState.items.forEach((item) => {
+        const tr = document.createElement("tr");
+        if (!item.active) {
+            tr.className = "item-inactive";
+        }
+        
+        const lineTotal = item.qty * item.price;
+        if (item.active) {
+            subtotal += lineTotal;
+        }
+
+        tr.innerHTML = `
+            <td class="item-index">${indexCount++}</td>
+            <td>
+                <div class="item-desc-wrapper">
+                    <span class="item-desc-title">${escapeHTML(item.desc)}</span>
+                    ${!item.active ? '<span class="item-disabled-note">(Excluded from invoice totals)</span>' : ''}
+                </div>
+            </td>
+            <td class="col-qty">${item.qty}</td>
+            <td class="col-price">$${item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td class="col-total">$${lineTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+        `;
+
+        tableBody.appendChild(tr);
+    });
+
+    // 3. Financial Calculations
+    const discountVal = subtotal * (invoiceState.discount / 100);
+    const taxedSubtotal = subtotal - discountVal;
+    const taxVal = taxedSubtotal * (invoiceState.taxRate / 100);
+    const grandTotal = taxedSubtotal + taxVal;
+    const balanceDue = grandTotal - invoiceState.amountPaid;
+
+    // 4. Update Preview Financials
+    document.getElementById("preview-subtotal").textContent = `$${subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    
+    const discountRow = document.getElementById("preview-discount-row");
+    if (invoiceState.discount > 0) {
+        discountRow.style.display = "flex";
+        document.getElementById("preview-discount-label").textContent = `Discount (${invoiceState.discount}%)`;
+        document.getElementById("preview-discount").textContent = `-$${discountVal.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    } else {
+        discountRow.style.display = "none";
+    }
+
+    const taxRow = document.getElementById("preview-tax-row");
+    if (invoiceState.taxRate > 0) {
+        taxRow.style.display = "flex";
+        document.getElementById("preview-tax-label").textContent = `Tax (${invoiceState.taxRate}%)`;
+        document.getElementById("preview-tax").textContent = `$${taxVal.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    } else {
+        taxRow.style.display = "none";
+    }
+
+    document.getElementById("preview-total").textContent = `$${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById("preview-paid").textContent = `$${invoiceState.amountPaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    
+    const balanceRow = document.getElementById("preview-balance-row");
+    const previewBalance = document.getElementById("preview-balance");
+    previewBalance.textContent = `$${balanceDue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    
+    if (balanceDue > 0) {
+        balanceRow.className = "totals-row balance-due";
+    } else {
+        balanceRow.className = "totals-row";
+    }
+
+    // 5. Banking & Footer Terms
+    document.getElementById("preview-bankName").textContent = invoiceState.bankName;
+    document.getElementById("preview-bankBranch").textContent = invoiceState.bankBranch;
+    document.getElementById("preview-bankPhone").textContent = invoiceState.bankPhone;
+    document.getElementById("preview-bankRouting").textContent = invoiceState.bankRouting;
+    document.getElementById("preview-bankAccount").textContent = invoiceState.bankAccount;
+    document.getElementById("preview-terms-text").textContent = invoiceState.terms;
+
+    // ==========================================
+    // 6. Funding Proposal Tab Dynamic Updates
+    // ==========================================
+    document.getElementById("prop-year").textContent = invoiceState.propertyYear;
+    document.getElementById("prop-size").textContent = invoiceState.propertySize;
+    document.getElementById("prop-lot").textContent = invoiceState.propertyLot;
+    document.getElementById("prop-beds").textContent = invoiceState.propertyBedsBaths;
+    
+    document.getElementById("prop-current-val").textContent = `$${invoiceState.propertyValuation.toLocaleString('en-US')}`;
+    document.getElementById("prop-arv-val").textContent = `$${invoiceState.propertyARV.toLocaleString('en-US')}`;
+    
+    document.getElementById("proposal-payee").textContent = invoiceState.senderPayee.split('\n')[0];
+    document.getElementById("proposal-routing").textContent = invoiceState.bankRouting;
+    document.getElementById("proposal-account").textContent = invoiceState.bankAccount;
+    document.getElementById("proposal-ref-po").textContent = invoiceState.poNumber;
+
+    // LTV Calculations
+    const ltvBase = invoiceState.propertyValuation > 0 ? (grandTotal / invoiceState.propertyValuation) * 100 : 0;
+    const ltvArv = invoiceState.propertyARV > 0 ? (grandTotal / invoiceState.propertyARV) * 100 : 0;
+    
+    document.getElementById("prop-ltv-base").textContent = `${ltvBase.toFixed(1)}%`;
+    document.getElementById("prop-ltv-arv").textContent = `${ltvArv.toFixed(1)}%`;
+
+    // Draw Schedule Calculations
+    const dPctSum = invoiceState.draw1 + invoiceState.draw2 + invoiceState.draw3 + invoiceState.draw4;
+    const drawSumLabel = document.getElementById("draw-percentage-sum");
+    drawSumLabel.textContent = dPctSum;
+    
+    if (dPctSum !== 100) {
+        drawSumLabel.style.color = "var(--danger)";
+    } else {
+        drawSumLabel.style.color = "var(--success)";
+    }
+
+    // Sync percentages to table
+    document.getElementById("draw-pct-1").textContent = invoiceState.draw1;
+    document.getElementById("draw-pct-2").textContent = invoiceState.draw2;
+    document.getElementById("draw-pct-3").textContent = invoiceState.draw3;
+    document.getElementById("draw-pct-4").textContent = invoiceState.draw4;
+
+    // Calculate dollar values for draws
+    const drawAmt1 = grandTotal * (invoiceState.draw1 / 100);
+    const drawAmt2 = grandTotal * (invoiceState.draw2 / 100);
+    const drawAmt3 = grandTotal * (invoiceState.draw3 / 100);
+    const drawAmt4 = grandTotal * (invoiceState.draw4 / 100);
+
+    document.getElementById("draw-amt-1").textContent = `$${drawAmt1.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById("draw-amt-2").textContent = `$${drawAmt2.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById("draw-amt-3").textContent = `$${drawAmt3.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById("draw-amt-4").textContent = `$${drawAmt4.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById("draw-total-amt").textContent = `$${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+    // ==========================================
+    // 7. Energy Upgrades Tab Dynamic Updates
+    // ==========================================
+    
+    // Sync rebates to table labels
+    document.getElementById("prev-rebateHVAC").textContent = invoiceState.rebateHVAC.toLocaleString('en-US', { minimumFractionDigits: 2 });
+    document.getElementById("prev-rebateElectric").textContent = invoiceState.rebateElectric.toLocaleString('en-US', { minimumFractionDigits: 2 });
+    document.getElementById("prev-rebateCrawl").textContent = invoiceState.rebateCrawl.toLocaleString('en-US', { minimumFractionDigits: 2 });
+    document.getElementById("prev-rebatePump").textContent = invoiceState.rebatePump.toLocaleString('en-US', { minimumFractionDigits: 2 });
+    document.getElementById("prev-rebateWindows").textContent = invoiceState.rebateWindows.toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+    // Calculate individual net values
+    const netHVAC = Math.max(0, 8500 - invoiceState.rebateHVAC);
+    const netElectric = Math.max(0, 5500 - invoiceState.rebateElectric);
+    const netCrawl = Math.max(0, 3850 - invoiceState.rebateCrawl);
+    const netPump = Math.max(0, 5500 - invoiceState.rebatePump);
+    const netWindows = Math.max(0, 22000 - invoiceState.rebateWindows);
+
+    document.getElementById("prev-netHVAC").textContent = `$${netHVAC.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    document.getElementById("prev-netElectric").textContent = `$${netElectric.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    document.getElementById("prev-netCrawl").textContent = `$${netCrawl.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    document.getElementById("prev-netPump").textContent = `$${netPump.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    document.getElementById("prev-netWindows").textContent = `$${netWindows.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+
+    // Summary calculations
+    const baseTotal = 8500 + 5500 + 3850 + 5500 + 22000 + 24000; // sum of listed bases
+    const rebatesTotal = invoiceState.rebateHVAC + invoiceState.rebateElectric + invoiceState.rebateCrawl + invoiceState.rebatePump + invoiceState.rebateWindows;
+    const netTotal = baseTotal - rebatesTotal;
+    const savingsTotal = 450 + 180 + 330 + 320 + 150 + 210; // HVAC + Crawl + HPWH + Windows + LED + Cool Roof
+
+    document.getElementById("up-total-base").textContent = `$${baseTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    document.getElementById("up-total-rebates").textContent = `-$${rebatesTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    document.getElementById("up-total-net").textContent = `$${netTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    document.getElementById("up-total-savings").textContent = `$${savingsTotal.toLocaleString('en-US')}/yr`;
 }
 
-// Update Draw schedule dollar amounts and display errors
-function updateDrawAmounts(totalCost) {
-  let totalPct = 0;
-  
-  draws.forEach((draw, index) => {
-    totalPct += draw.pct;
-    const amt = (draw.pct / 100) * totalCost;
-    const amtSpan = document.getElementById(`amt-draw-${index}`);
-    if (amtSpan) {
-      amtSpan.textContent = formatCurrencyDetailed(amt);
-    }
-  });
-  
-  // Update Draw summary
-  drawTotalPctVal.textContent = `${totalPct}%`;
-  drawTotalAmtVal.textContent = formatCurrencyDetailed(totalCost);
-  
-  // Verify 100% total
-  if (totalPct === 100) {
-    drawTotalPctVal.className = 'text-green';
-    drawErrorBanner.classList.add('hidden');
-  } else {
-    drawTotalPctVal.className = 'text-red';
-    drawCurrentTotalPct.textContent = `${totalPct}%`;
-    drawErrorBanner.classList.remove('hidden');
-  }
+// Helpers & Formatting
+function formatDate(dateStr) {
+    if (!dateStr) return "";
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    return `${parts[1]}/${parts[2]}/${parts[0]}`;
 }
 
-// Filter line items
-btnFilterAll.addEventListener('click', () => {
-  btnFilterAll.classList.add('active');
-  btnFilterEnergy.classList.remove('active');
-  activeFilter = 'all';
-  populateTable();
-});
+function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, 
+        tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[tag] || tag)
+    );
+}
 
-btnFilterEnergy.addEventListener('click', () => {
-  btnFilterEnergy.classList.add('active');
-  btnFilterAll.classList.remove('active');
-  activeFilter = 'energy';
-  populateTable();
-});
+function showToast(message) {
+    const container = document.getElementById("toast-container");
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.innerHTML = `<span>⚙</span> ${message}`;
+    
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = "slideIn 0.3s ease reverse forwards";
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
 
-// Reset Draws to defaults
-btnResetDraws.addEventListener('click', () => {
-  draws = JSON.parse(JSON.stringify(DEFAULT_DRAWS));
-  populateDrawSchedule();
-  
-  let totalCost = 0;
-  RENO_ITEMS.forEach(item => {
-    if (item.selected) totalCost += item.baseCost;
-  });
-  updateDrawAmounts(totalCost);
-});
+// JSON Import / Export Functions
+function exportInvoiceJSON() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(invoiceState, null, 4));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `proposal-invoice-${invoiceState.invoiceNo}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    showToast("Project state exported as JSON");
+}
 
-// Print trigger
-btnPrintProposal.addEventListener('click', () => {
-  window.print();
-});
+function importInvoiceJSON(e) {
+    const file = e.target.files[0];
+    if (!file) return;
 
-// Initialize dashboard
-populateTable();
-populateDrawSchedule();
-recalculate();
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        try {
+            const data = JSON.parse(evt.target.result);
+            Object.assign(invoiceState, data);
+            
+            // Rebind UI inputs
+            bindInputs();
+            renderItemsEditor();
+            updateInvoice();
+            showToast("Project state imported successfully!");
+        } catch (err) {
+            alert("Error parsing JSON file. Please check that it is a valid backup.");
+        }
+    };
+    reader.readAsText(file);
+}
