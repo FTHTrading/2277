@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Funding Portal - 2277 N Peachtree Way</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="dark-mode">
+  <div class="app-container">
+    
+    <!-- Top Header -->
+    <header class="main-header">
+      <div class="header-logo">
+        <span class="logo-icon"><i data-lucide="building-2"></i></span>
+        <div class="logo-text">
+          <h1>Y3K Real Estate Connections</h1>
+          <p>Sovereign RWA Tokenization & Settlement</p>
+        </div>
+      </div>
+      <div class="header-badge">
+        <span class="pulse-indicator"></span>
+        <span class="badge-text">Interactive Funding Portal</span>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Grid -->
+    <main class="dashboard-grid">
+      
+      <!-- Left Column: Summary & Overview -->
+      <section class="overview-section card">
+        <div class="card-header">
+          <i data-lucide="info" class="header-icon text-blue"></i>
+          <h2>Project Overview</h2>
+        </div>
+        <div class="property-details">
+          <div class="detail-row">
+            <span class="label">Escrow Reference</span>
+            <span class="value font-mono">REC-2277NP</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Subject Property</span>
+            <span class="value text-right">2277 N Peachtree Way, Dunwoody GA 30338</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">SPV Entity</span>
+            <span class="value font-mono">Y3K Dunwoody 2277 SPV LLC</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Remodeling Firm</span>
+            <span class="value">The Real Estate Connections LLC</span>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="financial-metrics">
+          <div class="metric-card">
+            <span class="metric-label">Zestimate (Pre-Remodel)</span>
+            <span class="metric-value font-mono" id="val-zestimate">$524,500</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Projected ARV</span>
+            <span class="metric-value font-mono text-green" id="val-arv">$725,000</span>
+          </div>
+          <div class="metric-card highlight">
+            <span class="metric-label">Total Construction Cost</span>
+            <span class="metric-value font-mono" id="val-total-cost">$194,707</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Total Energy Rebates</span>
+            <span class="metric-value font-mono text-blue" id="val-total-rebate">-$20,850</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Net Construction Cost</span>
+            <span class="metric-value font-mono text-cyan" id="val-net-cost">$173,857</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Est. Yearly Energy Savings</span>
+            <span class="metric-value font-mono text-yellow" id="val-yearly-saving">$1,640/yr</span>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="ltv-ratios">
+          <div class="ltv-box">
+            <span class="ltv-label">Base LTV Ratio</span>
+            <div class="progress-container">
+              <div class="progress-bar bg-blue" id="bar-base-ltv" style="width: 37.1%"></div>
+            </div>
+            <span class="ltv-value font-mono text-blue" id="val-base-ltv">37.1%</span>
+          </div>
+          <div class="ltv-box">
+            <span class="ltv-label">Projected After-Repair LTV</span>
+            <div class="progress-container">
+              <div class="progress-bar bg-green" id="bar-ar-ltv" style="width: 26.8%"></div>
+            </div>
+            <span class="ltv-value font-mono text-green" id="val-ar-ltv">26.8%</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Interactive Line Items -->
+      <section class="line-items-section card">
+        <div class="card-header justify-between">
+          <div class="flex items-center">
+            <i data-lucide="list-checks" class="header-icon text-green"></i>
+            <h2>Detailed Scope of Work & Energy Upgrades</h2>
+          </div>
+          <div class="filter-controls">
+            <button class="filter-btn active" id="btn-filter-all">All Items</button>
+            <button class="filter-btn" id="btn-filter-energy">Energy Upgrades Only</button>
+          </div>
+        </div>
+        
+        <p class="section-intro">Toggle remodeling line items below. Energy Star and Zero-Carbon upgrades qualify for federal/state rebates and utility credits, reducing net project cost.</p>
+
+        <div class="items-table-container">
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th width="40"><input type="checkbox" id="chk-toggle-all" checked></th>
+                <th>Renovation Line Item</th>
+                <th width="90">Base Cost</th>
+                <th width="100">Est. Rebates</th>
+                <th width="90">Net Cost</th>
+                <th width="90">Est. Saving</th>
+              </tr>
+            </thead>
+            <tbody id="items-tbody">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Interactive Grid: Draw Schedule & Wiring -->
+    <div class="bottom-grid">
+      
+      <!-- Draw Schedule -->
+      <section class="draw-schedule-section card">
+        <div class="card-header justify-between">
+          <div class="flex items-center">
+            <i data-lucide="calendar-range" class="header-icon text-cyan"></i>
+            <h2>Capital Draw Schedule</h2>
+          </div>
+          <button class="btn-secondary" id="btn-reset-draws"><i data-lucide="rotate-ccw"></i> Reset Defaults</button>
+        </div>
+        <p class="section-intro">Adjust milestones to match field inspections. Total percentage must equal 100%.</p>
+
+        <div class="draw-schedule-container" id="draws-container">
+          <!-- Dynamically populated by JS -->
+        </div>
+
+        <div class="draw-summary-bar" id="draw-summary-bar">
+          <span class="total-pct">Total Allocation: <span id="draw-total-pct-val" class="text-cyan">100%</span></span>
+          <span class="total-amt">Total Amount: <span id="draw-total-amt-val" class="font-mono text-white">$194,707.00</span></span>
+        </div>
+        <div class="error-banner hidden" id="draw-error-banner">
+          <i data-lucide="alert-triangle"></i>
+          <span>Warning: The total draw allocation must equal exactly 100% (currently <span id="draw-current-total-pct">0%</span>).</span>
+        </div>
+      </section>
+
+      <!-- Escrow, Action Panel, & Documents -->
+      <section class="action-panel card">
+        <div class="card-header">
+          <i data-lucide="shield-check" class="header-icon text-yellow"></i>
+          <h2>Escrow & Settlement Center</h2>
+        </div>
+        
+        <div class="wiring-instructions">
+          <div class="wiring-header">
+            <h3>Chase Bank Escrow Account</h3>
+            <span class="badge-yellow">Verified Payee</span>
+          </div>
+          <div class="wiring-grid">
+            <div>
+              <span class="wiring-label">Payee</span>
+              <span class="wiring-value">Real Estate Connections LLC</span>
+            </div>
+            <div>
+              <span class="wiring-label">Bank Branch</span>
+              <span class="wiring-value">Summit Point, Fayetteville GA</span>
+            </div>
+            <div>
+              <span class="wiring-label">Routing Number</span>
+              <span class="wiring-value font-mono text-white">#502101025</span>
+            </div>
+            <div>
+              <span class="wiring-label">Account Number</span>
+              <span class="wiring-value font-mono text-white">#932922302</span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="document-section">
+          <h3>Project Verification & Legal Binder</h3>
+          <div class="document-list">
+            <a href="Detailed_Remodeling_Invoice.docx" class="doc-link" download>
+              <i data-lucide="file-text" class="text-blue"></i>
+              <div class="doc-info">
+                <span class="doc-name">Detailed_Remodeling_Invoice.docx</span>
+                <span class="doc-meta">Word Document • 49 KB</span>
+              </div>
+              <span class="download-icon"><i data-lucide="download"></i></span>
+            </a>
+            <a href="Draft_Operating_Agreement.docx" class="doc-link" download>
+              <i data-lucide="file-text" class="text-green"></i>
+              <div class="doc-info">
+                <span class="doc-name">Draft_Operating_Agreement.docx</span>
+                <span class="doc-meta">Word Document • 25 KB</span>
+              </div>
+              <span class="download-icon"><i data-lucide="download"></i></span>
+            </a>
+            <a href="NOG_LLC_USDT_RWA_Collateral_System.pdf" class="doc-link" download>
+              <i data-lucide="file-text" class="text-red"></i>
+              <div class="doc-info">
+                <span class="doc-name">NOG_LLC_USDT_RWA_Collateral_System.pdf</span>
+                <span class="doc-meta">PDF Document • 17 KB</span>
+              </div>
+              <span class="download-icon"><i data-lucide="download"></i></span>
+            </a>
+            <a href="Never_Give_a_Buck_Meme_Certificate.jpg" class="doc-link" download>
+              <i data-lucide="image" class="text-yellow"></i>
+              <div class="doc-info">
+                <span class="doc-name">Never_Give_a_Buck_Meme_Certificate.jpg</span>
+                <span class="doc-meta">JPEG Image • 214 KB</span>
+              </div>
+              <span class="download-icon"><i data-lucide="download"></i></span>
+            </a>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="action-buttons">
+          <button class="btn-primary w-full" id="btn-print-proposal"><i data-lucide="printer"></i> Print / Download PDF Proposal</button>
+          <div class="flex gap-2 mt-2">
+            <a href="invoice.html" target="_blank" class="btn-secondary w-full text-center flex items-center justify-center gap-1"><i data-lucide="external-link"></i> Full Invoice HTML</a>
+            <a href="operating_agreement.html" target="_blank" class="btn-secondary w-full text-center flex items-center justify-center gap-1"><i data-lucide="external-link"></i> Operating Agreement</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <p>&copy; 2026 The Real Estate Connections LLC &amp; UnyKorn LLC. All rights reserved. Sovereign Real Estate Settlement Infrastructure.</p>
+      <p class="disclaimer">For planning and analysis purposes only. Real-world asset validation is subject to independent audit and compliance checks.</p>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detailed Remodeling Invoice - 2277 N Peachtree Way</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Document Style Override */
+    .doc-card {
+      max-width: 900px;
+      margin: 2rem auto;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 3rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .doc-title-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .doc-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .doc-party {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .doc-party h4 {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .doc-party p {
+      font-size: 0.9375rem;
+      font-weight: 500;
+    }
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2.5rem;
+    }
+    .invoice-table th, .invoice-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .invoice-table th {
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: left;
+      background-color: rgba(31, 46, 76, 0.2);
+    }
+    .invoice-table td.amount {
+      text-align: right;
+      font-family: SFMono-Regular, Consolas, monospace;
+      font-weight: 500;
+    }
+    .invoice-total-row td {
+      border-top: 2px solid var(--border-color);
+      border-bottom: none;
+      font-weight: 800;
+      font-size: 1.125rem;
+    }
+    .invoice-total-row td.amount {
+      color: var(--accent-cyan);
+    }
+    .wire-details {
+      background-color: rgba(245, 158, 11, 0.03);
+      border: 1px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    .wire-details h3 {
+      font-size: 1rem;
+      color: var(--accent-yellow);
+      margin-bottom: 1rem;
+      font-family: var(--font-display);
+    }
+    .wire-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      font-size: 0.875rem;
+    }
+    .wire-label {
+      color: var(--text-secondary);
+    }
+    .wire-value {
+      font-weight: 600;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+      transition: color 0.2s;
+    }
+    .back-btn:hover {
+      color: #fff;
+    }
+    @media print {
+      body {
+        background-color: #fff;
+        color: #000;
+      }
+      .doc-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+      }
+      .back-btn, .print-btn {
+        display: none !important;
+      }
+      .invoice-table th {
+        background-color: #f3f4f6 !important;
+        color: #000 !important;
+        border-bottom: 2px solid #000 !important;
+      }
+      .invoice-table td {
+        border-bottom: 1px solid #e5e7eb !important;
+        color: #000 !important;
+      }
+      .invoice-total-row td {
+        border-top: 2px solid #000 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <a href="index.html" class="back-btn"><i data-lucide="arrow-left"></i> Back to Funding Portal</a>
+    
+    <div class="doc-card">
+      <div class="doc-title-row">
+        <div>
+          <h1 style="font-family: var(--font-display); font-size: 2rem; font-weight: 800;">INVOICE</h1>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">Remodeling & Rehabilitation Services</p>
+        </div>
+        <div style="text-align: right;">
+          <p style="font-size: 0.875rem; color: var(--text-secondary);">Date: <strong>June 24, 2026</strong></p>
+          <p style="font-size: 0.875rem; color: var(--text-secondary);">Invoice Ref: <strong>REC-2277NP</strong></p>
+          <button class="btn-primary print-btn" onclick="window.print()" style="margin-top: 0.5rem;"><i data-lucide="printer"></i> Print Invoice</button>
+        </div>
+      </div>
+
+      <div class="doc-meta-grid">
+        <div class="doc-party">
+          <h4>From:</h4>
+          <p style="font-size: 1.125rem; font-weight: 700; color: #fff;">The Real Estate Connections LLC</p>
+          <p>110 Habersham Dr, Suite 140</p>
+          <p>Fayetteville, GA 30314</p>
+          <p>Email: info@therealestateconnections.com</p>
+        </div>
+        <div class="doc-party" style="text-align: right;">
+          <h4>To:</h4>
+          <p style="font-size: 1.125rem; font-weight: 700; color: #fff;">Buck Vaughan</p>
+          <p>2277 North Peachtree Way</p>
+          <p>Dunwoody, GA 30338</p>
+        </div>
+      </div>
+
+      <table class="invoice-table">
+        <thead>
+          <tr>
+            <th>Description of Remodeling & Energy Rehabilitation Work</th>
+            <th style="text-align: right; width: 150px;">Cost (USD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Kitchen Remodel (cabinets, countertops, hardware, fixtures)</td><td class="amount">$25,257.00</td></tr>
+          <tr><td>Replace 3-Bathroom Tile and Repaint (sinks, toilets, floors, showers, glass doors, tubs)</td><td class="amount">$15,350.00</td></tr>
+          <tr><td>Replace Floors & Carpets in the Basement (Hardwood Upgrade)</td><td class="amount">$7,500.00</td></tr>
+          <tr><td>Painting the Entire House Inside</td><td class="amount">$14,500.00</td></tr>
+          <tr><td>Replace All Windows (Double-Pane Energy Star Replacement)</td><td class="amount">$22,000.00</td></tr>
+          <tr><td>Replace Driveway (Concrete)</td><td class="amount">$13,500.00</td></tr>
+          <tr><td>Remove Mold from Basement Walls</td><td class="amount">$3,500.00</td></tr>
+          <tr><td>Remove Mold from Garage</td><td class="amount">$2,500.00</td></tr>
+          <tr><td>Replace Laundry Room Walls and Floors with Tile</td><td class="amount">$7,250.00</td></tr>
+          <tr><td>Upgrade Wood Floors Throughout the House</td><td class="amount">$13,500.00</td></tr>
+          <tr><td>Remove Trees Outside, Cleanup Yard & Haul Away</td><td class="amount">$8,500.00</td></tr>
+          <tr><td>Crawl Space Plastic/Vapor Barrier Installation</td><td class="amount">$3,850.00</td></tr>
+          <tr><td>Install New Sump Pump</td><td class="amount">$5,500.00</td></tr>
+          <tr><td>Shingles on Roof & Haul Away Old Roof Materials</td><td class="amount">$24,000.00</td></tr>
+          <tr><td>Replace Gutters & Downspouts</td><td class="amount">$5,000.00</td></tr>
+          <tr><td>Installing New Soffit (HardiePlank Siding)</td><td class="amount">$8,500.00</td></tr>
+          <tr><td>HVAC New Unit (Energy Star Variable Heat Pump Conversion)</td><td class="amount">$8,500.00</td></tr>
+          <tr><td>Install Hand Rails on Staircases</td><td class="amount">$1,500.00</td></tr>
+          <tr><td>Electrical Upgrades & Problem Remediation (including Smart Breaker Panel)</td><td class="amount">$5,500.00</td></tr>
+          <tr><td>Water Leak in the Basement Wall Repair & Waterproofing</td><td class="amount">$7,500.00</td></tr>
+          <tr class="invoice-total-row">
+            <td><strong>TOTAL DUE</strong></td>
+            <td class="amount"><strong>$194,707.00</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="wire-details">
+        <h3>Escrow Wiring Instructions</h3>
+        <p style="margin-bottom: 1rem; font-size: 0.875rem; color: var(--text-secondary);">All invoices are payable upon receipt. Make all wire transfers using the details below:</p>
+        <div class="wire-grid">
+          <div>
+            <span class="wire-label">Beneficiary</span>
+            <span class="wire-value" style="color: #fff;">Real Estate Connections LLC</span>
+          </div>
+          <div>
+            <span class="wire-label">Bank Name</span>
+            <span class="wire-value" style="color: #fff;">Chase Bank / Summit Point Branch</span>
+          </div>
+          <div>
+            <span class="wire-label">Branch Address</span>
+            <span class="wire-value">Fayetteville, GA</span>
+          </div>
+          <div>
+            <span class="wire-label">Bank Phone</span>
+            <span class="wire-value">770-460-2914</span>
+          </div>
+          <div>
+            <span class="wire-label">Routing Number</span>
+            <span class="wire-value font-mono" style="color: #fff;">#502101025</span>
+          </div>
+          <div>
+            <span class="wire-label">Account Number</span>
+            <span class="wire-value font-mono" style="color: #fff;">#932922302</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; text-align: center; font-size: 0.8125rem; color: var(--text-muted);">
+        <p>Thank you for your business.</p>
+        <p>TheRealEstateConnection.com</p>
+      </div>
+
+    </div>
+  </div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

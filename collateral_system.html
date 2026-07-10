@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOG LLC - USDT + RWA Collateral System</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .doc-card {
+      max-width: 900px;
+      margin: 2rem auto;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 3rem 4rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .framework-title {
+      font-family: var(--font-display);
+      text-align: center;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+    .framework-body {
+      font-size: 0.9375rem;
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .framework-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .framework-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+      transition: color 0.2s;
+    }
+    .back-btn:hover {
+      color: #fff;
+    }
+    .framework-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+    }
+    .framework-table th, .framework-table td {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      text-align: left;
+    }
+    .framework-table th {
+      background-color: rgba(31, 46, 76, 0.3);
+      color: #fff;
+      font-weight: 600;
+    }
+    .sig-block {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-color);
+      padding-top: 2rem;
+    }
+    .sig-line {
+      border-bottom: 1px solid var(--text-secondary);
+      margin-top: 1.5rem;
+      width: 250px;
+      height: 24px;
+    }
+    @media print {
+      body {
+        background-color: #fff;
+        color: #000;
+      }
+      .doc-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+      }
+      .back-btn, .print-btn {
+        display: none !important;
+      }
+      .framework-title {
+        color: #000 !important;
+        border-bottom: 2px solid #000 !important;
+      }
+      .framework-section h3 {
+        color: #000 !important;
+      }
+      .framework-table th {
+        background-color: #f3f4f6 !important;
+        color: #000 !important;
+      }
+      .framework-table td, .framework-table th {
+        border: 1px solid #ccc !important;
+        color: #000 !important;
+      }
+      .sig-line {
+        border-bottom: 1px solid #000 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <a href="index.html" class="back-btn"><i data-lucide="arrow-left"></i> Back to Funding Portal</a>
+    
+    <div class="doc-card">
+      <div style="text-align: right;" class="print-btn">
+        <button class="btn-primary" onclick="window.print()"><i data-lucide="printer"></i> Print Document</button>
+      </div>
+      
+      <h1 class="framework-title">NOG LLC - USDT + RWA COLLATERAL SYSTEM</h1>
+      
+      <div class="framework-body">
+        <p>This operating document outlines the conceptual framework for integrating digital dollar-denominated settlement tokens (USDT) with verified real-world asset (RWA) collateral records.</p>
+        
+        <blockquote>
+          <strong>Important Notice:</strong> This document is for planning, explanation, and system architecture design purposes only. Any live deployment requires qualified legal, audit, accounting, and multi-signature custodial controls.
+        </blockquote>
+
+        <div class="framework-section">
+          <h3>1. Purpose</h3>
+          <p><strong>1.1.</strong> NOG LLC may use this framework to explain how verified real-world assets may support digital settlement workflows, collateral records, and proof-based commercial activity.</p>
+          <p><strong>1.2.</strong> The objective is to connect physical value, supporting documentation, and digital transaction records without overstating legal ownership, liquidity, or enforceability.</p>
+          <p><strong>1.3.</strong> The system is designed as an infrastructure and proof tooling, not as a promise of guaranteed returns or automatic asset liquidation.</p>
+        </div>
+
+        <div class="framework-section">
+          <h3>2. Key Definitions</h3>
+          <p>• <strong>USDT:</strong> A digital dollar-denominated settlement token used as a fast payment and liquidity rail, subject to compliance and wallet controls.</p>
+          <p>• <strong>RWA (Real-World Asset):</strong> An asset that exists outside the blockchain, such as real estate (e.g., 2277 N Peachtree Way), equipment, commodities, or contracts.</p>
+          <p>• <strong>Collateral Record:</strong> A documented claim file showing asset identity, ownership evidence, valuation support, liens, and operational status.</p>
+          <p>• <strong>Proof Layer:</strong> A digital record, ledger event, document hash, or audit trail linking asset documentation to transaction activity.</p>
+        </div>
+
+        <div class="framework-section">
+          <h3>3. System Summary</h3>
+          <p>USDT moves the digital value; the RWA collateral file supports the asset story; the proof layer records what was checked; and the operating rules decide who may act, when settlement occurs, and what happens if something fails.</p>
+          
+          <table class="framework-table">
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Function</th>
+                <th>Required Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>USDT Settlement</strong></td>
+                <td>Moves digital dollars between approved wallets.</td>
+                <td>Wallet security, transaction logs, compliance checks.</td>
+              </tr>
+              <tr>
+                <td><strong>RWA Collateral</strong></td>
+                <td>Supports value with verified real-world assets.</td>
+                <td>Ownership docs, valuation, lien reviews, custody terms.</td>
+              </tr>
+              <tr>
+                <td><strong>Proof Layer</strong></td>
+                <td>Links documents, hashes, and status events.</td>
+                <td>Audit trail, timestamps, document version control.</td>
+              </tr>
+              <tr>
+                <td><strong>Governance</strong></td>
+                <td>Sets rules for use, release, defaults, and reporting.</td>
+                <td>Legal agreements, approvals, risk limits.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="framework-section">
+          <h3>4. Operating Flow</h3>
+          <p><strong>Step 1 - Asset Intake:</strong> NOG LLC identifies an eligible asset and collects base documents (deeds, photos, insurance, valuations).</p>
+          <p><strong>Step 2 - Verification Package:</strong> The asset file is reviewed for ownership validity, valuation support, liens, and the authorized party's right to pledge.</p>
+          <p><strong>Step 3 - Collateral Certificate:</strong> A proof record is created describing the asset, the document set, and the limits of what has been verified.</p>
+          <p><strong>Step 4 - Digital Record:</strong> The proof layer stores a document hash, timestamp, and wallet link pointing back to the physical legal file.</p>
+          <p><strong>Step 5 - USDT Settlement:</strong> Approved parties use USDT for fast drawdowns, escrow-like flows, and payments based on milestones.</p>
+        </div>
+
+        <div class="sig-block">
+          <div>
+            <p><strong>Drafted &amp; Signed By:</strong></p>
+            <p>Name: <strong>Buck Vaughan</strong></p>
+            <div class="sig-line"></div>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Signature &amp; Date</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
