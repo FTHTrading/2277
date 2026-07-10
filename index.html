@@ -336,6 +336,7 @@
                     <button type="button" class="tab-btn" data-tab="upgrades">Energy Upgrades</button>
                     <button type="button" class="tab-btn" data-tab="binder">Documents Binder</button>
                     <button type="button" class="tab-btn" data-tab="appraisal">Desk Appraisal</button>
+                    <button type="button" class="tab-btn" data-tab="compliance">Rehab &amp; Compliance</button>
                 </div>
                 <button type="button" id="theme-toggle" class="icon-badge-btn" title="Toggle Preview Theme">
                     <span id="theme-icon">🌙</span>
@@ -1023,6 +1024,162 @@
                     <div style="text-align: right;">
                         <span style="font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px;">Indicated Market Value</span>
                         <div id="appr-indicated-val" style="font-size: 24px; font-weight: 800; color: var(--accent); margin-top: 4px;">$0.00</div>
+                    </div>
+                </div>
+
+                <!-- Footer Details -->
+                <footer class="invoice-footer" style="margin-top: auto;">
+                    <div>The Real Estate Connections LLC &copy; 2026</div>
+                    <div>Website: <a class="footer-link" target="_blank">TheRealEstateConnection.com</a></div>
+                </footer>
+            </article>
+
+            <!-- TAB 6: Document Sheet (Rehab & Code Compliance Binder View) -->
+            <article id="compliance-sheet" class="invoice-sheet" style="display: none; flex-direction: column;">
+                <!-- Branding Header -->
+                <div class="company-brand-section">
+                    <div class="invoice-logo-container">
+                        <div class="logo-graphic"></div>
+                        <div>
+                            <div class="logo-text-title">The Real Estate Connections LLC</div>
+                            <div class="logo-text-subtitle">Remodeling & Investment</div>
+                        </div>
+                    </div>
+                    <div class="invoice-status-badge status-estimate" style="background-color: rgba(220, 38, 38, 0.1); color: #dc2626; border-color: rgba(220, 38, 38, 0.2);">
+                        <span>⚖️</span> Rehab &amp; Compliance Binder
+                    </div>
+                </div>
+
+                <!-- Title Header -->
+                <div style="border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 20px;">
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: var(--invoice-text); text-transform: uppercase; letter-spacing: 0.5px;">
+                        Rehabilitation, Code Compliance &amp; Funding Memo
+                    </h2>
+                    <div style="font-size: 11px; color: var(--invoice-text-muted); margin-top: 4px;">
+                        Technical validation of property preservation, regulatory compliance, and optimization of public incentives (Federal/State).
+                    </div>
+                </div>
+
+                <!-- Executive Summary / Foreclosure Stop Argument -->
+                <div style="background-color: rgba(220, 38, 38, 0.02); border-left: 4px solid #dc2626; border-radius: 4px; padding: 16px; margin-bottom: 20px;">
+                    <h4 style="font-size: 13px; font-weight: 700; color: #dc2626; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px;">Asset Preservation &amp; Foreclosure Mitigation Statement</h4>
+                    <p style="font-size: 11px; color: var(--invoice-text); line-height: 1.5; margin: 0;">
+                        This document details a comprehensive <strong>$194,707.00</strong> rehabilitation program for <strong>2277 North Peachtree Way</strong> to address structural deterioration, environmental hazards, and building code violations. By executing this project:
+                    </p>
+                    <ul style="font-size: 11px; color: var(--invoice-text); line-height: 1.5; margin: 6px 0 0 16px; padding: 0;">
+                        <li><strong>Collateral Protection:</strong> The lender's security interest is preserved and enhanced, elevating the property valuation from a distressed <strong>$524,500.00</strong> to a projected After-Repair Value (ARV) of <strong>$725,000.00+</strong> (a 38% equity expansion).</li>
+                        <li><strong>Regulatory Mitigation:</strong> Immediate correction of active National Electrical Code (NEC) violations and hazardous mold/moisture conditions mitigates municipal liability, preserving property occupancy rights.</li>
+                        <li><strong>Public Capital Inflow:</strong> Incorporating Energy Star zero-carbon systems captures up to <strong>$20,850.00</strong> in direct GEFA/HEAR rebates and substantial Section 25C tax credits, ensuring project liquidity.</li>
+                    </ul>
+                </div>
+
+                <!-- Zillow Reference Link Card -->
+                <div style="background-color: rgba(59, 130, 246, 0.03); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 6px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;" class="no-print">
+                    <div>
+                        <h4 style="font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700; color: var(--invoice-text); margin: 0;">Zillow Real Estate Data Verification</h4>
+                        <p style="font-size: 11px; color: var(--invoice-text-muted); margin: 4px 0 0;">
+                            Verify tax history, previous listing photos, and neighborhood sales comparables directly on Zillow (Property ID: 14605963).
+                        </p>
+                    </div>
+                    <a href="https://www.zillow.com/homedetails/2277-N-Peachtree-Way-Dunwoody-GA-30338/14605963_zpid/" target="_blank" class="primary-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11px; padding: 8px 16px; background-color: #3b82f6; border-color: #3b82f6;">
+                        <span>🌐</span> View Zillow Profile
+                    </a>
+                </div>
+
+                <!-- Building Code Compliance Grid -->
+                <div class="notes-terms-title" style="margin-bottom: 8px;">IBC / IRC Building Code Compliance Mapping</div>
+                <table class="invoice-table" style="margin-bottom: 20px; font-size: 10.5px;">
+                    <thead>
+                        <tr style="background-color: rgba(0, 0, 0, 0.02);">
+                            <th style="width: 150px;">Work Component</th>
+                            <th style="width: 250px;">Identified Pre-Rehab Defect (1969 Structure)</th>
+                            <th style="width: 140px;">Regulatory Code Requirement</th>
+                            <th style="width: 180px;">Remediation &amp; Upgrade Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Smart Electrical Panel</strong></td>
+                            <td>Outdated FPE panel; lack of grounded wiring circuits, no AFCI/GFCI breakers in kitchen/baths.</td>
+                            <td><strong>NEC 2023 Article 210 / 408</strong><br>(GFCI/AFCI &amp; panel capacity)</td>
+                            <td>Install 200A Smart Breaker Load-Center &amp; pull dedicated high-load copper circuits.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mold Remediation &amp; Vapor Seal</strong></td>
+                            <td>Active toxic mold growth in basement walls and open crawlspace dirt, causing dry rot.</td>
+                            <td><strong>IRC Section R408 / R318</strong><br>(Vapor barriers &amp; mold decay)</td>
+                            <td>Basement waterproofing, structural crawlspace encapsulation, and sump pump installation.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Energy Star Windows</strong></td>
+                            <td>Single-pane wood-frame windows decaying; high thermal transmittance (U-factor &gt; 0.8).</td>
+                            <td><strong>IECC 2021 Table R402.1.2</strong><br>(Climate Zone 4 U-Factor &le; 0.30)</td>
+                            <td>Double-pane Low-E Argon-insulated replacement windows (U-factor &le; 0.28).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Heat Pump HVAC Conversion</strong></td>
+                            <td>Inefficient 30-year-old gas furnace with cracked heat exchanger, leaking carbon monoxide.</td>
+                            <td><strong>IMC Section 304 / IRC M1401</strong><br>(Combustion &amp; heating safety)</td>
+                            <td>High-Efficiency variable-speed electric heat pump and ductwork sealing/re-insulation.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Crawlspace &amp; Attic Envelope</strong></td>
+                            <td>Attic and floors uninsulated; extreme drafts, causing high heating/cooling loads.</td>
+                            <td><strong>IECC 2021 Table R402.1.3</strong><br>(Attic R-49, Floor R-19 minimum)</td>
+                            <td>Closed-cell vapor encapsulation and R-30/R-49 fiberglass batts installation.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Financial Incentives & Free Money System -->
+                <div class="notes-terms-title" style="margin-bottom: 8px;">Federal, State &amp; Utility Incentive Optimization</div>
+                <table class="invoice-table" style="margin-bottom: 24px; font-size: 10.5px;">
+                    <thead>
+                        <tr style="background-color: rgba(0, 0, 0, 0.02);">
+                            <th style="width: 180px;">Incentive Program / Source</th>
+                            <th style="width: 140px;">Upgrade Element</th>
+                            <th style="width: 120px;">Rebate / Credit Amount</th>
+                            <th style="width: 280px;">Optimization Strategy (Accessing "Free Money")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>GEFA Home Energy Rebates (HOMES/HEEHR)</strong></td>
+                            <td>HVAC, Smart Panel, Heavy Wiring</td>
+                            <td style="color: var(--success); font-weight: 600;">$14,250.00 (Max)</td>
+                            <td>Access direct point-of-sale discounts for low-to-moderate households under the state of Georgia's federal allocation.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Section 25C Energy Efficient Home Credit</strong></td>
+                            <td>Windows, Water Heater, Insulation</td>
+                            <td style="color: var(--success); font-weight: 600;">$3,200.00 / yr</td>
+                            <td>Claim a 30% federal tax credit against income liability for qualifying Energy Star windows ($1,200) and heat pump upgrades ($2,000).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Georgia Power Rebate Program</strong></td>
+                            <td>HVAC conversion &amp; duct seal</td>
+                            <td style="color: var(--success); font-weight: 600;">$1,100.00</td>
+                            <td>Submit certified contractor conversion rebate application post-installation to receive cash back directly from the utility.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IRS Section 168(k) Depreciation</strong></td>
+                            <td>Smart Panel, Carpet, Landscape</td>
+                            <td style="color: var(--success); font-weight: 600;">Up to 60-80% First Year</td>
+                            <td>Utilize accelerated MACRS bonus depreciation to write off capital improvements immediately in Year 1 for RWA/Rental assets.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Property Renovation Schematic Blueprints (Generated Images) -->
+                <div class="notes-terms-title" style="margin-bottom: 8px;">Rehab Schematic &amp; Upgrade Blueprints</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                    <div>
+                        <div style="font-size: 10px; font-weight: 700; color: #dc2626; margin-bottom: 4px; text-transform: uppercase;">1. Before Rehab: 1969 Structural &amp; Code Defects</div>
+                        <img src="before_rehab_schematic.png" alt="Before Rehab Schematic Blueprint" style="width: 100%; border-radius: 6px; border: 1px solid var(--invoice-border); display: block; height: 160px; object-fit: cover;">
+                    </div>
+                    <div>
+                        <div style="font-size: 10px; font-weight: 700; color: var(--success); margin-bottom: 4px; text-transform: uppercase;">2. After Rehab: Code Compliant &amp; Energy Star Smart Systems</div>
+                        <img src="after_rehab_schematic.png" alt="After Rehab Schematic Blueprint" style="width: 100%; border-radius: 6px; border: 1px solid var(--invoice-border); display: block; height: 160px; object-fit: cover;">
                     </div>
                 </div>
 

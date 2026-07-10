@@ -208,6 +208,7 @@ function switchTab(tab) {
     document.getElementById("upgrades-sheet").style.display = (tab === "upgrades") ? "flex" : "none";
     document.getElementById("binder-sheet").style.display = (tab === "binder") ? "flex" : "none";
     document.getElementById("appraisal-sheet").style.display = (tab === "appraisal") ? "flex" : "none";
+    document.getElementById("compliance-sheet").style.display = (tab === "compliance") ? "flex" : "none";
     
     if (tab === "appraisal") {
         setTimeout(() => {
@@ -760,7 +761,7 @@ function downloadFullPDF() {
     container.style.color = "#1f2937";
     container.style.fontSize = "11px";
     
-    const sheetsList = ["invoice-sheet", "proposal-sheet", "upgrades-sheet", "binder-sheet", "appraisal-sheet"];
+    const sheetsList = ["invoice-sheet", "proposal-sheet", "upgrades-sheet", "binder-sheet", "appraisal-sheet", "compliance-sheet"];
     
     sheetsList.forEach((id, index) => {
         const originalSheet = document.getElementById(id);
