@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Invoice & Funding Proposal Studio</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Leaflet.js (Open-Source OSM Mapping) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- html2pdf.js (Consolidated PDF Export Engine) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -68,6 +73,34 @@
                         <div class="form-group">
                             <label for="edit-propertyARV">Estimated ARV ($)</label>
                             <input type="number" id="edit-propertyARV" min="0">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Desk Appraisal Adjustments -->
+                <section class="section-card">
+                    <h2 class="section-title">Appraisal Valuation Adjustments</h2>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.3;">
+                        Configure comparable sales adjustment values to justify target ARV.
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-coeffSqFt">Living Area ($/sqft)</label>
+                            <input type="number" id="edit-coeffSqFt" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-coeffBed">Bedroom Diff ($)</label>
+                            <input type="number" id="edit-coeffBed" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-coeffBath">Bathroom Diff ($)</label>
+                            <input type="number" id="edit-coeffBath" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-coeffEnergy">Energy Premium ($)</label>
+                            <input type="number" id="edit-coeffEnergy" min="0">
                         </div>
                     </div>
                 </section>
@@ -276,7 +309,10 @@
             <!-- Action Buttons Footer -->
             <footer class="sidebar-footer">
                 <button type="button" id="print-invoice" class="primary-btn">
-                    <span>🖨️</span> Print / Save to PDF
+                    <span>🖨️</span> Print Active Tab
+                </button>
+                <button type="button" id="download-package-pdf" class="primary-btn" style="background: linear-gradient(135deg, var(--accent), #10B981); border: none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); width: 100%; margin-top: 6px;">
+                    <span>📥</span> Download Full PDF Package
                 </button>
                 <div class="secondary-actions">
                     <button type="button" id="export-json" class="secondary-btn">
@@ -299,6 +335,7 @@
                     <button type="button" class="tab-btn" data-tab="proposal">Funding Proposal</button>
                     <button type="button" class="tab-btn" data-tab="upgrades">Energy Upgrades</button>
                     <button type="button" class="tab-btn" data-tab="binder">Documents Binder</button>
+                    <button type="button" class="tab-btn" data-tab="appraisal">Desk Appraisal</button>
                 </div>
                 <button type="button" id="theme-toggle" class="icon-badge-btn" title="Toggle Preview Theme">
                     <span id="theme-icon">🌙</span>
@@ -832,6 +869,161 @@
                         </a>
                     </div>
 
+                </div>
+
+                <!-- Footer Details -->
+                <footer class="invoice-footer" style="margin-top: auto;">
+                    <div>The Real Estate Connections LLC &copy; 2026</div>
+                    <div>Website: <a class="footer-link" target="_blank">TheRealEstateConnection.com</a></div>
+                </footer>
+            </article>
+
+            <!-- TAB 5: Document Sheet (Desk Appraisal Studio View) -->
+            <article id="appraisal-sheet" class="invoice-sheet" style="display: none; flex-direction: column;">
+                <!-- Branding Header -->
+                <div class="company-brand-section">
+                    <div class="invoice-logo-container">
+                        <div class="logo-graphic"></div>
+                        <div>
+                            <div class="logo-text-title">The Real Estate Connections LLC</div>
+                            <div class="logo-text-subtitle">Remodeling & Investment</div>
+                        </div>
+                    </div>
+                    <div class="invoice-status-badge status-estimate" style="background-color: rgba(6, 182, 212, 0.1); color: var(--accent); border-color: rgba(6, 182, 212, 0.2);">
+                        <span>🏛️</span> Desktop Appraisal
+                    </div>
+                </div>
+
+                <!-- Title Header -->
+                <div style="border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 24px;">
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: var(--invoice-text); text-transform: uppercase; letter-spacing: 0.5px;">
+                        Comparable Sales &amp; Valuation Analysis
+                    </h2>
+                    <div style="font-size: 12px; color: var(--invoice-text-muted); margin-top: 4px;">
+                        Professional Valuation Model justifying property After-Repair Value (ARV)
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div class="notes-terms-title no-print" style="margin-bottom: 8px;">Comparable Sales Location Map (OpenStreetMap)</div>
+                <div id="appraisal-map" class="no-print" style="height: 300px; border-radius: 8px; border: 1px solid var(--invoice-border); margin-bottom: 24px; z-index: 10;"></div>
+
+                <!-- Grid Table -->
+                <div class="notes-terms-title" style="margin-bottom: 10px;">Comparable Sales Adjustment Grid</div>
+                <table class="invoice-table" style="margin-bottom: 24px; font-size: 11px;">
+                    <thead>
+                        <tr style="background-color: rgba(0, 0, 0, 0.02);">
+                            <th style="width: 140px;">Feature</th>
+                            <th style="width: 150px; background-color: rgba(59, 130, 246, 0.03);">Subject Property</th>
+                            <th style="width: 160px;">Comparable Sale 1</th>
+                            <th style="width: 160px;">Comparable Sale 2</th>
+                            <th style="width: 160px;">Comparable Sale 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Address -->
+                        <tr>
+                            <td><strong>Property Address</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.03);"><strong>2277 N Peachtree Way</strong></td>
+                            <td>2295 N Peachtree Way</td>
+                            <td>5410 North Peachtree Rd</td>
+                            <td>2210 Peachtree Ln</td>
+                        </tr>
+                        <!-- Proximity -->
+                        <tr>
+                            <td><strong>Proximity to Subject</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.03);">Subject</td>
+                            <td>0.1 miles NE</td>
+                            <td>0.4 miles S</td>
+                            <td>0.3 miles W</td>
+                        </tr>
+                        <!-- Sale Price -->
+                        <tr style="font-weight: 700; background-color: rgba(0, 0, 0, 0.01);">
+                            <td><strong>Sale Price</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.05); color: var(--invoice-text);">$725,000 (Target ARV)</td>
+                            <td>$680,000</td>
+                            <td>$745,000</td>
+                            <td>$655,000</td>
+                        </tr>
+                        <!-- Date of Sale -->
+                        <tr>
+                            <td><strong>Sale Date</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.03);">Proposed</td>
+                            <td>03/15/2026</td>
+                            <td>04/20/2026</td>
+                            <td>05/10/2026</td>
+                        </tr>
+                        <!-- Living Area -->
+                        <tr>
+                            <td><strong>Living Area (Sq Ft)</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.03);"><span id="appr-sub-sqft">2,659</span> Sq Ft</td>
+                            <td>2,500 Sq Ft<br><span id="appr-adj-sqft-1" class="appr-adj-text text-green">+0.00</span></td>
+                            <td>2,800 Sq Ft<br><span id="appr-adj-sqft-2" class="appr-adj-text text-red">+0.00</span></td>
+                            <td>2,400 Sq Ft<br><span id="appr-adj-sqft-3" class="appr-adj-text text-green">+0.00</span></td>
+                        </tr>
+                        <!-- Beds/Baths -->
+                        <tr>
+                            <td><strong>Beds / Baths</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.03);"><span id="appr-sub-bb">4 / 3.0</span></td>
+                            <td>4 / 2.5<br><span id="appr-adj-bb-1" class="appr-adj-text text-green">+0.00</span></td>
+                            <td>4 / 3.5<br><span id="appr-adj-bb-2" class="appr-adj-text text-red">+0.00</span></td>
+                            <td>3 / 2.5<br><span id="appr-adj-bb-3" class="appr-adj-text text-green">+0.00</span></td>
+                        </tr>
+                        <!-- Lot Size -->
+                        <tr>
+                            <td><strong>Lot Size (Acres)</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.03);"><span id="appr-sub-lot">0.96</span> Acres</td>
+                            <td>0.85 Acres<br><span class="text-muted">+0.00</span></td>
+                            <td>1.10 Acres<br><span class="text-muted">+0.00</span></td>
+                            <td>0.78 Acres<br><span class="text-muted">+0.00</span></td>
+                        </tr>
+                        <!-- Year Built -->
+                        <tr>
+                            <td><strong>Year Built / Age</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.03);">1969 (57 yrs)</td>
+                            <td>1972 (54 yrs)<br><span class="text-muted">+0.00</span></td>
+                            <td>1975 (51 yrs)<br><span class="text-muted">+0.00</span></td>
+                            <td>1968 (58 yrs)<br><span class="text-muted">+0.00</span></td>
+                        </tr>
+                        <!-- Energy Upgrades / Condition -->
+                        <tr>
+                            <td><strong>Energy Star / upgrades</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.03); color: var(--success); font-weight: 600;">Zero-Carbon Package</td>
+                            <td>Standard / Standard<br><span id="appr-adj-energy-1" class="appr-adj-text text-green">+0.00</span></td>
+                            <td>Standard / Standard<br><span id="appr-adj-energy-2" class="appr-adj-text text-green">+0.00</span></td>
+                            <td>Standard / Standard<br><span id="appr-adj-energy-3" class="appr-adj-text text-green">+0.00</span></td>
+                        </tr>
+                        <!-- Net Adjustments -->
+                        <tr style="font-weight: 600; background-color: rgba(0, 0, 0, 0.015);">
+                            <td><strong>Net Adjustments</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.03);">Reference</td>
+                            <td id="appr-net-adj-1">$0.00</td>
+                            <td id="appr-net-adj-2">$0.00</td>
+                            <td id="appr-net-adj-3">$0.00</td>
+                        </tr>
+                        <!-- Adjusted Comp Price -->
+                        <tr style="font-weight: 800; font-size: 12px; background-color: rgba(0, 0, 0, 0.03); border-top: 1.5px solid var(--invoice-text);">
+                            <td><strong>Adjusted Price</strong></td>
+                            <td style="background-color: rgba(59, 130, 246, 0.08); color: var(--invoice-text);">Indicated ARV</td>
+                            <td id="appr-adj-price-1">$0.00</td>
+                            <td id="appr-adj-price-2">$0.00</td>
+                            <td id="appr-adj-price-3">$0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Reconciled Value Callout -->
+                <div style="background-color: rgba(6, 182, 212, 0.03); border: 1.5px solid rgba(6, 182, 212, 0.2); border-radius: 6px; padding: 18px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h4 style="font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700; color: var(--invoice-text); margin: 0;">Reconciled Valuation Target (Rehab ARV)</h4>
+                        <p style="font-size: 12px; color: var(--invoice-text-muted); margin: 4px 0 0; line-height: 1.4;">
+                            Indicated subject property valuation after complete implementation of the proposed $194,707 remodeling and GEFA zero-carbon upgrades.
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px;">Indicated Market Value</span>
+                        <div id="appr-indicated-val" style="font-size: 24px; font-weight: 800; color: var(--accent); margin-top: 4px;">$0.00</div>
+                    </div>
                 </div>
 
                 <!-- Footer Details -->

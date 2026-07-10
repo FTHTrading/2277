@@ -903,6 +903,23 @@ body:not(.dark-preview) .logo-graphic {
     }
 }
 
+.text-green {
+    color: var(--success) !important;
+    font-weight: 600;
+}
+.text-red {
+    color: var(--danger) !important;
+    font-weight: 600;
+}
+.text-muted {
+    color: var(--invoice-text-muted) !important;
+}
+.appr-adj-text {
+    font-size: 10px;
+    margin-top: 2px;
+    display: inline-block;
+}
+
 /* Print Stylesheet overrides */
 @media print {
     @page {

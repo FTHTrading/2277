@@ -120,6 +120,12 @@ let invoiceState = {
     amountPaid: 0,
     terms: "All invoices are payable when received. Thank you for your business!",
     
+    // Appraisal Valuation Adjustments Coefficients
+    coeffSqFt: 100,
+    coeffBed: 15000,
+    coeffBath: 10000,
+    coeffEnergy: 30000,
+
     // Line Items
     items: JSON.parse(JSON.stringify(presets["original-math"].items))
 };
@@ -163,15 +169,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Theme toggle button
     document.getElementById("theme-toggle").addEventListener("click", () => {
-        const sheet = document.getElementById("invoice-sheet");
-        const proposal = document.getElementById("proposal-sheet");
-        const upgrades = document.getElementById("upgrades-sheet");
+        const sheets = ["invoice-sheet", "proposal-sheet", "upgrades-sheet", "binder-sheet", "appraisal-sheet"];
+        sheets.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle("dark-preview");
+        });
         
-        sheet.classList.toggle("dark-preview");
-        proposal.classList.toggle("dark-preview");
-        upgrades.classList.toggle("dark-preview");
-        
-        const isDark = sheet.classList.contains("dark-preview");
+        const isDark = document.getElementById("invoice-sheet").classList.contains("dark-preview");
         document.getElementById("theme-icon").textContent = isDark ? "☀️" : "🌙";
         showToast(`Theme switched to ${isDark ? 'Dark' : 'Light'} preview`);
     });
@@ -182,6 +186,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("print-invoice").addEventListener("click", () => {
         window.print();
     });
+    
+    // Download full PDF package
+    document.getElementById("download-package-pdf").addEventListener("click", downloadFullPDF);
 
     // Load initial original-math preset details
     loadPreset("original-math");
@@ -200,6 +207,16 @@ function switchTab(tab) {
     document.getElementById("proposal-sheet").style.display = (tab === "proposal") ? "flex" : "none";
     document.getElementById("upgrades-sheet").style.display = (tab === "upgrades") ? "flex" : "none";
     document.getElementById("binder-sheet").style.display = (tab === "binder") ? "flex" : "none";
+    document.getElementById("appraisal-sheet").style.display = (tab === "appraisal") ? "flex" : "none";
+    
+    if (tab === "appraisal") {
+        setTimeout(() => {
+            initMap();
+            if (myMap) {
+                myMap.invalidateSize();
+            }
+        }, 100);
+    }
     
     showToast(`Switched view to ${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
 }
@@ -213,7 +230,8 @@ function bindInputs() {
         "draw1", "draw2", "draw3", "draw4",
         "rebateHVAC", "rebateElectric", "rebateCrawl", "rebatePump", "rebateWindows",
         "bankName", "bankBranch", "bankPhone", "bankRouting", "bankAccount",
-        "discount", "taxRate", "amountPaid", "terms"
+        "discount", "taxRate", "amountPaid", "terms",
+        "coeffSqFt", "coeffBed", "coeffBath", "coeffEnergy"
     ];
 
     fields.forEach(field => {
@@ -516,6 +534,9 @@ function updateInvoice() {
     document.getElementById("up-total-rebates").textContent = `-$${rebatesTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
     document.getElementById("up-total-net").textContent = `$${netTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
     document.getElementById("up-total-savings").textContent = `$${savingsTotal.toLocaleString('en-US')}/yr`;
+
+    // 8. Run Desk Appraisal Calculations
+    recalculateAppraisal();
 }
 
 // Helpers & Formatting
@@ -584,4 +605,208 @@ function importInvoiceJSON(e) {
         }
     };
     reader.readAsText(file);
+}
+
+// ==========================================
+// 8. Interactive Desk Appraisal & Leaflet Map
+// ==========================================
+let myMap = null;
+
+function initMap() {
+    if (typeof L === 'undefined') return;
+    if (myMap) return;
+
+    try {
+        const subjectLatLng = [33.9482, -84.3216];
+        myMap = L.map('appraisal-map').setView(subjectLatLng, 15);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(myMap);
+        
+        // Add markers
+        L.marker(subjectLatLng).addTo(myMap)
+            .bindPopup('<strong>Subject Property</strong><br>2277 N Peachtree Way<br>Dunwoody, GA 30338')
+            .openPopup();
+            
+        L.marker([33.9490, -84.3205]).addTo(myMap)
+            .bindPopup('<strong>Comp 1: 2295 N Peachtree Way</strong><br>Sold: $680,000<br>Distance: 0.1 miles');
+            
+        L.marker([33.9425, -84.3225]).addTo(myMap)
+            .bindPopup('<strong>Comp 2: 5410 North Peachtree Rd</strong><br>Sold: $745,000<br>Distance: 0.4 miles');
+            
+        L.marker([33.9475, -84.3270]).addTo(myMap)
+            .bindPopup('<strong>Comp 3: 2210 Peachtree Ln</strong><br>Sold: $655,000<br>Distance: 0.3 miles');
+    } catch (e) {
+        console.error("Leaflet map initialization failed: ", e);
+    }
+}
+
+function recalculateAppraisal() {
+    const indicatedEl = document.getElementById("appr-indicated-val");
+    if (!indicatedEl) return;
+
+    // Coefficients
+    const coeffSqFt = parseFloat(invoiceState.coeffSqFt) || 0;
+    const coeffBed = parseFloat(invoiceState.coeffBed) || 0;
+    const coeffBath = parseFloat(invoiceState.coeffBath) || 0;
+    const coeffEnergy = parseFloat(invoiceState.coeffEnergy) || 0;
+
+    // Subject
+    const subSqFt = 2659;
+    const subBeds = 4;
+    const subBaths = 3.0;
+
+    // Comps
+    const comps = [
+        { price: 680000, sqft: 2500, beds: 4, baths: 2.5, idx: 1 },
+        { price: 745000, sqft: 2800, beds: 4, baths: 3.5, idx: 2 },
+        { price: 655000, sqft: 2400, beds: 3, baths: 2.5, idx: 3 }
+    ];
+
+    let totalAdjustedPrice = 0;
+
+    comps.forEach(comp => {
+        const sqftDiff = subSqFt - comp.sqft;
+        const sqftAdj = sqftDiff * coeffSqFt;
+
+        const bedDiff = subBeds - comp.beds;
+        const bedAdj = bedDiff * coeffBed;
+
+        const bathDiff = subBaths - comp.baths;
+        const bathAdj = bathDiff * coeffBath;
+
+        const energyAdj = coeffEnergy;
+
+        const netAdj = sqftAdj + bedAdj + bathAdj + energyAdj;
+        const adjustedPrice = comp.price + netAdj;
+
+        totalAdjustedPrice += adjustedPrice;
+
+        // UI formatting signs
+        const sqftSign = sqftAdj >= 0 ? '+' : '';
+        const bbAdj = bedAdj + bathAdj;
+        const bbSign = bbAdj >= 0 ? '+' : '';
+        const energySign = energyAdj >= 0 ? '+' : '';
+        const netSign = netAdj >= 0 ? '+' : '';
+
+        const setAdjText = (elId, val, sign) => {
+            const el = document.getElementById(elId);
+            if (el) {
+                el.textContent = `${sign}$${Math.abs(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                el.className = val > 0 ? "appr-adj-text text-green" : (val < 0 ? "appr-adj-text text-red" : "appr-adj-text text-muted");
+            }
+        };
+
+        setAdjText(`appr-adj-sqft-${comp.idx}`, sqftAdj, sqftSign);
+        setAdjText(`appr-adj-bb-${comp.idx}`, bbAdj, bbSign);
+        setAdjText(`appr-adj-energy-${comp.idx}`, energyAdj, energySign);
+
+        const netAdjEl = document.getElementById(`appr-net-adj-${comp.idx}`);
+        if (netAdjEl) {
+            netAdjEl.textContent = `${netSign}$${Math.abs(netAdj).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+            netAdjEl.style.color = netAdj >= 0 ? "var(--success)" : "var(--danger)";
+        }
+
+        const adjPriceEl = document.getElementById(`appr-adj-price-${comp.idx}`);
+        if (adjPriceEl) {
+            adjPriceEl.textContent = `$${adjustedPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+    });
+
+    const indicatedVal = totalAdjustedPrice / comps.length;
+    indicatedEl.textContent = `$${indicatedVal.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+
+    // Sync Estimated ARV if changed
+    const roundedIndicated = Math.round(indicatedVal);
+    if (invoiceState.propertyARV !== roundedIndicated) {
+        invoiceState.propertyARV = roundedIndicated;
+        
+        const arvInput = document.getElementById("edit-propertyARV");
+        if (arvInput) arvInput.value = roundedIndicated;
+
+        const propArvVal = document.getElementById("prop-arv-val");
+        if (propArvVal) propArvVal.textContent = `$${roundedIndicated.toLocaleString('en-US')}`;
+
+        // Re-calculate LTV
+        const subtotal = invoiceState.items.reduce((sum, item) => sum + (item.active ? item.qty * item.price : 0), 0);
+        const discountVal = subtotal * (invoiceState.discount / 100);
+        const taxedSubtotal = subtotal - discountVal;
+        const taxVal = taxedSubtotal * (invoiceState.taxRate / 100);
+        const grandTotal = taxedSubtotal + taxVal;
+        
+        const ltvArv = roundedIndicated > 0 ? (grandTotal / roundedIndicated) * 100 : 0;
+        const propLtvArv = document.getElementById("prop-ltv-arv");
+        if (propLtvArv) propLtvArv.textContent = `${ltvArv.toFixed(1)}%`;
+    }
+}
+
+// ==========================================
+// 9. Consolidated PDF Generation
+// ==========================================
+function downloadFullPDF() {
+    if (typeof html2pdf === 'undefined') {
+        alert("The PDF library is still loading. Please try again in a moment.");
+        return;
+    }
+    
+    showToast("Compiling full PDF package...");
+    
+    const container = document.createElement("div");
+    container.style.width = "750px";
+    container.style.padding = "10px";
+    container.style.background = "#ffffff";
+    container.style.color = "#1f2937";
+    container.style.fontSize = "11px";
+    
+    const sheetsList = ["invoice-sheet", "proposal-sheet", "upgrades-sheet", "binder-sheet", "appraisal-sheet"];
+    
+    sheetsList.forEach((id, index) => {
+        const originalSheet = document.getElementById(id);
+        if (!originalSheet) return;
+        
+        const clone = originalSheet.cloneNode(true);
+        clone.style.display = "flex";
+        clone.style.boxShadow = "none";
+        clone.style.border = "none";
+        clone.style.padding = "0";
+        clone.style.margin = "0 0 30px 0";
+        clone.style.width = "100%";
+        clone.style.minHeight = "auto";
+        clone.style.background = "#ffffff";
+        clone.style.color = "#1f2937";
+        
+        clone.classList.remove("dark-preview");
+        clone.style.setProperty("--invoice-bg", "#ffffff");
+        clone.style.setProperty("--invoice-text", "#1f2937");
+        clone.style.setProperty("--invoice-text-muted", "#4b5563");
+        clone.style.setProperty("--invoice-border", "#e5e7eb");
+        
+        clone.querySelectorAll(".no-print, button").forEach(el => el.remove());
+        
+        container.appendChild(clone);
+        
+        if (index < sheetsList.length - 1) {
+            const pageBreak = document.createElement("div");
+            pageBreak.className = "html2pdf__page-break";
+            container.appendChild(pageBreak);
+        }
+    });
+    
+    const opt = {
+        margin: [10, 10, 15, 10],
+        filename: `2277_Peachtree_Dunwoody_Full_Proposal_Package.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'] }
+    };
+    
+    html2pdf().set(opt).from(container).save().then(() => {
+        showToast("PDF Package downloaded successfully!");
+    }).catch(err => {
+        console.error("PDF generation error: ", err);
+        showToast("Failed to compile PDF document", "warning");
+    });
 }
