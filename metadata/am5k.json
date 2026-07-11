@@ -1,7 +1,7 @@
 {
-  "name": "Sovereign Token",
-  "symbol": "TOKEN",
-  "description": "Sovereign charity fundraiser",
+  "name": "Atlanta Mission 5K Reserve",
+  "symbol": "AM5K",
+  "description": "Sovereign asset token for Atlanta Mission 5K Reserve (AM5K) supporting Charity & Humanitarian Aid. Fully backed and non-custodial.",
   "image": "https://mensofgod.com/brand_logo_shield.png",
   "videoUrl": "https://www.youtube.com/watch?v=NgkTHzXZk2U",
   "translations": {
@@ -19,7 +19,7 @@
     },
     {
       "trait_type": "Cause",
-      "value": "Humanitarian Goal"
+      "value": "Express: Charity & Humanitarian Aid"
     },
     {
       "trait_type": "Goal Amount",

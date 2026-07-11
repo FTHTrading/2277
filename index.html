@@ -1357,7 +1357,7 @@
                     <div class="property-card" style="margin: 0;">
                         <h4 style="font-family: var(--font-heading); font-size: 14px; margin-bottom: 8px; color: var(--gold);">⚖️ Platform Fee Architecture</h4>
                         <p class="text-muted" style="font-size: 12px; line-height: 1.5;">
-                            To sustain operations and host Web3 IPFS gateways, Men of God Hub retains a <strong>10% commission fee</strong> ($2.50) on all Stripe $25 mint transactions. 90% goes directly to the fundraising target.
+                            To sustain operations and host Web3 IPFS gateways, Men of God Hub retains a flat <strong>$49 one-time clone fee</strong> for standard Community tier blueprints, a <strong>$199 one-time fee</strong> for Premium customization blueprints, and optional value-added monthly SaaS subscriptions starting at <strong>$19/month</strong>.
                         </p>
                     </div>
                     <div class="property-card" style="margin: 0;">
@@ -1369,66 +1369,47 @@
                 </div>
 
                 <!-- Subscriptions Plan Switcher -->
-                <h4 style="font-family: var(--font-heading); font-size: 15px; margin-bottom: 15px; text-align: left;">Manage Creator Subscriptions</h4>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 30px;">
-                    <!-- Free Plan Card -->
-                    <div class="property-card" id="billing-free-plan-card" style="margin:0; border: 2px solid var(--accent); position: relative;">
-                        <span class="badge badge-blue" style="position: absolute; top: 12px; right: 12px; font-size: 9px;">ACTIVE</span>
-                        <h4 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 4px;">Free Donor Tier</h4>
-                        <p class="text-muted" style="font-size: 11px; margin-bottom: 15px;">Standard donor access to causes and LP seeding.</p>
-                        <strong style="font-size: 24px; display: block; margin-bottom: 15px;">$0 <span style="font-size:12px; font-weight: normal; color:var(--text-muted);">/ month</span></strong>
+                <h4 style="font-family: var(--font-heading); font-size: 15px; margin-bottom: 15px; text-align: left;">Franchise Plans &amp; SaaS Subscriptions</h4>
+                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; margin-bottom: 30px;">
+                    <!-- Blueprint Pricing Tier -->
+                    <div class="property-card" style="margin:0; border: 1px solid var(--border-color);">
+                        <h4 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 4px;">One-Time Blueprint License</h4>
+                        <p class="text-muted" style="font-size: 11px; margin-bottom: 15px;">Deploy pre-audited blueprints to Solana devnet or mainnet.</p>
+                        <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px;">
+                            <div>
+                                <strong style="font-size: 20px; display: block; color: white;">$49</strong>
+                                <span style="font-size: 9px; color: var(--text-muted);">Community Tier</span>
+                            </div>
+                            <div>
+                                <strong style="font-size: 20px; display: block; color: var(--accent);">$199</strong>
+                                <span style="font-size: 9px; color: var(--text-muted);">Premium Tier</span>
+                            </div>
+                            <div>
+                                <strong style="font-size: 20px; display: block; color: #00ff9d;">$129</strong>
+                                <span style="font-size: 9px; color: var(--text-muted);">Best Value Bundle</span>
+                            </div>
+                        </div>
                         <ul style="font-size: 11px; color: var(--text-secondary); margin-left: 15px; line-height: 1.8;">
-                            <li>Mint certificates for causes</li>
-                            <li>Seed liquidity in LP Directory</li>
-                            <li>Generate standard affiliate links</li>
+                            <li>Metaplex-compliant token metadata</li>
+                            <li>OCC-Chartered BitGo Multi-Sig binding</li>
+                            <li>Linear milestone release escrows</li>
                         </ul>
                     </div>
 
-                    <!-- Pro Creator Plan Card -->
-                    <div class="property-card" id="billing-pro-plan-card" style="margin:0; border: 2px solid transparent;">
-                        <span class="badge badge-purple" style="position: absolute; top: 12px; right: 12px; font-size: 9px;">RECURRING</span>
-                        <h4 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 4px;">Pro Creator Tier</h4>
-                        <p class="text-muted" style="font-size: 11px; margin-bottom: 15px;">Autonomous AI agent tools, premium newsletters, and custom tokens.</p>
-                        <strong style="font-size: 24px; display: block; margin-bottom: 15px; color: var(--accent-purple);">$29 <span style="font-size:12px; font-weight: normal; color:var(--text-muted);">/ month</span></strong>
+                    <!-- Monthly SaaS Add-ons -->
+                    <div class="property-card" style="margin:0; border: 1px solid var(--border-color); position: relative;">
+                        <span class="badge badge-purple" style="position: absolute; top: 12px; right: 12px; font-size: 9px;">INTEGRATED</span>
+                        <h4 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 4px;">Monthly SaaS Add-ons</h4>
+                        <p class="text-muted" style="font-size: 11px; margin-bottom: 15px;">Advanced utilities to scale your charity operations.</p>
                         <ul style="font-size: 11px; color: var(--text-secondary); margin-left: 15px; line-height: 1.8; margin-bottom: 15px;">
-                            <li>Autonomous AI LP rebalancing &amp; social poster</li>
-                            <li>Unlimited Metaplex batch contact airdrops</li>
-                            <li>Custom fundraiser token launchpad</li>
-                            <li>VIP 15% referral affiliate commission</li>
+                            <li>🔒 IPFS Vaulting &amp; Clawback — <strong>$19/month</strong></li>
+                            <li>⚡ Go Network Liquidity Seeding — <strong>$29/month</strong></li>
+                            <li>💼 Full BitGo Custody Desk — <strong>$39/month</strong></li>
+                            <li>🤝 Priority Fee Routing — <strong>$19/month</strong></li>
                         </ul>
-                        <button id="upgrade-plan-btn" class="btn" style="width: 100%; max-width: 100%; padding: 8px; font-size: 12px; margin: 0; border-radius: 4px;">
-                            Upgrade to Pro Creator ($29)
+                        <button onclick="switchTab('campaigns'); document.getElementById('express-blueprint-code').scrollIntoView({behavior:'smooth'});" class="btn" style="width: 100%; max-width: 100%; padding: 8px; font-size: 12px; margin: 0; border-radius: 4px; background: #00ff9d; color: black; font-weight: bold;">
+                            Deploy a Blueprint Now
                         </button>
-                    </div>
-                </div>
-
-                <!-- Recurring Checkout Form (Hidden until upgrade clicked) -->
-                <div class="stripe-form-card" id="billing-checkout-container" style="display: none; border-color: var(--accent-purple);">
-                    <h4 style="font-family: var(--font-heading); font-size: 14px; margin-bottom: 15px; color: var(--accent-purple);">Activate Pro Creator Subscription</h4>
-                    <div class="stripe-header">
-                        <span class="stripe-logo">stripe</span>
-                        <span class="text-muted" style="font-size: 11px; font-weight: 600;">CARD DETAILS</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="sub-card-number">Card Number</label>
-                        <div class="card-element-wrapper">
-                            <span style="font-size: 16px;"></span>
-                            <input type="text" id="sub-card-number" class="form-control" style="background: transparent; border: none; padding: 0; box-shadow: none;" placeholder="4242 4242 4242 4242" maxlength="19">
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                        <div class="form-group">
-                            <label for="sub-card-expiry">Expiry Date</label>
-                            <input type="text" id="sub-card-expiry" class="form-control" placeholder="MM/YY" maxlength="5">
-                        </div>
-                        <div class="form-group">
-                            <label for="sub-card-cvc">CVC</label>
-                            <input type="password" id="sub-card-cvc" class="form-control" placeholder="123" maxlength="4">
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 12px;">
-                        <button id="sub-cancel-btn" class="btn btn-secondary" style="width: auto; padding: 10px 20px; font-size: 12px; margin: 0;">Cancel</button>
-                        <button id="sub-submit-btn" class="btn" style="flex: 1; padding: 10px 20px; font-size: 12px; margin: 0;">Authorize Stripe &amp; Upgrade ($29/mo)</button>
                     </div>
                 </div>
             </div>
