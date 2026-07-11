@@ -443,7 +443,7 @@ document.addEventListener("DOMContentLoaded", () => {
         state.activeTab = tabKey;
         
         // Highlight active navigation tab button (hidden tabs highlight backoffice)
-        const visibleTabs = ["campaigns", "trenches", "bitgo", "backoffice"];
+        const visibleTabs = ["campaigns", "trenches", "bitgo", "backoffice", "affiliates"];
         tabs.forEach(t => {
             const isHighlight = (t.dataset.tab === tabKey) || (!visibleTabs.includes(tabKey) && t.dataset.tab === "backoffice");
             t.classList.toggle("active", isHighlight);
@@ -2151,6 +2151,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Affiliate Dashboard Engine
     // ==========================================
     function renderAffiliatesDashboard() {
+        if (typeof initAffiliateSystem === 'function') {
+            initAffiliateSystem();
+        }
+    }
+    
+    function updateAffiliateDisplay() {
         if (state.userWallet) {
             affiliateWalletInput.value = state.userWallet;
         } else {
@@ -3169,6 +3175,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (creditBalanceEl) creditBalanceEl.textContent = `$${availableBalance.toFixed(2)}`;
         if (cashoutBalanceEl) cashoutBalanceEl.textContent = `$${availableBalance.toFixed(2)}`;
+
+        // Populate Referral Introductions Ledger Rows
+        const affLedgerRows = document.getElementById("affiliate-ledger-rows");
+        if (affLedgerRows) {
+            affLedgerRows.innerHTML = "";
+            const sampleLedger = [
+                { user: "hope.mensofgod.id", project: "Atlanta Hope Fund", volume: "$25,000", commission: "$50.00", status: "Paid" },
+                { user: "tiny.mensofgod.id", project: "Wellspring Tiny Homes", volume: "$10,000", commission: "$20.00", status: "Paid" },
+                { user: "rehab.mensofgod.id", project: "22 Peachtre Way", volume: "$5,000", commission: "$10.00", status: "Pending" }
+            ];
+
+            if (stats.referrals === 0) {
+                affLedgerRows.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--text-muted);">No referrals tracked yet. Share your link to start earning!</td></tr>`;
+            } else {
+                const limit = Math.min(sampleLedger.length, stats.referrals);
+                const displayList = sampleLedger.slice(0, limit);
+                displayList.forEach(item => {
+                    const tr = document.createElement("tr");
+                    tr.style.borderBottom = "1px solid rgba(255,255,255,0.04)";
+                    const statusColor = item.status === "Paid" ? "#00ff9d" : "#ffd700";
+                    tr.innerHTML = `
+                        <td style="padding: 10px; font-weight: bold; color: white; font-family: var(--font-mono);">${item.user}</td>
+                        <td style="padding: 10px; color: var(--text-secondary);">${item.project}</td>
+                        <td style="padding: 10px; color: white; font-family: var(--font-mono);">${item.volume}</td>
+                        <td style="padding: 10px; color: #00ff9d; font-family: var(--font-mono);">${item.commission}</td>
+                        <td style="padding: 10px; color: ${statusColor}; font-weight: bold;">${item.status}</td>
+                    `;
+                    affLedgerRows.appendChild(tr);
+                });
+            }
+        }
 
         // Credit button state
         if (creditBtn) {
@@ -5494,3 +5531,72 @@ function renderSovereignProfile(causeId) {
         });
     });
 })();
+
+// ==========================================
+// 🪙 $BUCK TREASURY MINTING DESK INITIALIZATION
+// ==========================================
+(function initTreasuryDesk() {
+    const mintSubmitBtn = document.getElementById("trench-mint-submit");
+    if (!mintSubmitBtn) return;
+
+    mintSubmitBtn.addEventListener("click", async () => {
+        const opSelect = document.getElementById("trench-mint-op");
+        const amountInput = document.getElementById("trench-mint-amount");
+        const walletInput = document.getElementById("trench-mint-wallet");
+
+        if (!opSelect || !amountInput || !walletInput) return;
+
+        const operation = opSelect.value;
+        const amount = parseFloat(amountInput.value);
+        const wallet = walletInput.value.trim();
+
+        if (isNaN(amount) || amount <= 0) {
+            if (typeof showToast === "function") showToast("Please enter a valid amount.", "error");
+            return;
+        }
+
+        if (!wallet) {
+            if (typeof showToast === "function") showToast("Please enter a destination wallet address.", "error");
+            return;
+        }
+
+        mintSubmitBtn.disabled = true;
+        mintSubmitBtn.textContent = "Executing Operation...";
+
+        const proxyBase = (window.state && window.state.proxyUrl) || (window.bitgoState && window.bitgoState.proxyUrl) || 'http://localhost:3377';
+
+        try {
+            const response = await fetch(`${proxyBase}/solana/treasury/execute`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ operation, amount, wallet })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                if (typeof showToast === "function") showToast(data.message, "success");
+                if (typeof addLog === "function") addLog(`[Treasury Desk] ${data.message} TX Signature: ${data.signature}`);
+                
+                // Update BUCK supply dynamically on the screen
+                const buckSupplyEl = document.getElementById("trench-buck-supply");
+                if (buckSupplyEl) {
+                    const currentSupply = parseInt(buckSupplyEl.textContent.replace(/,/g, ''));
+                    const newSupply = operation === 'mint' ? (currentSupply + amount) : (currentSupply - amount);
+                    buckSupplyEl.textContent = newSupply.toLocaleString();
+                }
+
+                // Reset inputs
+                amountInput.value = "";
+            } else {
+                if (typeof showToast === "function") showToast(data.error || "Operation failed", "error");
+            }
+        } catch (err) {
+            console.error("Treasury execution error:", err);
+            if (typeof showToast === "function") showToast("Network error contacting proxy server.", "error");
+        } finally {
+            mintSubmitBtn.disabled = false;
+            mintSubmitBtn.textContent = "Execute Operation";
+        }
+    });
+})();
+

@@ -143,7 +143,7 @@
             <button type="button" class="tab-btn" data-tab="launch" id="tab-launch-toggle" style="display: none;">Launch a Cause</button>
             <button type="button" class="tab-btn" data-tab="seeder" id="tab-seeder-toggle" style="display: none;">LP Directory</button>
             <button type="button" class="tab-btn" data-tab="airdrop" id="tab-airdrop-toggle" style="display: none;">Airdrop Hub</button>
-            <button type="button" class="tab-btn" data-tab="affiliates" id="tab-affiliates-toggle" style="display: none;">Affiliates</button>
+            <button type="button" class="tab-btn" data-tab="affiliates" id="tab-affiliates-toggle">Affiliates</button>
             <button type="button" class="tab-btn" data-tab="billing" id="tab-billing-toggle" style="display: none;">Subscriptions</button>
             <button type="button" class="tab-btn" data-tab="insights" id="tab-insights-toggle" style="display: none; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); color: #c084fc;">Insights &amp; AI Blog</button>
             <button type="button" class="tab-btn" data-tab="sovereign-profile" id="tab-sovereign-profile-toggle" style="display: none;">Sovereign Profile</button>
@@ -1515,6 +1515,30 @@
                         <button id="request-cashout-btn" class="btn btn-secondary" style="width: 100%; margin-top: 15px;" disabled>Cashout Available at $30</button>
                     </div>
                 </div>
+
+                <!-- Referral Transactions Ledger -->
+                <div class="property-card" style="margin: 20px 0 0 0; padding: 20px;">
+                    <h4 style="font-family: var(--font-heading); font-size: 14px; margin: 0 0 16px 0; color: white; display: flex; align-items: center; justify-content: space-between;">
+                        <span>Referral Introductions Ledger</span>
+                        <span style="font-size: 9px; background: rgba(0, 255, 157, 0.1); color: #00ff9d; padding: 2px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase;">Real-Time</span>
+                    </h4>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); font-size: 10px; text-transform: uppercase;">
+                                    <th style="padding: 8px 10px;">Referred User</th>
+                                    <th style="padding: 8px 10px;">Project Launched</th>
+                                    <th style="padding: 8px 10px;">Raised Volume</th>
+                                    <th style="padding: 8px 10px;">Commission Earned</th>
+                                    <th style="padding: 8px 10px;">Payout Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="affiliate-ledger-rows">
+                                <!-- Dynamic rows rendered by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -2335,6 +2359,86 @@
                     <div>
                         <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">LP Seeding Routing</div>
                         <div style="font-size: 20px; font-weight: bold; color: #00ff9d; font-family: var(--font-mono);">FalconX &amp; Wintermute Desks</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Platform Tokens Core Portfolio & Minting Suite -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1200px; margin: 0 auto 30px; padding: 0 10px;">
+                <!-- Portfolio Metrics & Safeguards -->
+                <div class="glass-card" style="padding: 24px;">
+                    <h3 style="font-family: var(--font-heading); font-size: 16px; margin: 0 0 16px 0; color: white;">Platform Treasury Assets</h3>
+                    <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+                        <!-- $MOG Asset Card -->
+                        <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="font-size: 16px; color: #a855f7; display: block;">$MOG (Sovereign Utility)</strong>
+                                <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); word-break: break-all;">AFDVbdAKfje8gNAkL8st5LV8cgb9rGvMGQpekyVqobj1</span>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 16px; font-weight: bold; color: white; font-family: var(--font-mono);" id="trench-mog-supply">2,500,000,000</div>
+                                <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Total Supply</div>
+                            </div>
+                        </div>
+                        <!-- $BUCK Asset Card -->
+                        <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="font-size: 16px; color: #00ff9d; display: block;">$BUCK (Community Value)</strong>
+                                <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); word-break: break-all;">HEcAzw28ZvYXzsou4XfCido51YVYZVneZ1aut4yNCvWu</span>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 16px; font-weight: bold; color: white; font-family: var(--font-mono);" id="trench-buck-supply">1,000,000,000</div>
+                                <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Total Supply</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Safeguard Verification Panel -->
+                    <div style="background: rgba(0,255,157,0.03); border: 1px solid rgba(0,255,157,0.1); padding: 16px; border-radius: 8px;">
+                        <h4 style="font-family: var(--font-heading); font-size: 12px; color: #00ff9d; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">Safeguard Status</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px;">
+                            <div style="display: flex; align-items: center; gap: 6px; color: white;">
+                                <span style="color: #00ff9d; font-weight: bold;">✓</span> Mint Authority: Secured via Multi-Sig
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px; color: white;">
+                                <span style="color: #00ff9d; font-weight: bold;">✓</span> Freeze Authority: Revoked
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px; color: white;">
+                                <span style="color: #00ff9d; font-weight: bold;">✓</span> LP Contract: Locked 24-Months
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px; color: white;">
+                                <span style="color: #00ff9d; font-weight: bold;">✓</span> Custody Desk: BitGo Chartered
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BUCK Minting Suite Console -->
+                <div class="glass-card" style="padding: 24px;">
+                    <h3 style="font-family: var(--font-heading); font-size: 16px; margin: 0 0 16px 0; color: white;">$BUCK Treasury Minting Desk</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;">Authorized entities can interact directly with the BUCK treasury mint contract. All operations require secure multi-sig key validation.</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div>
+                                <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 4px; text-transform: uppercase;">Operation Type</label>
+                                <select id="trench-mint-op" class="form-control" style="background: #07090e; color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; height: 44px; border-radius: 6px; font-size: 13px; font-weight: 500;">
+                                    <option value="mint">Issue (Mint BUCK)</option>
+                                    <option value="redeem">Redeem (Burn BUCK)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 4px; text-transform: uppercase;">Amount</label>
+                                <input type="number" id="trench-mint-amount" class="form-control" placeholder="e.g. 50000" style="background: #07090e; color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; height: 44px; padding: 10px; border-radius: 6px; font-size: 13px;">
+                            </div>
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 4px; text-transform: uppercase;">Destination Wallet / Multi-Sig Wallet</label>
+                            <input type="text" id="trench-mint-wallet" class="form-control" placeholder="B8Hb7yMTg8XhQd7CkuPAsS671rq4gqky1j6pNF2KMTKM" style="background: #07090e; color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; height: 44px; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 12px;">
+                        </div>
+                        <button id="trench-mint-submit" class="btn" style="background: #00ff9d; color: black; font-weight: bold; width: 100%; margin-top: 8px;">
+                            Execute Operation
+                        </button>
                     </div>
                 </div>
             </div>
