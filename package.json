@@ -6,7 +6,8 @@
   "scripts": {
     "proxy": "node bitgo-proxy.js",
     "dev": "node bitgo-proxy.js & python -m http.server 9090",
-    "start": "node bitgo-proxy.js"
+    "start": "node bitgo-proxy.js",
+    "deploy": "node deploy.js"
   },
   "dependencies": {
     "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
