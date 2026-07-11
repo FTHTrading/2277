@@ -232,6 +232,17 @@
                     No jargon. No complex setups. Enter 3 fields to instantly deploy your sovereign token and bonding curve on Solana.
                 </p>
                 <form id="express-launch-form" onsubmit="return false;">
+                    <!-- Turnkey Code Input -->
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label style="font-size: 11px; color: var(--accent); display: flex; align-items: center; gap: 6px; font-weight: bold;">
+                            📥 PASTE TURNKEY BLUEPRINT CODE
+                        </label>
+                        <input type="text" id="express-blueprint-code" class="form-control" placeholder="e.g. UNYKORN-RELIEF-DOVE-7777" style="padding: 10px 14px; font-size: 13px; border-color: rgba(0, 255, 157, 0.4); text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.5px;">
+                        <div style="font-size: 9px; color: var(--text-muted); margin-top: 4px;">
+                            Auto-fills logo, token variables, escrow milestones, and metadata registry configurations instantly.
+                        </div>
+                    </div>
+
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                         <div class="form-group" style="margin-bottom: 0;">
                             <label style="font-size: 11px; color: var(--text-muted);">Token Name</label>
@@ -250,22 +261,22 @@
                             <div class="logo-template-option active" data-template="shield" style="border: 2px solid #00ff9d; background: rgba(0, 255, 157, 0.05); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: var(--transition);">
                                 <div style="font-size: 20px; margin-bottom: 4px;">🛡️</div>
                                 <div style="font-size: 11px; font-weight: bold; color: var(--text-primary);">Sovereign Shield</div>
-                                <div style="font-size: 9px; color: var(--text-muted);">Community &amp; Prep</div>
+                                <div style="font-size: 9px; color: var(--text-muted);">Civic Defense</div>
                             </div>
                             <div class="logo-template-option" data-template="leaf" style="border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: var(--transition);">
                                 <div style="font-size: 20px; margin-bottom: 4px;">🍃</div>
                                 <div style="font-size: 11px; font-weight: bold; color: var(--text-primary);">Global Leaf</div>
-                                <div style="font-size: 9px; color: var(--text-muted);">Eco &amp; Real Estate</div>
+                                <div style="font-size: 9px; color: var(--text-muted);">Zero-Carbon RWA</div>
                             </div>
                             <div class="logo-template-option" data-template="hands" style="border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: var(--transition);">
                                 <div style="font-size: 20px; margin-bottom: 4px;">🤝</div>
                                 <div style="font-size: 11px; font-weight: bold; color: var(--text-primary);">Open Hands</div>
-                                <div style="font-size: 9px; color: var(--text-muted);">Charity &amp; Ministry</div>
+                                <div style="font-size: 9px; color: var(--text-muted);">Child First &amp; Charity</div>
                             </div>
                             <div class="logo-template-option" data-template="dove" style="border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: var(--transition);">
                                 <div style="font-size: 20px; margin-bottom: 4px;">🕊️</div>
                                 <div style="font-size: 11px; font-weight: bold; color: var(--text-primary);">Sovereign Dove</div>
-                                <div style="font-size: 9px; color: var(--text-muted);">Transparency &amp; Audit</div>
+                                <div style="font-size: 9px; color: var(--text-muted);">Direct Relief</div>
                             </div>
                         </div>
                         <input type="hidden" id="express-template" value="shield">

@@ -696,6 +696,22 @@ app.post('/solana/mint', async (req, res) => {
 
         const metadataFilename = `${cleanSymbol}.json`;
         const metadataPath = path.join(metadataDir, metadataFilename);
+        let custodian = "BitGo Enterprise";
+        let escrowType = "Standard Disbursal Escrow";
+        if (logoTemplate === "dove") {
+            custodian = "BitGo Non-Custodial Hybrid";
+            escrowType = "3-Month Recipient Family Escrow";
+        } else if (logoTemplate === "shield") {
+            custodian = "BitGo Multi-Sig Vault";
+            escrowType = "6-Month Linear Milestone Escrow";
+        } else if (logoTemplate === "leaf") {
+            custodian = "Wintermute Desk";
+            escrowType = "12-Month Liquidity Desk Routing";
+        } else if (logoTemplate === "hands") {
+            custodian = "OCC-Chartered BitGo Managed";
+            escrowType = "24-Month Donation Clawback Escrow";
+        }
+
         const metadataContent = {
             name: tokenName,
             symbol: tokenSymbol.toUpperCase(),
@@ -706,7 +722,11 @@ app.post('/solana/mint', async (req, res) => {
             attributes: [
                 {
                     trait_type: "Custodian",
-                    value: "BitGo Enterprise"
+                    value: custodian
+                },
+                {
+                    trait_type: "Escrow Type",
+                    value: escrowType
                 },
                 {
                     trait_type: "Cause",
@@ -837,6 +857,22 @@ app.post('/solana/mint', async (req, res) => {
                 const reqVideoUrl = req.body.videoUrl || "";
                 const reqTranslations = req.body.translations || {};
 
+                let fallbackCustodian = "BitGo Enterprise";
+                let fallbackEscrowType = "Standard Disbursal Escrow";
+                if (reqLogoTemplate === "dove") {
+                    fallbackCustodian = "BitGo Non-Custodial Hybrid";
+                    fallbackEscrowType = "3-Month Recipient Family Escrow";
+                } else if (reqLogoTemplate === "shield") {
+                    fallbackCustodian = "BitGo Multi-Sig Vault";
+                    fallbackEscrowType = "6-Month Linear Milestone Escrow";
+                } else if (reqLogoTemplate === "leaf") {
+                    fallbackCustodian = "Wintermute Desk";
+                    fallbackEscrowType = "12-Month Liquidity Desk Routing";
+                } else if (reqLogoTemplate === "hands") {
+                    fallbackCustodian = "OCC-Chartered BitGo Managed";
+                    fallbackEscrowType = "24-Month Donation Clawback Escrow";
+                }
+
                 const metadataContent = {
                     name: cleanName,
                     symbol: cleanSymbol.toUpperCase(),
@@ -847,7 +883,11 @@ app.post('/solana/mint', async (req, res) => {
                     attributes: [
                         {
                             trait_type: "Custodian",
-                            value: "BitGo Enterprise"
+                            value: fallbackCustodian
+                        },
+                        {
+                            trait_type: "Escrow Type",
+                            value: fallbackEscrowType
                         },
                         {
                             trait_type: "Cause",

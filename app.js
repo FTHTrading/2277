@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
             raised: 142500,
             category: "Child Security",
             location: "Global Network Platform",
-            description: "Stablecoin smart-contract escrows and soulbound donor NFTs ensuring transparent charity fund releases for child safety and education.",
+            description: "Turnkey Child Security Blueprint: stablecoin escrows, soulbound donor NFTs, and 24-month release structure. White-label cloning enabled: bring your brand, we provision rails and custody.",
             image: "child_first_banner.png",
             tokenName: "Child Security Token",
             tokenSymbol: "CHILD",
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
             raised: 48650,
             category: "Foreclosure Mitigation",
             location: "Dunwoody, GA 30338",
-            description: "Foreclosure rescue and complete zero-carbon rehabilitation. Funding covers Energy Star HVAC heat pumps, double-pane Low-E windows, R-30 crawl space insulation, and smart load-center panel updates.",
+            description: "Turnkey Property Rehabilitation Blueprint: foreclosure rescue and complete zero-carbon energy-efficiency rehab. White-label cloning enabled: clone this design to your region.",
             image: "rehab_property_banner.png",
             tokenName: "Never Give A Buck",
             tokenSymbol: "BUCK",
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
             raised: 89200,
             category: "Zero Carbon Remodel",
             location: "Atlanta Area Communities",
-            description: "Pooling capital for smart solar arrays and energy efficiency remodels to yield direct utility rebates for low-income housing units.",
+            description: "Turnkey Zero Carbon RWA Blueprint: solar arrays and energy efficiency remodels with 12-month routing. White-label cloning enabled: bring your brand and properties.",
             image: "carbon_credits_banner.png",
             tokenName: "Zero Carbon Remodel Token",
             tokenSymbol: "CARBON",
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
             raised: 450000,
             category: "Stablecoin LP",
             location: "XRPL & Solana Ledgers",
-            description: "Providing liquidity depth for MOG USD-pegged stablecoins used for instant cross-border charity distribution.",
+            description: "Turnkey Stablecoin Liquidity Blueprint: liquidity depth for MOG USD-pegged stablecoins. White-label cloning enabled: plug in your custom stablecoin routing structures.",
             image: "brand_logo_v3.jpg",
             tokenName: "MOG Stablecoin",
             tokenSymbol: "MOGS",
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
             raised: 112000,
             category: "Hyperinflation Aid",
             location: "Caracas, Venezuela",
-            description: "Direct stablecoin transfers to verified families offset local inflation. Built using XRPL Devnet gateways and Stellar anchor partnerships.",
+            description: "Turnkey Direct Relief Blueprint: direct stablecoin transfers to verified families, 3-month release, Stellar/XRPL rails. White-label cloning enabled: map your own recipient lists.",
             image: "logo_5_Feb_11_2026_01_21_51_AM.png",
             tokenName: "Venezuela Relief Token",
             tokenSymbol: "VESR",
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
             raised: 42500,
             category: "Humanitarian Aid",
             location: "Havana, Cuba",
-            description: "Funding decentralized off-grid solar generators and independent medical kits to local communities.",
+            description: "Turnkey Cuba Solar & Medical Aid Blueprint: solar arrays and medical kit distribution. White-label cloning enabled: bring your community partners and outreach.",
             image: "logo_6_Feb_11_2026_01_20_39_AM.png",
             tokenName: "Cuba Solar Token",
             tokenSymbol: "CUSAID",
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
             raised: 225000,
             category: "Global Crisis Aid",
             location: "Global Disaster Zones",
-            description: "Rapid response stablecoin reserve accounts triggered autonomously by verified regional alert feeds.",
+            description: "Turnkey Crisis Response Blueprint: stablecoin reserve accounts triggered by alert feeds. White-label cloning enabled: map alert signals to your regional coordinators.",
             image: "brand_logo_v3.jpg",
             tokenName: "Global Emergency Token",
             tokenSymbol: "GLOBE",
@@ -507,6 +507,108 @@ document.addEventListener("DOMContentLoaded", () => {
             addLog(`[System] Logo template selected: ${template.toUpperCase()}`);
         });
     });
+
+    // ==========================================
+    // Turnkey Blueprint Code Parser
+    // ==========================================
+    const blueprintCodeInput = document.getElementById("express-blueprint-code");
+    
+    const BLUEPRINTS = {
+        "UNYKORN-RELIEF-DOVE-7777": {
+            name: "Direct Humanitarian Relief",
+            symbol: "DHR",
+            goal: "Charity & Humanitarian Aid",
+            template: "dove",
+            discount: 10,
+            reserve: 15,
+            delay: 30,
+            vesting: 3
+        },
+        "UNYKORN-CIVIC-SHIELD-7777": {
+            name: "Civic Defense Reserve",
+            symbol: "CDR",
+            goal: "Community Defense & Prep",
+            template: "shield",
+            discount: 5,
+            reserve: 20,
+            delay: 15,
+            vesting: 6
+        },
+        "UNYKORN-RWA-LEAF-7777": {
+            name: "Green Property Yield",
+            symbol: "GPY",
+            goal: "Zero-Carbon / Real-Estate RWA",
+            template: "leaf",
+            discount: 15,
+            reserve: 25,
+            delay: 45,
+            vesting: 12
+        },
+        "UNYKORN-CHARITY-HANDS-7777": {
+            name: "Open Hands Sanctuary",
+            symbol: "OHS",
+            goal: "Charity & Humanitarian Aid",
+            template: "hands",
+            discount: 0,
+            reserve: 30,
+            delay: 60,
+            vesting: 24
+        }
+    };
+
+    if (blueprintCodeInput) {
+        blueprintCodeInput.addEventListener("input", (e) => {
+            const rawVal = e.target.value.trim().toUpperCase();
+            if (BLUEPRINTS[rawVal]) {
+                const config = BLUEPRINTS[rawVal];
+                
+                // 1. Auto-fill form inputs
+                if (expressNameInput) expressNameInput.value = config.name;
+                if (expressSymbolInput) expressSymbolInput.value = config.symbol;
+                if (expressGoalSelect) expressGoalSelect.value = config.goal;
+                
+                // 2. Select logo template option
+                if (templateInput) templateInput.value = config.template;
+                logoOptions.forEach(opt => {
+                    if (opt.getAttribute("data-template") === config.template) {
+                        opt.classList.add("active");
+                        opt.style.borderColor = "#00ff9d";
+                        opt.style.background = "rgba(0, 255, 157, 0.05)";
+                    } else {
+                        opt.classList.remove("active");
+                        opt.style.borderColor = "var(--border-color)";
+                        opt.style.background = "rgba(255,255,255,0.02)";
+                    }
+                });
+                
+                // 3. Update sliders & trigger computations
+                if (sliderDiscount) {
+                    sliderDiscount.value = config.discount;
+                    sliderDiscount.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                if (sliderReserve) {
+                    sliderReserve.value = config.reserve;
+                    sliderReserve.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                if (sliderDelay) {
+                    sliderDelay.value = config.delay;
+                    sliderDelay.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                if (sliderVesting) {
+                    sliderVesting.value = config.vesting;
+                    sliderVesting.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                
+                showToast(`Turnkey blueprint code accepted: ${config.symbol} loaded!`);
+                addLog(`[System] Turnkey blueprint matched: ${rawVal}. Parameters set.`);
+                
+                // 4. Chatbot Override trigger
+                if (window.sovereignChatbot && window.sovereignChatbot.loadBlueprint) {
+                    window.sovereignChatbot.loadBlueprint(config);
+                }
+            }
+        });
+    }
 
     // ==========================================
     // Advanced Mode Sliders & Calculations Engine
@@ -1185,6 +1287,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (window.trenchesData) {
                         const vestingSlider = document.getElementById("slider-vesting");
                         const milestoneMos = vestingSlider ? parseInt(vestingSlider.value) : 12;
+                        let trenchesEscrow = "BitGo Multi-Sig";
+                        if (template === "dove") trenchesEscrow = "3-Mo Recipient Escrow";
+                        else if (template === "shield") trenchesEscrow = "6-Mo Linear Escrow";
+                        else if (template === "leaf") trenchesEscrow = "12-Mo Go Network LP";
+                        else if (template === "hands") trenchesEscrow = "24-Mo Clawback Escrow";
+
                         window.trenchesData.unshift({
                             name: name,
                             symbol: symbol,
@@ -1197,7 +1305,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             logo: imgUrl,
                             mint: result.mintAddress,
                             ipfs: `https://mensofgod.com/metadata/${symbol.toLowerCase()}.json`,
-                            escrow: "BitGo Multi-Sig",
+                            escrow: trenchesEscrow,
                             lpStatus: lpSeeding ? "FalconX Desk (Active Routing)" : "Wintermute Desk (Active Routing)",
                             timestamp: Date.now(),
                             videoUrl: videoUrl
@@ -3074,6 +3182,53 @@ function sendQuickMessage(text) {
     }
 }
 
+// Expose global chatbot controls for blueprint integration
+window.sovereignChatbot = {
+    loadBlueprint: function(config) {
+        const msgList = document.getElementById('ai-chat-messages');
+        if (!msgList) return;
+        
+        // Open chatbot window if not visible
+        const chatWin = document.getElementById('ai-assistant-chat');
+        if (chatWin && chatWin.style.display === 'none') {
+            chatWin.style.display = 'flex';
+        }
+        
+        // Initialize state
+        window.aiOnboardingState = {
+            step: 4,
+            name: config.name,
+            symbol: config.symbol,
+            goal: config.goal
+        };
+        
+        const botDiv = document.createElement('div');
+        botDiv.style.alignSelf = 'flex-start';
+        botDiv.style.background = 'rgba(0, 255, 157, 0.05)';
+        botDiv.style.padding = '10px 14px';
+        botDiv.style.borderRadius = '12px';
+        botDiv.style.borderTopLeftRadius = '2px';
+        botDiv.style.maxWidth = '85%';
+        botDiv.style.color = '#e2e8f0';
+        botDiv.style.border = '1px solid rgba(0, 255, 157, 0.2)';
+        
+        botDiv.innerHTML = `🤖 <strong>Turnkey Blueprint Loaded!</strong><br><br>
+                            I've configured all tokenomics, escrow parameters, and metadata for: <strong>"${config.name} (${config.symbol})"</strong>.<br><br>
+                            - <strong>Goal category:</strong> ${config.goal}<br>
+                            - <strong>Seed discount:</strong> ${config.discount}%<br>
+                            - <strong>Escrow reserve:</strong> ${config.reserve}%<br>
+                            - <strong>Milestone vesting:</strong> ${config.vesting} months<br><br>
+                            Type <strong>"confirm"</strong> to deploy this turnkey relief system live on-chain!`;
+        
+        msgList.appendChild(botDiv);
+        msgList.scrollTop = msgList.scrollHeight;
+        
+        if (window.speakSpeechText) {
+            window.speakSpeechText(`Turnkey blueprint loaded for ${config.name}. Type confirm to deploy this turnkey relief system live on-chain.`);
+        }
+    }
+};
+
 function handleAISubmit(event) {
     if (event) event.preventDefault();
     const chatInput = document.getElementById('ai-chat-input');
@@ -3125,7 +3280,66 @@ function handleAISubmit(event) {
         const stateObj = window.aiOnboardingState;
 
         // Onboarding Conversational State Machine
-        if (stateObj.step === 1) {
+        const rawUpper = userQuery.trim().toUpperCase();
+        if (BLUEPRINTS[rawUpper]) {
+            const config = BLUEPRINTS[rawUpper];
+            
+            // 1. Auto-fill form inputs
+            if (expressNameInput) expressNameInput.value = config.name;
+            if (expressSymbolInput) expressSymbolInput.value = config.symbol;
+            if (expressGoalSelect) expressGoalSelect.value = config.goal;
+            
+            // 2. Select logo template option
+            if (templateInput) templateInput.value = config.template;
+            logoOptions.forEach(opt => {
+                if (opt.getAttribute("data-template") === config.template) {
+                    opt.classList.add("active");
+                    opt.style.borderColor = "#00ff9d";
+                    opt.style.background = "rgba(0, 255, 157, 0.05)";
+                } else {
+                    opt.classList.remove("active");
+                    opt.style.borderColor = "var(--border-color)";
+                    opt.style.background = "rgba(255,255,255,0.02)";
+                }
+            });
+            
+            // 3. Update sliders & trigger computations
+            if (sliderDiscount) {
+                sliderDiscount.value = config.discount;
+                sliderDiscount.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+            if (sliderReserve) {
+                sliderReserve.value = config.reserve;
+                sliderReserve.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+            if (sliderDelay) {
+                sliderDelay.value = config.delay;
+                sliderDelay.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+            if (sliderVesting) {
+                sliderVesting.value = config.vesting;
+                sliderVesting.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+
+            stateObj.step = 4;
+            stateObj.name = config.name;
+            stateObj.symbol = config.symbol;
+            stateObj.goal = config.goal;
+            
+            // Scroll to form
+            const tokenizerCard = document.querySelector("#tab-campaigns .glass-card");
+            if (tokenizerCard) {
+                tokenizerCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            reply = `🤖 <strong>Turnkey Blueprint Loaded!</strong><br><br>
+                     I've configured all tokenomics, escrow parameters, and metadata for: <strong>"${config.name} (${config.symbol})"</strong>.<br><br>
+                     - <strong>Goal category:</strong> ${config.goal}<br>
+                     - <strong>Seed discount:</strong> ${config.discount}%<br>
+                     - <strong>Escrow reserve:</strong> ${config.reserve}%<br>
+                     - <strong>Milestone vesting:</strong> ${config.vesting} months<br><br>
+                     Type <strong>"confirm"</strong> to deploy this turnkey relief system live on-chain!`;
+        } else if (stateObj.step === 1) {
             stateObj.name = userQuery;
             // Suggest symbol based on initials
             const initials = userQuery.split(" ").map(w => w[0]).join("").toUpperCase().replace(/[^A-Z]/g, "");

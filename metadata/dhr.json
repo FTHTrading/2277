@@ -1,7 +1,7 @@
 {
-  "name": "Sovereign Token",
-  "symbol": "TOKEN",
-  "description": "Sovereign charity fundraiser",
+  "name": "Direct Humanitarian Relief",
+  "symbol": "DHR",
+  "description": "Sovereign asset token for Direct Humanitarian Relief (DHR) supporting Charity & Humanitarian Aid. Fully backed and non-custodial.",
   "image": "https://mensofgod.com/brand_logo_dove.png",
   "videoUrl": "",
   "translations": {
@@ -19,7 +19,7 @@
     },
     {
       "trait_type": "Cause",
-      "value": "Humanitarian Goal"
+      "value": "Express: Charity & Humanitarian Aid"
     },
     {
       "trait_type": "Goal Amount",
