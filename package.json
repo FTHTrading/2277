@@ -1,0 +1,22 @@
+{
+  "name": "mog-bitgo-proxy",
+  "version": "1.0.0",
+  "description": "Men of God - BitGo Enterprise API proxy server",
+  "main": "bitgo-proxy.js",
+  "scripts": {
+    "proxy": "node bitgo-proxy.js",
+    "dev": "node bitgo-proxy.js & python -m http.server 9090",
+    "start": "node bitgo-proxy.js"
+  },
+  "dependencies": {
+    "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
+    "@pump-fun/pump-sdk": "^1.36.0",
+    "@solana/spl-token": "^0.4.15",
+    "@solana/web3.js": "^1.98.4",
+    "bs58": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.0",
+    "nodemailer": "^9.0.3"
+  }
+}
