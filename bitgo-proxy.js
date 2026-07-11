@@ -541,40 +541,114 @@ app.post('/registration', async (req, res) => {
 
         let info = null;
         let usedMock = false;
+        let sentViaZoho = false;
+        let zohoError = null;
 
-        if (smtpConfig) {
-            const transporter = nodemailer.createTransport(smtpConfig);
-            info = await transporter.sendMail({
-                from: process.env.SMTP_FROM || `"Men of God Admin" <noreply@mensofgod.com>`,
-                to: notifyEmails.join(', '),
-                subject: subject,
-                text: body,
-                html: htmlContent
-            });
-        } else {
-            // No custom SMTP; create an ethereal test account or write to local files
-            usedMock = true;
+        const ZOHO_CLIENT_ID = process.env.ZOHO_CLIENT_ID;
+        const ZOHO_CLIENT_SECRET = process.env.ZOHO_CLIENT_SECRET;
+        const ZOHO_REFRESH_TOKEN = process.env.ZOHO_REFRESH_TOKEN;
+        const ZOHO_ACCOUNT_ID = process.env.ZOHO_ACCOUNT_ID;
+        const ZOHO_FROM_ADDRESS = process.env.ZOHO_FROM_ADDRESS || 'keven@unykorn.org';
+        const ZOHO_DATA_CENTER = process.env.ZOHO_DATA_CENTER || 'com';
+
+        if (ZOHO_CLIENT_ID && ZOHO_CLIENT_SECRET && ZOHO_REFRESH_TOKEN && ZOHO_ACCOUNT_ID) {
             try {
-                const testAccount = await nodemailer.createTestAccount();
-                const transporter = nodemailer.createTransport({
-                    host: 'smtp.ethereal.email',
-                    port: 587,
-                    secure: false,
-                    auth: {
-                        user: testAccount.user,
-                        pass: testAccount.pass
-                    }
+                console.log("[Zoho API] Attempting to send registration notification via Zoho OAuth...");
+                
+                // 1. Refresh token
+                const params = new URLSearchParams({
+                    grant_type: 'refresh_token',
+                    client_id: ZOHO_CLIENT_ID,
+                    client_secret: ZOHO_CLIENT_SECRET,
+                    refresh_token: ZOHO_REFRESH_TOKEN
                 });
+                const tokenUrl = `https://accounts.zoho.${ZOHO_DATA_CENTER}/oauth/v2/token?${params}`;
+                const tokenRes = await fetch(tokenUrl, { method: 'POST' });
+                const tokenData = await tokenRes.json();
+                
+                if (tokenData.access_token) {
+                    const accessToken = tokenData.access_token;
+                    
+                    // 2. Send email via Zoho Mail API
+                    const payload = {
+                        fromAddress: ZOHO_FROM_ADDRESS,
+                        toAddress: notifyEmails.join(', '),
+                        subject: subject,
+                        content: htmlContent,
+                        mailFormat: 'html'
+                    };
+                    
+                    const mailApiUrl = `https://mail.zoho.${ZOHO_DATA_CENTER}/api/accounts/${ZOHO_ACCOUNT_ID}/messages`;
+                    const mailRes = await fetch(mailApiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Zoho-oauthtoken ${accessToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    const mailText = await mailRes.text();
+                    let mailResult = {};
+                    try {
+                        mailResult = JSON.parse(mailText);
+                    } catch {
+                        mailResult = { message: mailText };
+                    }
+                    
+                    console.log(`[Zoho API Response Status] ${mailRes.status}`);
+                    console.log(`[Zoho API Response Body]`, JSON.stringify(mailResult));
+                    
+                    if (mailRes.ok) {
+                        sentViaZoho = true;
+                        console.log(`[Zoho API] Email dispatched successfully to ${payload.toAddress}.`);
+                    } else {
+                        throw new Error(mailResult.message || mailResult.error || `Zoho API status ${mailRes.status}`);
+                    }
+                } else {
+                    throw new Error(tokenData.error || "Failed to retrieve access token");
+                }
+            } catch (err) {
+                zohoError = err.message;
+                console.warn(`[Zoho API Warning] Zoho dispatch failed: ${err.message}. Falling back to SMTP...`);
+            }
+        }
+
+        if (!sentViaZoho) {
+            if (smtpConfig) {
+                const transporter = nodemailer.createTransport(smtpConfig);
                 info = await transporter.sendMail({
-                    from: '"Men of God Mock Admin" <noreply@mensofgod.com>',
+                    from: process.env.SMTP_FROM || `"Men of God Admin" <noreply@mensofgod.com>`,
                     to: notifyEmails.join(', '),
                     subject: subject,
                     text: body,
                     html: htmlContent
                 });
-                console.log(`[Email Mock] Sent registration notification. Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
-            } catch (err) {
-                console.log(`[Email Mock] Ethereal mail creation failed, logging locally: ${err.message}`);
+            } else {
+                // No custom SMTP; create an ethereal test account or write to local files
+                usedMock = true;
+                try {
+                    const testAccount = await nodemailer.createTestAccount();
+                    const transporter = nodemailer.createTransport({
+                        host: 'smtp.ethereal.email',
+                        port: 587,
+                        secure: false,
+                        auth: {
+                            user: testAccount.user,
+                            pass: testAccount.pass
+                        }
+                    });
+                    info = await transporter.sendMail({
+                        from: '"Men of God Mock Admin" <noreply@mensofgod.com>',
+                        to: notifyEmails.join(', '),
+                        subject: subject,
+                        text: body,
+                        html: htmlContent
+                    });
+                    console.log(`[Email Mock] Sent registration notification. Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+                } catch (err) {
+                    console.log(`[Email Mock] Ethereal mail creation failed, logging locally: ${err.message}`);
+                }
             }
         }
 
@@ -585,6 +659,7 @@ app.post('/registration', async (req, res) => {
 <!-- TIME: ${new Date().toISOString()} -->
 <!-- SUBJECT: ${subject} -->
 <!-- TO: ${notifyEmails.join(', ')} -->
+<!-- METHOD: ${sentViaZoho ? 'Zoho Mail API' : (usedMock ? 'Ethereal Mock' : 'SMTP Direct')} -->
 <!-- ==================================================== -->
 ${htmlContent}
 <hr style="border: 2px solid #1f2937; margin: 40px 0;">
@@ -595,12 +670,15 @@ ${htmlContent}
 
         res.json({
             success: true,
-            message: 'Registration emails routed successfully',
+            message: sentViaZoho ? 'Registration emails routed successfully via Zoho Mail API' : 'Registration emails routed successfully via SMTP',
             recipients: notifyEmails,
+            zoho: sentViaZoho,
+            zohoError: zohoError,
             mocked: usedMock,
             previewUrl: info ? nodemailer.getTestMessageUrl(info) : null,
             logFile: logPath
         });
+
     } catch (e) {
         console.error('Registration email error:', e);
         res.status(500).json({ error: true, message: e.message });

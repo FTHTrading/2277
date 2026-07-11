@@ -2622,15 +2622,15 @@
 
         <!-- ==================== SOVEREIGN PROFILE — Dedicated Cause Mini-Site ==================== -->
         <div id="tab-sovereign-profile" class="tab-content" style="display: none;">
-            <div style="max-width: 900px; margin: 0 auto;">
+            <div style="max-width: 950px; margin: 0 auto;">
 
                 <!-- Back Navigation -->
-                <button class="profile-back-btn" onclick="switchTab('campaigns')">
+                <button class="profile-back-btn no-print" onclick="switchTab('campaigns')" style="margin-bottom: 20px;">
                     ← Back to Blueprint Gallery
                 </button>
 
                 <!-- Theater-Mode Video Header -->
-                <div class="theater-video-header" id="profile-video-theater">
+                <div class="theater-video-header no-print" id="profile-video-theater" style="margin-bottom: 25px;">
                     <div class="theater-no-video">
                         <span>🎬</span>
                         <span>No video attached to this cause</span>
@@ -2638,7 +2638,7 @@
                 </div>
 
                 <!-- Verified Institutional Identity Block -->
-                <div class="glass-card" style="padding: 30px; margin-bottom: 30px;">
+                <div class="glass-card mb-20" style="padding: 30px; margin-bottom: 20px;">
                     <div class="sovereign-profile-identity">
                         <img id="profile-cause-logo" class="profile-logo" src="brand_logo_v3.jpg" alt="Cause Logo">
                         <div class="profile-info">
@@ -2650,7 +2650,7 @@
                             <p id="profile-cause-desc" style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">Cause description goes here...</p>
 
                             <!-- Verified Links Module -->
-                            <div class="verified-links-module" id="profile-verified-links">
+                            <div class="verified-links-module no-print" id="profile-verified-links">
                                 <a class="verified-link-badge" href="https://mensofgod.com" target="_blank">
                                     <span class="vl-check">✓</span> 🌐 Website
                                 </a>
@@ -2669,57 +2669,244 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Campaign Statistics Dashboard -->
-                    <div class="profile-stats-grid">
-                        <div class="profile-stat-card">
-                            <div class="stat-value" id="profile-stat-raised">$0</div>
-                            <div class="stat-label">Total Raised</div>
-                        </div>
-                        <div class="profile-stat-card">
-                            <div class="stat-value" id="profile-stat-target">$0</div>
-                            <div class="stat-label">Target Goal</div>
-                        </div>
-                        <div class="profile-stat-card">
-                            <div class="stat-value" id="profile-stat-contributors">0</div>
-                            <div class="stat-label">Contributors</div>
-                        </div>
-                        <div class="profile-stat-card">
-                            <div class="stat-value" id="profile-stat-lp">0 SOL</div>
-                            <div class="stat-label">LP Reserve</div>
-                        </div>
-                    </div>
-
-                    <!-- Progress Bar -->
-                    <div class="profile-progress-bar">
-                        <div class="progress-fill" id="profile-progress-fill" style="width: 0%;"></div>
-                    </div>
-
-                    <!-- IPFS Proof Section -->
-                    <div class="profile-ipfs-proof">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <span style="color: #c084fc; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">🔗 On-Chain Proof & Metadata</span>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <div>
-                                <span style="font-size: 9px; color: var(--text-muted); display: block; margin-bottom: 2px;">Token Mint Address</span>
-                                <span style="color: #00ff9d; font-size: 11px; word-break: break-all;" id="profile-mint-address">—</span>
-                            </div>
-                            <div>
-                                <span style="font-size: 9px; color: var(--text-muted); display: block; margin-bottom: 2px;">Token Symbol</span>
-                                <span style="color: white; font-size: 11px;" id="profile-token-symbol">—</span>
-                            </div>
-                        </div>
-                        <div style="margin-top: 10px;">
-                            <a id="profile-solscan-link" href="#" target="_blank" style="font-size: 10px; color: #60a5fa; text-decoration: none;">View on Solscan →</a>
-                        </div>
-                    </div>
-
-                    <!-- Donate CTA -->
-                    <button class="profile-donate-cta" id="profile-donate-btn" onclick="document.getElementById('blueprint-checkout-modal').style.display='flex';">
-                        💎 Support This Cause — Donate Now
-                    </button>
                 </div>
+
+                <!-- Custom Sub-Tabs Navigation Bar -->
+                <div class="sub-tab-switcher no-print" style="display: flex; gap: 6px; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;">
+                    <button class="sub-tab-btn active" data-subtab="overview" onclick="switchProfileSubTab('overview')">Overview</button>
+                    <button class="sub-tab-btn" data-subtab="certificate" onclick="switchProfileSubTab('certificate')">Certificate</button>
+                    <button class="sub-tab-btn" data-subtab="markets" onclick="switchProfileSubTab('markets')">Markets</button>
+                    <button class="sub-tab-btn" data-subtab="trade" onclick="switchProfileSubTab('trade')">Trade</button>
+                </div>
+
+                <!-- Sub-Tab Content 1: Overview -->
+                <div id="profile-subtab-overview" class="profile-subtab-content" style="display: block;">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                        
+                        <!-- Left Panel: Campaign Stats & Safety Card -->
+                        <div>
+                            <!-- Campaign Statistics Dashboard -->
+                            <div class="glass-card" style="padding: 24px; margin-bottom: 20px;">
+                                <h3 style="font-family: var(--font-heading); font-size: 15px; margin: 0 0 16px 0; color: white; display: flex; align-items: center; gap: 8px;">
+                                    📊 Campaign Statistics
+                                </h3>
+                                <div class="profile-stats-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px;">
+                                    <div class="profile-stat-card" style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                                        <div class="stat-value" id="profile-stat-raised" style="font-size: 20px; font-weight: 700; color: var(--accent); font-family: var(--font-mono);">$0</div>
+                                        <div class="stat-label" style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Total Raised</div>
+                                    </div>
+                                    <div class="profile-stat-card" style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                                        <div class="stat-value" id="profile-stat-target" style="font-size: 20px; font-weight: 700; color: white; font-family: var(--font-mono);">$0</div>
+                                        <div class="stat-label" style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Target Goal</div>
+                                    </div>
+                                    <div class="profile-stat-card" style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                                        <div class="stat-value" id="profile-stat-contributors" style="font-size: 20px; font-weight: 700; color: white; font-family: var(--font-mono);">0</div>
+                                        <div class="stat-label" style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Contributors</div>
+                                    </div>
+                                    <div class="profile-stat-card" style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                                        <div class="stat-value" id="profile-stat-lp" style="font-size: 20px; font-weight: 700; color: #a855f7; font-family: var(--font-mono);">0 SOL</div>
+                                        <div class="stat-label" style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">LP Reserve</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="profile-progress-bar" style="background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 20px;">
+                                    <div class="progress-fill" id="profile-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent), #a855f7); transition: width 0.8s ease-in-out;"></div>
+                                </div>
+
+                                <!-- Donate CTA -->
+                                <button class="profile-donate-cta" id="profile-donate-btn" onclick="document.getElementById('blueprint-checkout-modal').style.display='flex';" style="width: 100%; background: linear-gradient(135deg, #00ff9d, #0052ff); color: #0a0f19; font-weight: 700; border: none; padding: 14px; border-radius: 8px; font-size: 14px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    💎 Support This Cause — Donate Now
+                                </button>
+                            </div>
+
+                            <!-- Safety Card -->
+                            <div class="glass-card" style="padding: 24px; margin-bottom: 20px;">
+                                <h3 style="font-family: var(--font-heading); font-size: 15px; margin: 0 0 16px 0; color: white; display: flex; align-items: center; gap: 8px;">
+                                    🛡️ Token Safety Card
+                                </h3>
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                                    <div style="background: rgba(0,0,0,0.15); padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.02);">
+                                        <div style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Mint Authority</div>
+                                        <div style="font-size: 12px; font-weight: bold; color: #00ff9d; margin-top: 2px;">REVOKED</div>
+                                    </div>
+                                    <div style="background: rgba(0,0,0,0.15); padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.02);">
+                                        <div style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Freeze Authority</div>
+                                        <div style="font-size: 12px; font-weight: bold; color: #00ff9d; margin-top: 2px;">REVOKED</div>
+                                    </div>
+                                    <div style="background: rgba(0,0,0,0.15); padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.02);">
+                                        <div style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Metadata Host</div>
+                                        <div style="font-size: 12px; font-weight: bold; color: white; margin-top: 2px;">IPFS (Pinata)</div>
+                                    </div>
+                                    <div style="background: rgba(0,0,0,0.15); padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.02);">
+                                        <div style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Token Standard</div>
+                                        <div style="font-size: 12px; font-weight: bold; color: white; margin-top: 2px;">SPL Token-2022</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Token Parameters, QR, and IPFS -->
+                        <div>
+                            <!-- Token QR Code -->
+                            <div class="glass-card" style="padding: 24px; text-align: center; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <div style="font-size: 11px; font-weight: 700; color: white; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Token QR Code</div>
+                                <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: inline-block;">
+                                    <img id="profile-qr-code-img" src="" alt="Token QR Code" style="width: 150px; height: 150px; display: block;">
+                                </div>
+                                <div style="font-size: 9px; color: var(--text-muted); margin-top: 10px;">Scan to view this token profile</div>
+                                <a id="profile-qr-download" href="" target="_blank" class="btn btn-secondary" style="margin-top: 12px; font-size: 10px; padding: 6px 12px; width: auto; min-width: 110px;">View Full QR</a>
+                            </div>
+
+                            <!-- Token Parameters -->
+                            <div class="glass-card" style="padding: 24px; margin-bottom: 20px;">
+                                <div style="font-size: 11px; font-weight: 700; color: white; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Token Parameters</div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <div>
+                                        <span style="font-size: 9px; color: var(--text-muted); display: block;">Mint Address</span>
+                                        <span style="color: #00ff9d; font-size: 11px; font-family: var(--font-mono); word-break: break-all;" id="profile-mint-address-overview">—</span>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 9px; color: var(--text-muted); display: block;">Decimals</span>
+                                        <span style="color: white; font-size: 11px; font-family: var(--font-mono);">9</span>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 9px; color: var(--text-muted); display: block;">Supply</span>
+                                        <span style="color: white; font-size: 11px; font-family: var(--font-mono);">1,000,000,000</span>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 9px; color: var(--text-muted); display: block;">Namespace Root</span>
+                                        <span style="color: white; font-size: 11px; font-family: var(--font-mono);">none</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Sub-Tab Content 2: Certificate of Issuance -->
+                <div id="profile-subtab-certificate" class="profile-subtab-content" style="display: none;">
+                    
+                    <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;" class="no-print">
+                        <button class="btn" style="width: auto; padding: 8px 16px; font-size: 11px; background: #c9963a; color: white; font-weight: 700; display: flex; align-items: center; gap: 6px; border: none; border-radius: 6px;" onclick="window.print()">
+                            🖨️ Print / Download PDF
+                        </button>
+                    </div>
+
+                    <!-- Print Layout Framed Certificate -->
+                    <div class="certificate-container" style="background: #0d121f; border: 3px double #c9963a; padding: 40px; border-radius: 12px; box-shadow: 0 0 35px rgba(201, 150, 58, 0.15); max-width: 800px; margin: 0 auto; position: relative;">
+                        
+                        <!-- Top Header -->
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <img src="brand_logo_v3.png" alt="Unykorn Logo" style="width: 60px; height: 60px; margin-bottom: 12px; border-radius: 50%;">
+                            <div style="font-size: 11px; letter-spacing: 0.15em; color: #c9963a; font-weight: 700; text-transform: uppercase;">SOVEREIGN RWA HUB & CERTIFICATION</div>
+                            <h1 style="font-family: var(--font-heading); font-size: 26px; color: white; margin: 8px 0 0 0; letter-spacing: 1px;">Certificate of Sovereign Issuance</h1>
+                        </div>
+
+                        <!-- Main Certificate Text -->
+                        <div style="text-align: center; margin-bottom: 40px; padding: 0 30px;">
+                            <div style="font-size: 12px; color: var(--text-muted); font-style: italic; margin-bottom: 20px;">This official document certifies the permanent on-chain deployment and verified genesis state of the sovereign asset:</div>
+                            
+                            <h2 style="font-family: var(--font-heading); font-size: 32px; color: white; margin: 10px 0 2px 0;" id="profile-cert-cause-title">Cause Title</h2>
+                            <h3 style="font-family: var(--font-mono); font-size: 20px; color: #c9963a; margin: 0 0 20px 0; font-weight: 400;" id="profile-cert-token-symbol">Token Symbol</h3>
+                        </div>
+
+                        <!-- Details Grid -->
+                        <div style="border-top: 1px solid rgba(201, 150, 58, 0.25); border-bottom: 1px solid rgba(201, 150, 58, 0.25); padding: 20px 0; margin-bottom: 30px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px 30px;">
+                            <div>
+                                <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 2px;">Mint Address</span>
+                                <span style="color: #00ff9d; font-size: 11px; font-family: var(--font-mono); word-break: break-all;" id="profile-cert-mint-address">—</span>
+                            </div>
+                            <div>
+                                <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 2px;">Total Supply</span>
+                                <span style="color: white; font-size: 11px; font-family: var(--font-mono);">1,000,000,000</span>
+                            </div>
+                            <div>
+                                <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 2px;">Network Path</span>
+                                <span style="color: white; font-size: 11px;">Solana Mainnet-Beta</span>
+                            </div>
+                            <div>
+                                <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 2px;">Issue Date</span>
+                                <span style="color: white; font-size: 11px;" id="profile-cert-issue-date">—</span>
+                            </div>
+                        </div>
+
+                        <!-- Badges Row -->
+                        <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 30px;">
+                            <span style="font-size: 9px; background: rgba(0, 255, 157, 0.1); border: 1px solid rgba(0, 255, 157, 0.2); color: #00ff9d; padding: 4px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase;">Mint Auth: Revoked</span>
+                            <span style="font-size: 9px; background: rgba(0, 255, 157, 0.1); border: 1px solid rgba(0, 255, 157, 0.2); color: #00ff9d; padding: 4px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase;">Freeze Auth: Revoked</span>
+                            <span style="font-size: 9px; background: rgba(0, 255, 157, 0.1); border: 1px solid rgba(0, 255, 157, 0.2); color: #00ff9d; padding: 4px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase;">Metadata: Pinned</span>
+                            <span style="font-size: 9px; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2); color: #c084fc; padding: 4px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase;">Vesting: Active</span>
+                            <span style="font-size: 9px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 4px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase;">OCC Custody: Secured</span>
+                        </div>
+
+                        <!-- Verification Footer -->
+                        <div style="display: flex; gap: 20px; align-items: center; border-top: 1px dashed rgba(255,255,255,0.06); padding-top: 25px;">
+                            <div style="background: white; padding: 6px; border-radius: 4px; display: inline-block;">
+                                <img id="profile-cert-qr-img" src="" alt="Verify QR" style="width: 90px; height: 90px; display: block;">
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 11px; font-weight: bold; color: white; margin-bottom: 4px;">SECURE VERIFICATION DESK</div>
+                                <div style="font-size: 9px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">Scan the QR code to verify this certificate's authenticity, view its metadata JSON anchored on IPFS, and inspect its current Solana transaction signature state.</div>
+                                <div style="font-size: 8px; color: var(--text-muted); font-family: var(--font-mono); word-break: break-all;" id="profile-cert-tx-sig">TX: —</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Sub-Tab Content 3: Markets -->
+                <div id="profile-subtab-markets" class="profile-subtab-content" style="display: none;">
+                    <div class="glass-card" style="padding: 24px;">
+                        <h3 style="font-family: var(--font-heading); font-size: 16px; margin: 0 0 16px 0; color: white; display: flex; align-items: center; gap: 8px;">
+                            📈 Real-Time Market Analytics
+                        </h3>
+                        <div id="profile-market-chart-container" style="width: 100%; height: 500px; background: rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03); position: relative;">
+                            <!-- Embedded DexScreener chart using the Solana mint address -->
+                            <iframe id="profile-market-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-Tab Content 4: Trade (Raydium / Swap) -->
+                <div id="profile-subtab-trade" class="profile-subtab-content" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        
+                        <!-- Swap Widget -->
+                        <div class="glass-card" style="padding: 24px;">
+                            <h3 style="font-family: var(--font-heading); font-size: 16px; margin: 0 0 16px 0; color: white; display: flex; align-items: center; gap: 8px;">
+                                💱 Instant Raydium Swap
+                            </h3>
+                            <div id="profile-swap-widget-container" style="width: 100%; height: 420px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03); position: relative;">
+                                <!-- Embedded Jupiter Terminal / Swap Iframe pointing to this token -->
+                                <iframe id="profile-swap-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+                            </div>
+                        </div>
+
+                        <!-- Trade Details & Guides -->
+                        <div class="glass-card" style="padding: 24px;">
+                            <h3 style="font-family: var(--font-heading); font-size: 16px; margin: 0 0 16px 0; color: white;">
+                                🛡️ Decentralized Trading Guide
+                            </h3>
+                            <p class="text-secondary" style="font-size: 13px; line-height: 1.6; margin-bottom: 16px;">
+                                This token is deployed on the Solana mainnet. It has been seeded with an active liquidity curve. You can trade it directly via Raydium CPMM, Jupiter, or the embedded terminal on the left.
+                            </p>
+                            
+                            <h4 style="font-size: 12px; color: white; margin-bottom: 8px;">How to trade manually:</h4>
+                            <ol style="padding-left: 20px; color: var(--text-muted); font-size: 12px; line-height: 1.8;">
+                                <li>Copy the Token Mint Address.</li>
+                                <li>Open your Phantom, Solflare, or Backpack wallet.</li>
+                                <li>Navigate to the Swap tab.</li>
+                                <li>Paste the Mint Address into the token search bar.</li>
+                                <li>Set your slippage to <strong>0.5% - 1%</strong> and confirm the swap.</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
             </div>
         </div>
 

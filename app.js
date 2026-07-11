@@ -4647,13 +4647,20 @@ window.openSovereignProfile = function(causeId) {
     }
 };
 
+window.switchProfileSubTab = function(subtabName) {
+    document.querySelectorAll(".profile-subtab-content").forEach(t => t.style.display = "none");
+    document.querySelectorAll(".sub-tab-btn").forEach(b => b.classList.remove("active"));
+    
+    const targetContent = document.getElementById(`profile-subtab-${subtabName}`);
+    if (targetContent) targetContent.style.display = "block";
+    
+    const targetBtn = document.querySelector(`.sub-tab-btn[data-subtab="${subtabName}"]`);
+    if (targetBtn) targetBtn.classList.add("active");
+};
+
 function renderSovereignProfile(causeId) {
     // Find campaign data from flagshipCampaigns or state.campaigns
     let campaign = null;
-    const stateCheck = window._mogState;
-    
-    // Try to find in the global campaigns data
-    const allCards = document.querySelectorAll(".flagship-card, .campaign-card");
     
     // Direct lookup from the inline data
     const knownCampaigns = [
@@ -4663,14 +4670,24 @@ function renderSovereignProfile(causeId) {
         { id: "mog-stablecoin", title: "MOG Stablecoin Liquidity", target: 1000000, raised: 450000, category: "Stablecoin LP", location: "XRPL & Solana Ledgers", description: "Turnkey Stablecoin Liquidity Blueprint: liquidity depth for MOG USD-pegged stablecoins.", image: "brand_logo_v3.jpg", tokenName: "MOG Stablecoin", tokenSymbol: "MOGS", mintAddress: "MogStableCoinIssuerAccountKey", lpSol: 25.0 },
         { id: "venezuela-stablecoin", title: "Venezuela Stablecoin Relief", target: 75000, raised: 12000, category: "Direct Relief", location: "Venezuela & Latin America", description: "Turnkey Direct Relief Blueprint: direct stablecoin transfers to verified families.", image: "brand_logo_dove.png", tokenName: "Venezuela Relief Token", tokenSymbol: "VENZ", mintAddress: "VenezuelaReliefStablecoinKey", lpSol: 3.0 },
         { id: "atlanta-mission", title: "Atlanta Mission 5K Reserve", target: 50000, raised: 8200, category: "Community Support", location: "Atlanta, GA", description: "Community support reserve for Atlanta Mission shelter programs.", image: "brand_logo_hands.png", tokenName: "Atlanta Mission Token", tokenSymbol: "ATL5K", mintAddress: "75HVhH1q2p6buzfAMXaUESwgCNkLK7vR3CxrbcAdvi1n", lpSol: 2.0 },
-        { id: "wellspring", title: "Wellspring Tiny Homes", target: 350000, raised: 67000, category: "Housing", location: "Metro Atlanta", description: "Sovereign real-estate RWA trust cloning a zero-carbon community village for Atlanta youth.", image: "brand_logo_leaf.png", tokenName: "Wellspring Tiny Homes", tokenSymbol: "WTH", mintAddress: "AFDVbdAKfje8gNAkL8st5LV8cgb9rGvMGQpekyVqobj1", lpSol: 6.0 }
+        { id: "wellspring", title: "Wellspring Tiny Homes", target: 350000, raised: 67000, category: "Housing", location: "Metro Atlanta", description: "Sovereign real-estate RWA trust cloning a zero-carbon community village for Atlanta youth.", image: "brand_logo_leaf.png", tokenName: "Wellspring Tiny Homes", tokenSymbol: "WTH", mintAddress: "AFDVbdAKfje8gNAkL8st5LV8cgb9rGvMGQpekyVqobj1", lpSol: 6.0 },
+        { id: "atlanta-hope-fund", title: "Atlanta Hope Fund", target: 25000, raised: 0, category: "Disaster Relief", location: "Atlanta, GA", description: "Sovereign profile for the Atlanta Mission blueprint, supporting shelter programs and community rehabilitation.", image: "brand_logo_dove.png", tokenName: "Atlanta Hope Fund", tokenSymbol: "AHF", mintAddress: "YUknpQcT9ohLKzHMDzHvcFotZiVUWKMxroKqrsTsQRz", lpSol: 0.128 }
     ];
 
     campaign = knownCampaigns.find(c => c.id === causeId);
+    
+    // Check if it's dynamic campaign from local state
+    if (!campaign && window._mogState && window._mogState.campaigns) {
+        campaign = window._mogState.campaigns.find(c => c.id === causeId || c.mintAddress === causeId);
+    }
+    
     if (!campaign) {
         if (typeof showToast === "function") showToast("Campaign profile not found.", "error");
         return;
     }
+
+    // Default back to overview subtab on load
+    switchProfileSubTab("overview");
 
     // Populate Theater Video
     const theater = document.getElementById("profile-video-theater");
@@ -4687,7 +4704,7 @@ function renderSovereignProfile(causeId) {
 
     // Populate Identity
     const logoEl = document.getElementById("profile-cause-logo");
-    if (logoEl) logoEl.src = campaign.image;
+    if (logoEl) logoEl.src = campaign.image || "brand_logo_v3.jpg";
 
     const titleEl = document.getElementById("profile-cause-title");
     if (titleEl) titleEl.textContent = `${campaign.title} (${campaign.tokenSymbol})`;
@@ -4714,13 +4731,45 @@ function renderSovereignProfile(causeId) {
         setTimeout(() => { progressFill.style.width = `${progressPct}%`; }, 100);
     }
 
-    // Populate IPFS Proof
-    document.getElementById("profile-mint-address").textContent = campaign.mintAddress;
-    document.getElementById("profile-token-symbol").textContent = `$${campaign.tokenSymbol}`;
-    const solscanLink = document.getElementById("profile-solscan-link");
-    if (solscanLink) solscanLink.href = `https://solscan.io/token/${campaign.mintAddress}`;
+    // Generate Dynamic QR Code (pointing to this cause profile)
+    const shareUrl = `https://mensofgod.com/?id=${campaign.id}`;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(shareUrl)}`;
+    
+    const qrOverview = document.getElementById("profile-qr-code-img");
+    if (qrOverview) qrOverview.src = qrUrl;
 
-    if (typeof addLog === "function") addLog(`[Sovereign Profile] Rendered dedicated profile for ${campaign.title} ($${campaign.tokenSymbol}).`);
+    const qrCert = document.getElementById("profile-cert-qr-img");
+    if (qrCert) qrCert.src = qrUrl;
+
+    const qrDownload = document.getElementById("profile-qr-download");
+    if (qrDownload) qrDownload.href = qrUrl;
+
+    // Populate Overview and Certificate Details
+    document.getElementById("profile-mint-address-overview").textContent = campaign.mintAddress;
+    document.getElementById("profile-cert-cause-title").textContent = campaign.title;
+    document.getElementById("profile-cert-token-symbol").textContent = `$${campaign.tokenSymbol}`;
+    document.getElementById("profile-cert-mint-address").textContent = campaign.mintAddress;
+    document.getElementById("profile-cert-issue-date").textContent = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    
+    const certTxSig = document.getElementById("profile-cert-tx-sig");
+    if (certTxSig) {
+        const signature = campaign.txSignature || "3irxCGNCYJm8CUQmKtompkhjTGzWv88h5mVTjg4S5oKhnC7B7nqd9kDUiLBVwZLXJTYrGPwZSAcFgBSVVNuzz2am";
+        certTxSig.innerHTML = `TX: <a href="https://solscan.io/tx/${signature}" target="_blank" style="color: #60a5fa; text-decoration: none;">${signature}</a>`;
+    }
+
+    // Update Markets embed
+    const marketIframe = document.getElementById("profile-market-iframe");
+    if (marketIframe) {
+        marketIframe.src = `https://dexscreener.com/solana/${campaign.mintAddress}?embed=1&theme=dark&trades=0`;
+    }
+
+    // Update Raydium/Jupiter Swap embed
+    const swapIframe = document.getElementById("profile-swap-iframe");
+    if (swapIframe) {
+        swapIframe.src = `https://terminal.jup.ag/?inputMint=So11111111111111111111111111111111111111112&outputMint=${campaign.mintAddress}&theme=dark`;
+    }
+
+    if (typeof addLog === "function") addLog(`[Sovereign Profile] Rendered dedicated profile and certificate desk for ${campaign.title} ($${campaign.tokenSymbol}).`);
 }
 
 // ==========================================
