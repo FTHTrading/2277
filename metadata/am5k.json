@@ -1,13 +1,10 @@
 {
   "name": "Atlanta Mission 5K Reserve",
   "symbol": "AM5K",
-  "description": "Sovereign asset token for Atlanta Mission 5K Reserve (AM5K) supporting Charity & Humanitarian Aid. Fully backed and non-custodial.",
+  "description": "Turnkey Property Rehabilitation Blueprint: foreclosure rescue and complete zero-carbon energy-efficiency rehab.",
   "image": "https://mensofgod.com/brand_logo_shield.png",
   "videoUrl": "https://www.youtube.com/watch?v=NgkTHzXZk2U",
-  "translations": {
-    "es": "Sovereign asset token for Atlanta Mission 5K Reserve (AM5K) supporting Charity & Humanitarian Aid. Fully backed and non-custodial. (Traducido por IA para soporte de fondos en América Latina y España)",
-    "pt": "Sovereign asset token for Atlanta Mission 5K Reserve (AM5K) supporting Charity & Humanitarian Aid. Fully backed and non-custodial. (Traduzido por IA para suporte de fundos no Brasil e Portugal)"
-  },
+  "translations": {},
   "attributes": [
     {
       "trait_type": "Custodian",
@@ -19,11 +16,11 @@
     },
     {
       "trait_type": "Cause",
-      "value": "Express: Charity & Humanitarian Aid"
+      "value": "Atlanta Mission 5K Reserve"
     },
     {
       "trait_type": "Goal Amount",
-      "value": "$100000"
+      "value": "$500000"
     },
     {
       "trait_type": "Issuer Legal Structure",
@@ -35,19 +32,19 @@
     },
     {
       "trait_type": "BitGo Custody Vault",
-      "value": "Inactive"
+      "value": "Active ($39/mo)"
     },
     {
       "trait_type": "IPFS Proof Vaulting",
-      "value": "Inactive"
+      "value": "Active ($19/mo)"
     },
     {
       "trait_type": "Go Network Seeding",
-      "value": "Inactive"
+      "value": "Active ($29/mo)"
     },
     {
       "trait_type": "Charity Fee Routing",
-      "value": "Inactive"
+      "value": "Active ($19/mo)"
     }
   ]
 }

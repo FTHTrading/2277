@@ -40,7 +40,7 @@
     </script>
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=11">
     <!-- SEO & AI-Discovery Structured Schema Markup -->
     <script type="application/ld+json">
     {
@@ -134,67 +134,53 @@
         
         <!-- Screen Toggles / Navigation Tabs -->
         <div class="tab-switcher no-print" style="margin: 0 auto 30px; display: inline-flex; align-self: center;">
-            <button type="button" class="tab-btn active" data-tab="campaigns">Campaigns Hub</button>
-            <button type="button" class="tab-btn" data-tab="launch">Launch a Cause</button>
-            <button type="button" class="tab-btn" data-tab="seeder" id="tab-seeder-toggle">LP Directory</button>
-            <button type="button" class="tab-btn" data-tab="airdrop" id="tab-airdrop-toggle">Airdrop Hub</button>
-            <button type="button" class="tab-btn" data-tab="affiliates" id="tab-affiliates-toggle">Affiliates</button>
-            <button type="button" class="tab-btn" data-tab="backoffice" id="tab-backoffice-toggle">Back Office</button>
-            <button type="button" class="tab-btn" data-tab="billing" id="tab-billing-toggle">Subscriptions</button>
-            <button type="button" class="tab-btn" data-tab="insights" id="tab-insights-toggle" style="background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); color: #c084fc;">Insights &amp; AI Blog</button>
-            <button type="button" class="tab-btn" data-tab="bitgo" id="tab-bitgo-toggle" style="background: linear-gradient(135deg, #0052ff22, #00d4aa22); border: 1px solid #0052ff44;">BitGo Custody</button>
-            <button type="button" class="tab-btn" data-tab="trenches" id="tab-trenches-toggle" style="background: rgba(0, 255, 157, 0.1); border: 1px solid rgba(0, 255, 157, 0.3); color: #00ff9d;">📊 Sovereign Trenches</button>
+            <button type="button" class="tab-btn active" data-tab="campaigns">Blueprint Gallery</button>
+            <button type="button" class="tab-btn" data-tab="trenches" id="tab-trenches-toggle">Live Transparency Ledger</button>
+            <button type="button" class="tab-btn" data-tab="bitgo" id="tab-bitgo-toggle">Institutional Custody</button>
+            <button type="button" class="tab-btn" data-tab="backoffice" id="tab-backoffice-toggle">Login / Verify</button>
+            
+            <!-- Hidden tabs for public, only shown/accessed in the Back Office dashboard -->
+            <button type="button" class="tab-btn" data-tab="launch" id="tab-launch-toggle" style="display: none;">Launch a Cause</button>
+            <button type="button" class="tab-btn" data-tab="seeder" id="tab-seeder-toggle" style="display: none;">LP Directory</button>
+            <button type="button" class="tab-btn" data-tab="airdrop" id="tab-airdrop-toggle" style="display: none;">Airdrop Hub</button>
+            <button type="button" class="tab-btn" data-tab="affiliates" id="tab-affiliates-toggle" style="display: none;">Affiliates</button>
+            <button type="button" class="tab-btn" data-tab="billing" id="tab-billing-toggle" style="display: none;">Subscriptions</button>
+            <button type="button" class="tab-btn" data-tab="insights" id="tab-insights-toggle" style="display: none; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); color: #c084fc;">Insights &amp; AI Blog</button>
+            <button type="button" class="tab-btn" data-tab="sovereign-profile" id="tab-sovereign-profile-toggle" style="display: none;">Sovereign Profile</button>
         </div>
 
         <!-- ==================== TAB 1: CAMPAIGNS HUB ==================== -->
         <div id="tab-campaigns" class="tab-content">
             
-            <!-- SOVEREIGN ACTION BUTTONS -->
-            <div style="text-align:center; padding:40px 20px; background:linear-gradient(135deg,#00ff9d,#00b36b); margin:0 0 30px 0; border-radius:16px;">
-              <h2 style="color:#000; font-size:28px; margin-bottom:12px; font-family: var(--font-heading);">Ready to move?</h2>
-              
-              <!-- Launch Token Button -->
-              <button onclick="launchCharityToken()" 
-                      style="background:#000; color:#fff; font-size:22px; font-weight:bold; padding:18px 50px; border:none; border-radius:50px; margin:10px; box-shadow:0 10px 30px rgba(0,0,0,.4); cursor:pointer; font-family: var(--font-heading);">
-                🚀 LAUNCH YOUR CHARITY TOKEN ON SOLANA NOW
-              </button>
-              
-              <!-- Register Button -->
-              <button onclick="scrollToRegister()" 
-                      style="background:#fff; color:#000; font-size:22px; font-weight:bold; padding:18px 50px; border:none; border-radius:50px; margin:10px; box-shadow:0 10px 30px rgba(0,0,0,.4); cursor:pointer; font-family: var(--font-heading);">
-                REGISTER FOR WEB3 CUSTODY →
-              </button>
-            </div>
-
-            <!-- Welcome Header -->
-            <div class="hero-wrapper mb-30" style="max-width: 900px;">
-                <div class="hero-badge">Sovereign Charity &amp; Asset Tokenization</div>
-                <h1 class="hero-title" style="font-size: 2.8rem; margin-bottom: 12px; font-family: var(--font-heading);">Men of God Sovereign Hub</h1>
-                <p class="hero-subtitle" style="font-size: 1.15rem; margin-bottom: 24px;">
-                    Welcome to the decentralization of charity. We map out real-world assets, secure children's safety escrows, fund zero-carbon remodels, and host transparent Liquidity Pools (LP). Mint donor certificates instantly or deploy your own fundraiser tokens.
+            <!-- Welcome Header (Hero Section) -->
+            <div class="hero-wrapper mb-30" style="max-width: 900px; margin: 40px auto 30px auto; text-align: center;">
+                <div class="hero-badge">Unykorn LLC Institutional Infrastructure</div>
+                <h1 class="hero-title" style="font-size: 3.2rem; margin-bottom: 16px; font-family: var(--font-heading); background: linear-gradient(135deg, #fff 0%, #a855f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Decentralized Fundraising.<br>Institutional Security.</h1>
+                <p class="hero-subtitle" style="font-size: 1.25rem; margin-bottom: 30px; max-width: 750px; margin-left: auto; margin-right: auto; line-height: 1.6; color: #9ca3af;">
+                    Deploy transparent, escrow-backed capital campaigns in under 60 seconds. Powered by BitGo’s OCC-chartered custody and underwritten by Unykorn LLC.
                 </p>
-                <div style="display: flex; gap: 12px; justify-content: center;">
-                    <button class="btn" onclick="document.querySelector('[data-tab=launch]').click()" style="width: auto; padding: 12px 30px; font-size: 14px;">Launch Your Own Cause</button>
-                    <button class="btn btn-secondary" id="hero-view-lps" style="width: auto; padding: 12px 30px; font-size: 14px;">Explore LP Directory</button>
+                <div style="display: flex; gap: 12px; justify-content: center; margin-bottom: 40px;">
+                    <button class="btn btn-3d-action" onclick="document.getElementById('blueprints-gallery-card').scrollIntoView({behavior:'smooth'});" style="width: auto; padding: 14px 40px; font-size: 15px; font-weight: bold; background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; cursor: pointer;">
+                        View Franchise Blueprints
+                    </button>
                 </div>
 
-                <!-- Newsletter Widget -->
-                <div class="glass-card mb-30" style="max-width: 500px; margin: 24px auto 0; text-align: center; border-color: rgba(139, 92, 246, 0.15);">
-                    <h4 style="font-family: var(--font-heading); font-size: 14px; margin-bottom: 8px;">Register to Learn More (AI Newsletter)</h4>
-                    <p class="text-muted" style="font-size: 11px; margin-bottom: 16px;">
-                        Subscribe to get weekly reports on real estate rebates, Child First escrows, and token metrics. Generated by AI. No fake stuff.
-                    </p>
-                    <form id="newsletter-form" onsubmit="return false;" style="display: flex; gap: 10px;">
-                        <input type="email" id="newsletter-email" class="form-control" placeholder="name@domain.com" style="padding: 10px 14px; font-size: 12px;" required>
-                        <button id="newsletter-btn" class="btn" style="width: auto; padding: 10px 20px; font-size: 12px; margin: 0;">Register Now</button>
-                    </form>
-                    <!-- Newsletter content container (hidden initially) -->
-                    <div id="newsletter-preview-card" style="display: none; margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px; text-align: left;">
-                        <span class="badge badge-purple" style="font-size: 8px; margin-bottom: 6px;">AI Generated Weekly Update</span>
-                        <h5 style="font-family: var(--font-heading); font-size: 13px; margin-bottom: 6px;" id="newsletter-title">MOG Intel Report - Week 28</h5>
-                        <div class="text-muted" style="font-size: 11px; line-height: 1.5; max-height: 150px; overflow-y: auto;" id="newsletter-content">
-                            <!-- Generated text here -->
-                        </div>
+                <!-- Trust Anchor Badges -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; max-width: 800px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 30px;">
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; text-align: center;">
+                        <span style="font-size: 24px; display: block; margin-bottom: 8px;">🛡️</span>
+                        <strong style="font-size: 14px; color: white; display: block; margin-bottom: 4px;">$250M Insured Custody</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Backed by Lloyd's of London syndicates via BitGo Trust.</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; text-align: center;">
+                        <span style="font-size: 24px; display: block; margin-bottom: 8px;">🔒</span>
+                        <strong style="font-size: 14px; color: white; display: block; margin-bottom: 4px;">SOC 2 Type II Certified</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Audited financial controls, secure multi-sig key infrastructure.</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; text-align: center;">
+                        <span style="font-size: 24px; display: block; margin-bottom: 8px;">💼</span>
+                        <strong style="font-size: 14px; color: white; display: block; margin-bottom: 4px;">Unykorn LLC Verified Identity</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Fully compliant corporate verification for legal entities.</span>
                     </div>
                 </div>
             </div>
@@ -220,15 +206,160 @@
                 </div>
             </div>
 
-            <!-- Sovereign Blueprint Gallery & Tokenizer -->
-            <div class="express-tokenizer-card glass-card mb-30" style="max-width: 800px; margin-left: auto; margin-right: auto; border-color: rgba(0, 255, 157, 0.3); background: rgba(13, 19, 33, 0.5); padding: 25px;">
+            <!-- ============================================= -->
+            <!-- 🚀 MINT IN 60 SECONDS — Simple Wizard -->
+            <!-- ============================================= -->
+            <div id="simple-mint-wizard" class="glass-card mb-30" style="max-width: 800px; margin-left: auto; margin-right: auto; border-color: rgba(0, 255, 157, 0.4); background: linear-gradient(145deg, rgba(0, 255, 157, 0.03), rgba(168, 85, 247, 0.03)); padding: 30px; position: relative; overflow: hidden;">
+                <!-- Animated glow border -->
+                <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #00ff9d, #a855f7, transparent); animation: shimmerSlide 3s ease-in-out infinite;"></div>
+
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #00ff9d; margin-bottom: 6px;">NO EXPERIENCE NEEDED</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 26px; color: white; margin: 0 0 8px 0;">🚀 Mint Your Cause Token in 60 Seconds</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); max-width: 550px; margin: 0 auto; line-height: 1.5;">
+                        Enter a name, pick a template, choose your plan. That's it. We handle everything — token creation, smart contracts, IPFS proof, pump.fun listing, and sending everything to your wallet.
+                    </p>
+                </div>
+
+                <!-- Step 1: Name Your Cause -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                        <span style="width: 24px; height: 24px; border-radius: 50%; background: #00ff9d; color: black; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center;">1</span>
+                        <span style="font-size: 13px; font-weight: 600; color: white;">Name Your Cause</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+                        <input type="text" id="simple-cause-name" class="form-control" placeholder="e.g. Atlanta Food Drive, Youth Soccer Fund, Church Roof Repair..." style="padding: 12px 16px; font-size: 14px; border-color: rgba(0, 255, 157, 0.2);">
+                        <div style="background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 6px;">
+                            <span style="font-size: 10px; color: var(--text-muted);">Symbol:</span>
+                            <span id="simple-auto-symbol" style="font-size: 14px; font-weight: bold; color: #00ff9d; font-family: var(--font-mono);">---</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Pick Template -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                        <span style="width: 24px; height: 24px; border-radius: 50%; background: #a855f7; color: white; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center;">2</span>
+                        <span style="font-size: 13px; font-weight: 600; color: white;">Pick Your Template</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                        <button type="button" class="simple-template-btn active" data-template="dove" style="background: rgba(0, 255, 157, 0.08); border: 2px solid #00ff9d; padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; color: white;">
+                            <div style="font-size: 24px; margin-bottom: 4px;">🕊️</div>
+                            <div style="font-size: 11px; font-weight: bold;">Relief</div>
+                            <div style="font-size: 8px; color: var(--text-muted);">Food, housing, aid</div>
+                        </button>
+                        <button type="button" class="simple-template-btn" data-template="shield" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; color: white;">
+                            <div style="font-size: 24px; margin-bottom: 4px;">🛡️</div>
+                            <div style="font-size: 11px; font-weight: bold;">Defense</div>
+                            <div style="font-size: 8px; color: var(--text-muted);">Safety, civic prep</div>
+                        </button>
+                        <button type="button" class="simple-template-btn" data-template="leaf" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; color: white;">
+                            <div style="font-size: 24px; margin-bottom: 4px;">🍃</div>
+                            <div style="font-size: 11px; font-weight: bold;">Eco</div>
+                            <div style="font-size: 8px; color: var(--text-muted);">Solar, carbon, green</div>
+                        </button>
+                        <button type="button" class="simple-template-btn" data-template="hands" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 12px 8px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; color: white;">
+                            <div style="font-size: 24px; margin-bottom: 4px;">🤝</div>
+                            <div style="font-size: 11px; font-weight: bold;">Faith</div>
+                            <div style="font-size: 8px; color: var(--text-muted);">Church, youth, ministry</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Choose Plan & Launch -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                        <span style="width: 24px; height: 24px; border-radius: 50%; background: #3b82f6; color: white; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center;">3</span>
+                        <span style="font-size: 13px; font-weight: 600; color: white;">Choose Your Plan</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <button type="button" class="simple-plan-btn" data-price="0" style="background: rgba(250,204,21,0.05); border: 1px solid rgba(250,204,21,0.2); padding: 12px; border-radius: 8px; cursor: pointer; text-align: center; color: white; transition: all 0.2s;">
+                            <div style="font-size: 18px; font-weight: bold; color: #facc15;">FREE</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">Devnet only • Test it</div>
+                        </button>
+                        <button type="button" class="simple-plan-btn active" data-price="25" style="background: rgba(0, 255, 157, 0.08); border: 2px solid #00ff9d; padding: 12px; border-radius: 8px; cursor: pointer; text-align: center; color: white; transition: all 0.2s; position: relative;">
+                            <div style="position: absolute; top: -6px; left: 50%; transform: translateX(-50%); font-size: 7px; background: #00ff9d; color: black; padding: 1px 6px; border-radius: 8px; font-weight: bold;">BEST VALUE</div>
+                            <div style="font-size: 18px; font-weight: bold; color: #00ff9d;">$25</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">Mainnet • pump.fun</div>
+                        </button>
+                        <button type="button" class="simple-plan-btn" data-price="49" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 12px; border-radius: 8px; cursor: pointer; text-align: center; color: white; transition: all 0.2s;">
+                            <div style="font-size: 18px; font-weight: bold;">$49</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">+ AI content + IPFS</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Launch Button + Progress Bar -->
+                <button type="button" id="simple-mint-launch-btn" class="btn btn-3d-action" style="width: 100%; padding: 16px 20px; font-size: 16px; margin: 0 0 12px 0; background: linear-gradient(135deg, #00ff9d, #00b36b); color: black; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 255, 157, 0.3); transition: all 0.3s;">
+                    ⚡ MINT &amp; LAUNCH NOW
+                </button>
+
+                <!-- 60-Second Progress Bar (hidden until launch) -->
+                <div id="simple-mint-progress" style="display: none;">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; overflow: hidden; margin-bottom: 10px;">
+                        <div id="simple-progress-bar" style="height: 6px; width: 0%; background: linear-gradient(90deg, #00ff9d, #a855f7); border-radius: 8px; transition: width 0.5s ease;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 9px; color: var(--text-muted);">
+                        <span id="simple-step-label">Initializing...</span>
+                        <span id="simple-timer-label">0s / 60s</span>
+                    </div>
+                </div>
+
+                <!-- Post-Mint Success Panel (hidden until complete) -->
+                <div id="simple-mint-success" style="display: none; margin-top: 16px; padding: 20px; background: rgba(0, 255, 157, 0.05); border: 1px solid rgba(0, 255, 157, 0.25); border-radius: 12px;">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <div style="font-size: 36px; margin-bottom: 6px;">✅</div>
+                        <h4 style="font-family: var(--font-heading); font-size: 18px; color: #00ff9d; margin: 0 0 4px 0;">YOUR SOVEREIGN TOKEN IS LIVE!</h4>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0;">Everything has been created, minted, and sent to your wallet.</p>
+                    </div>
+                    <div style="display: grid; gap: 8px; font-size: 11px; margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                            <span style="color: var(--text-muted);">Token Name</span>
+                            <strong id="success-token-name" style="color: white;">—</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                            <span style="color: var(--text-muted);">Mint Address</span>
+                            <strong id="success-mint-address" style="color: #00ff9d; font-family: var(--font-mono); font-size: 10px; cursor: pointer;" onclick="navigator.clipboard.writeText(this.textContent); showToast('Copied!');">—</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                            <span style="color: var(--text-muted);">Network</span>
+                            <strong id="success-network" style="color: white;">Solana Mainnet-Beta</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                            <span style="color: var(--text-muted);">Supply</span>
+                            <strong style="color: white;">1,000,000,000</strong>
+                        </div>
+                    </div>
+                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 12px; padding: 10px; background: rgba(250, 204, 21, 0.05); border: 1px solid rgba(250, 204, 21, 0.15); border-radius: 6px;">
+                        📎 <strong>What was delivered to you:</strong> Token mint address, Sovereign Profile page, IPFS metadata proof, pump.fun listing, and Solscan explorer link.<br>
+                        ⚠️ <strong>Important:</strong> You must accept the token in your Phantom/Solflare wallet to finalize. <a href="https://support.phantom.app/" target="_blank" style="color: #a855f7; text-decoration: underline;">How to accept →</a>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <a id="success-pump-link" href="#" target="_blank" class="btn" style="padding: 10px; font-size: 11px; margin: 0; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; text-align: center; text-decoration: none; display: block;">🔗 View on Pump.fun</a>
+                        <a id="success-explorer-link" href="#" target="_blank" class="btn" style="padding: 10px; font-size: 11px; margin: 0; background: rgba(0, 255, 157, 0.08); border: 1px solid rgba(0, 255, 157, 0.2); color: #00ff9d; text-align: center; text-decoration: none; display: block;">📊 View on Solscan</a>
+                    </div>
+                    <div style="text-align: center; margin-top: 10px;">
+                        <span style="font-size: 10px; color: var(--text-muted);">📧 Confirmation receipt sent to your registered email.</span>
+                    </div>
+                </div>
+
+                <!-- Toggle Advanced Builder -->
+                <div style="text-align: center; margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px;">
+                    <button type="button" id="toggle-advanced-builder" style="background: none; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; margin: 0 auto; padding: 4px 12px;">
+                        🔧 Want more control? Open Advanced Builder ▾
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sovereign Blueprint Gallery & Tokenizer (Advanced Builder — hidden by default for simple users) -->
+            <div id="blueprints-gallery-card" class="express-tokenizer-card glass-card mb-30" style="max-width: 800px; margin-left: auto; margin-right: auto; border-color: rgba(0, 255, 157, 0.3); background: rgba(13, 19, 33, 0.5); padding: 25px; display: none;">
                 
                 <div style="text-align: center; margin-bottom: 25px;">
                     <h3 style="font-family: var(--font-heading); font-size: 22px; color: white; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        ⚡ Sovereign Franchise Blueprint Gallery
+                        ⚡ Sovereign Franchise Blueprint Gallery — Advanced Builder
                     </h3>
                     <p class="text-muted" style="font-size: 12px; max-width: 600px; margin: 0 auto; line-height: 1.4;">
-                        Treat your cause like a high-end franchise. Clone pre-audited token structures instantly. Underwritten by UnyKorn LLC in compliance with BitGo trust custody frameworks.
+                        Full control over tokenomics, vesting schedules, LP seeding, and partner integrations. Underwritten by UnyKorn LLC in compliance with BitGo trust custody frameworks.
                     </p>
                 </div>
 
@@ -307,46 +438,57 @@
                 <!-- Step 2: Choose Plan / Licensing Tier -->
                 <div style="margin-bottom: 25px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
                     <label style="font-size: 11px; color: var(--accent); font-weight: bold; display: block; margin-bottom: 12px; letter-spacing: 0.5px;">OPTION A (PART 2): CHOOSE YOUR FRANCHISE LICENSING TIER</label>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;">
                         
-                        <!-- Tier 1: Community -->
+                        <!-- Tier 0: Starter (FREE) -->
                         <div class="pricing-tier-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 15px 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
                             <div>
-                                <div style="font-size: 10px; color: var(--text-muted); font-weight: bold;">COMMUNITY</div>
+                                <div style="font-size: 10px; color: var(--text-muted); font-weight: bold;">🆓 STARTER</div>
+                                <div style="font-size: 20px; font-weight: bold; color: #facc15; margin: 4px 0;">FREE</div>
+                                <div style="font-size: 8px; color: #9ca3af; margin-bottom: 12px; height: 36px; overflow: hidden; line-height: 1.2;">1 devnet token, basic template, no LP. Perfect for testing.</div>
+                            </div>
+                            <button class="btn btn-buy-tier" data-tier="starter" data-price="0" style="padding: 6px 0; font-size: 10px; margin: 0; width: 100%; font-weight: bold; background: #facc15; color: black; border: none; border-radius: 4px;">Try Free</button>
+                        </div>
+
+                        <!-- Tier 1: Express ($25) -->
+                        <div class="pricing-tier-card" style="background: rgba(0, 255, 157, 0.03); border: 1px solid rgba(0, 255, 157, 0.25); padding: 15px 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+                            <div style="position: absolute; top: -8px; left: 50%; transform: translateX(-50%); font-size: 8px; background: #00ff9d; color: black; padding: 1px 8px; border-radius: 10px; font-weight: bold;">⭐ POPULAR</div>
+                            <div>
+                                <div style="font-size: 10px; color: #00ff9d; font-weight: bold;">⚡ EXPRESS</div>
+                                <div style="font-size: 20px; font-weight: bold; color: white; margin: 4px 0;">$25</div>
+                                <div style="font-size: 8px; color: #9ca3af; margin-bottom: 12px; height: 36px; overflow: hidden; line-height: 1.2;">Mainnet token, any template, pump.fun listing. Mint in 60 sec.</div>
+                            </div>
+                            <button class="btn btn-buy-tier" data-tier="express" data-price="25" style="padding: 6px 0; font-size: 10px; margin: 0; width: 100%; font-weight: bold; background: #00ff9d; color: black; border: none; border-radius: 4px;">Launch - $25</button>
+                        </div>
+
+                        <!-- Tier 2: Community ($49) -->
+                        <div class="pricing-tier-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 15px 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="font-size: 10px; color: var(--text-muted); font-weight: bold;">🏛️ COMMUNITY</div>
                                 <div style="font-size: 20px; font-weight: bold; color: white; margin: 4px 0;">$49</div>
-                                <div style="font-size: 8px; color: #9ca3af; margin-bottom: 12px; height: 36px; overflow: hidden; line-height: 1.2;">Standard blueprint launch &amp; base Solana rails.</div>
+                                <div style="font-size: 8px; color: #9ca3af; margin-bottom: 12px; height: 36px; overflow: hidden; line-height: 1.2;">Everything in Express + AI content gen, video, IPFS vault.</div>
                             </div>
                             <button class="btn btn-buy-tier" data-tier="community" data-price="49" style="padding: 6px 0; font-size: 10px; margin: 0; width: 100%; font-weight: bold; background: #00ff9d; color: black; border: none; border-radius: 4px;">Clone - $49</button>
                         </div>
 
-                        <!-- Tier 2: Premium -->
+                        <!-- Tier 3: Premium ($199) -->
                         <div class="pricing-tier-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 15px 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
                             <div>
-                                <div style="font-size: 10px; color: var(--text-muted); font-weight: bold;">PREMIUM</div>
+                                <div style="font-size: 10px; color: var(--text-muted); font-weight: bold;">👑 PREMIUM</div>
                                 <div style="font-size: 20px; font-weight: bold; color: white; margin: 4px 0;">$199</div>
-                                <div style="font-size: 8px; color: #9ca3af; margin-bottom: 12px; height: 36px; overflow: hidden; line-height: 1.2;">Custom logo upload, priority queue &amp; AI translation.</div>
+                                <div style="font-size: 8px; color: #9ca3af; margin-bottom: 12px; height: 36px; overflow: hidden; line-height: 1.2;">Custom logo upload, priority queue, AI translations, all add-ons 1mo.</div>
                             </div>
                             <button class="btn btn-buy-tier" data-tier="premium" data-price="199" style="padding: 6px 0; font-size: 10px; margin: 0; width: 100%; font-weight: bold; background: #00ff9d; color: black; border: none; border-radius: 4px;">Clone - $199</button>
                         </div>
 
-                        <!-- Tier 3: Institutional -->
+                        <!-- Tier 4: Institutional ($2.5K) -->
                         <div class="pricing-tier-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 15px 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
                             <div>
-                                <div style="font-size: 10px; color: var(--text-muted); font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 3px;">INSTITUTIONAL <span style="font-size: 8px;">👑</span></div>
+                                <div style="font-size: 10px; color: var(--text-muted); font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 3px;">🏢 INSTITUTIONAL</div>
                                 <div style="font-size: 20px; font-weight: bold; color: white; margin: 4px 0;">$2.5K</div>
                                 <div style="font-size: 8px; color: #9ca3af; margin-bottom: 12px; height: 36px; overflow: hidden; line-height: 1.2;">White-label, unlimited deploys &amp; full BitGo vault setup.</div>
                             </div>
                             <button class="btn btn-sales-tier" data-tier="institutional" data-price="2500" style="padding: 6px 0; font-size: 10px; margin: 0; width: 100%; font-weight: bold; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 4px;">Inquire</button>
-                        </div>
-
-                        <!-- Tier 4: Master License -->
-                        <div class="pricing-tier-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 15px 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-                            <div>
-                                <div style="font-size: 10px; color: var(--text-muted); font-weight: bold;">MASTER REGIONAL</div>
-                                <div style="font-size: 20px; font-weight: bold; color: white; margin: 4px 0;">$15K</div>
-                                <div style="font-size: 8px; color: #9ca3af; margin-bottom: 12px; height: 36px; overflow: hidden; line-height: 1.2;">Territory monopoly, rev share &amp; regional node.</div>
-                            </div>
-                            <button class="btn btn-sales-tier" data-tier="master" data-price="15000" style="padding: 6px 0; font-size: 10px; margin: 0; width: 100%; font-weight: bold; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 4px;">Inquire</button>
                         </div>
 
                     </div>
@@ -359,6 +501,11 @@
                         <div style="display: flex; gap: 8px;">
                             <input type="text" id="express-blueprint-code" class="form-control" placeholder="e.g. MOG-ATLANTA-MISSION-5K" style="padding: 8px 12px; font-size: 12px; text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.5px; height: 36px; border-color: rgba(255,255,255,0.1);">
                             <button id="blueprint-code-btn" class="btn" style="width: auto; margin: 0; padding: 0 16px; font-size: 11px; height: 36px; background: #a855f7; color: white;">Sync</button>
+                        </div>
+                        <div id="blueprint-sync-details" style="display: none; margin-top: 10px; padding: 10px; background: rgba(0, 255, 157, 0.05); border: 1px solid rgba(0, 255, 157, 0.2); border-radius: 6px; font-size: 11px; line-height: 1.4;">
+                            <span style="color: var(--text-muted);">Synced Token:</span> <strong id="bp-sync-symbol" style="color: var(--gold);">-</strong>
+                            <br><span style="color: var(--text-muted);">Mint Address:</span> <a href="#" id="bp-sync-mint-link" target="_blank" style="font-family: var(--font-mono); font-size: 10px; color: var(--success); text-decoration: underline;">-</a>
+                            <br><span style="color: var(--text-muted);">On-Chain Balance:</span> <strong id="bp-sync-balance" style="font-family: var(--font-mono); color: var(--success);">-</strong>
                         </div>
                     </div>
                     <div style="display: flex; flex-direction: column; justify-content: flex-end;">
@@ -454,6 +601,68 @@
                         </div>
                     </div>
 
+                    <!-- ✨ AI CHIEF OF STAFF — 1-Click Content Generation -->
+                    <div style="margin-bottom: 20px; border: 1px dashed rgba(168, 85, 247, 0.25); border-radius: 12px; padding: 18px; background: rgba(168, 85, 247, 0.02);">
+                        <div style="text-align: center; margin-bottom: 14px;">
+                            <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #c084fc; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                🤖 AI Chief of Staff — Sovereign Content Engine
+                            </span>
+                            <p style="font-size: 11px; color: var(--text-muted); margin: 6px 0 0 0; line-height: 1.3;">
+                                Enter your cause name above, then hit the button. Your AI Chief of Staff will auto-generate an IPFS-ready cause description, 3 social media drafts, and an email newsletter — all in one click.
+                            </p>
+                        </div>
+                        <button type="button" id="ai-generate-campaign-btn" class="ai-generate-btn">
+                            ✨ Auto-Generate Campaign Content
+                        </button>
+
+                        <!-- AI Generated Output (Hidden until generated) -->
+                        <div id="ai-generated-output" style="display: none;">
+                            <div class="ai-output-panel">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                    <span class="ai-section-title">📄 IPFS Cause Description (Editable)</span>
+                                    <button type="button" class="draft-copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('ai-ipfs-desc').value); showToast('IPFS description copied!');">📋 Copy</button>
+                                </div>
+                                <textarea id="ai-ipfs-desc" class="ai-ipfs-textarea" placeholder="AI-generated cause description will appear here..."></textarea>
+
+                                <span class="ai-section-title">📱 Social Media Drafts</span>
+
+                                <!-- X / Twitter Draft -->
+                                <div class="ai-draft-card">
+                                    <div class="draft-platform" style="color: #1da1f2;">
+                                        <span>𝕏</span> X / TWITTER POST
+                                    </div>
+                                    <div class="draft-content" id="ai-draft-twitter"></div>
+                                    <button type="button" class="draft-copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('ai-draft-twitter').textContent); showToast('X post copied!');">📋 Copy</button>
+                                </div>
+
+                                <!-- LinkedIn Draft -->
+                                <div class="ai-draft-card">
+                                    <div class="draft-platform" style="color: #0077b5;">
+                                        <span>in</span> LINKEDIN POST
+                                    </div>
+                                    <div class="draft-content" id="ai-draft-linkedin"></div>
+                                    <button type="button" class="draft-copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('ai-draft-linkedin').textContent); showToast('LinkedIn post copied!');">📋 Copy</button>
+                                </div>
+
+                                <!-- Email Newsletter Draft -->
+                                <div class="ai-draft-card">
+                                    <div class="draft-platform" style="color: #f59e0b;">
+                                        <span>📧</span> EMAIL NEWSLETTER
+                                    </div>
+                                    <div class="draft-content" id="ai-draft-email"></div>
+                                    <button type="button" class="draft-copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('ai-draft-email').textContent); showToast('Email draft copied!');">📋 Copy</button>
+                                </div>
+
+                                <!-- Copy All Utility -->
+                                <div style="text-align: center; margin-top: 10px;">
+                                    <button type="button" id="ai-copy-all-btn" class="btn" style="width: auto; padding: 8px 24px; font-size: 11px; margin: 0; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; font-weight: 600;">
+                                        📋 Copy All Generated Content
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Platform Upgrade Add-Ons -->
                     <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-bottom: 20px;">
                         <label style="font-size: 11px; color: var(--accent); font-weight: bold; display: block; margin-bottom: 10px; letter-spacing: 0.5px;">🛡️ PLATFORM UPGRADE ADD-ONS (RECURRING REVENUE TOGGLES)</label>
@@ -489,8 +698,19 @@
                         </div>
                     </div>
 
+                    <!-- Custom Sliders Toggle -->
+                    <div style="margin-top: 20px; margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+                        <label style="display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; font-weight: 600; color: white;">
+                            <input type="checkbox" id="toggle-custom-engine" style="width: 18px; height: 18px; accent-color: #a855f7;">
+                            🛠️ Custom Enterprise Engine (Configure Custom Sliders)
+                        </label>
+                        <p class="text-muted" style="font-size: 11px; margin-left: 28px; margin-top: 4px; line-height: 1.4;">
+                            Override default blueprint configurations to manually define custom seed discounts, capital reserves, vesting periods, and launch delays.
+                        </p>
+                    </div>
+
                     <!-- Advanced Mode Layer Panel -->
-                    <div class="advanced-only" style="border-top: 1px solid var(--border-color); padding-top: 20px; margin-bottom: 20px;">
+                    <div id="custom-sliders-cockpit" style="display: none; border-top: 1px solid var(--border-color); padding-top: 20px; margin-bottom: 20px;">
                         <h4 style="font-family: var(--font-heading); font-size: 14px; margin-bottom: 12px; color: #a855f7; display: flex; align-items: center; gap: 8px;">
                             ⚙️ Advanced Tokenomics &amp; Launch Milestones
                         </h4>
@@ -656,25 +876,7 @@
                 </div>
             </div>
 
-            <!-- Pre-login Onboarding Trigger -->
-            <div id="auth-prompt-card" class="glass-card text-center mb-30" style="max-width: 600px; margin-left: auto; margin-right: auto;">
-                <h3 style="margin-bottom: 10px; font-family: var(--font-heading); font-size: 16px;">Connect On-Chain Identity</h3>
-                <p class="text-muted" style="font-size: 12px; margin-bottom: 16px;">
-                    Enter your email to claim your `.mensofgod.id` domain and generate your Solana minting keypair.
-                </p>
-                <div id="auth-cta">
-                    <button id="show-login-btn" class="btn" style="padding: 10px 30px; font-size: 13px; width: auto;">Connect &amp; Onboard</button>
-                </div>
-                <div id="auth-form" style="display: none;">
-                    <div class="form-group" style="max-width: 320px; margin: 0 auto 15px;">
-                        <input type="email" id="user-email" class="form-control" placeholder="name@domain.com" style="padding: 10px 14px; font-size: 13px;" required>
-                    </div>
-                    <div style="display: flex; gap: 12px; justify-content: center;">
-                        <button id="cancel-auth-btn" class="btn btn-secondary" style="width: auto; padding: 8px 16px; font-size: 12px;">Cancel</button>
-                        <button id="submit-auth-btn" class="btn" style="width: auto; padding: 8px 16px; font-size: 12px;">Claim Domain &amp; Login</button>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- Men of God Flagship Pools (Our own institutional stuff) -->
             <h2 style="font-family: var(--font-heading); font-size: 20px; margin-bottom: 15px; text-align: left;">Flagship Institutional Pools</h2>
@@ -975,25 +1177,25 @@
             </div>
         </div>
 
-        <!-- ==================== TAB 3: LP DIRECTORY ==================== -->
+        <!-- ==================== TAB 3: CAPITAL RESERVES & ENDOWMENTS ==================== -->
         <div id="tab-seeder" class="tab-content" style="display: none;">
-            <!-- Active Liquidity Pools Table -->
+            <!-- Active Capital Reserves Table -->
             <div class="glass-card mb-30">
                 <div class="sidebar-title-bar">
-                    <h3 style="font-family: var(--font-heading); font-size: 18px;">Active Charity Liquidity Pools</h3>
-                    <span class="badge badge-purple" style="font-size: 10px;">Raydium + Uniswap V4</span>
+                    <h3 style="font-family: var(--font-heading); font-size: 18px;">Active Capital Reserves &amp; Endowments</h3>
+                    <span class="badge badge-purple" style="font-size: 10px;">BitGo Managed Escrows</span>
                 </div>
                 <p class="text-muted mb-20" style="font-size: 12px;">
-                    Review dynamic yields, seed quote liquidity, or buy/sell pool tokens supporting flagship initiatives and community-funded causes.
+                    Review capital reserve allocations, secure escrow routing, and endowment status for active causes.
                 </p>
 
                 <div class="pool-directory-wrapper" style="overflow-x: auto;">
                     <table class="pool-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
                         <thead>
                             <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 11px; text-transform: uppercase;">
-                                <th style="padding: 12px 10px;">Pool Pair</th>
-                                <th style="padding: 12px 10px;">Quote Liquidity (SOL)</th>
-                                <th style="padding: 12px 10px;">Base Seeding</th>
+                                <th style="padding: 12px 10px;">Reserve Pair</th>
+                                <th style="padding: 12px 10px;">Endowment Reserve (SOL)</th>
+                                <th style="padding: 12px 10px;">Committed Allocation</th>
                                 <th style="padding: 12px 10px;">Exchange Rate</th>
                                 <th style="padding: 12px 10px;">Fee Tier</th>
                                 <th style="padding: 12px 10px; text-align: right;">Action</th>
@@ -1006,31 +1208,31 @@
                 </div>
             </div>
 
-            <!-- LP Planning & Seeder Workspace -->
+            <!-- Capital Reserve Allocation Workspace -->
             <div class="glass-card" id="pool-workspace-panel" style="display: none;">
                 <div class="sidebar-title-bar">
-                    <h3 style="font-family: var(--font-heading); font-size: 18px;" id="selected-pool-title">Seed Peachtree Way Rescue Pool</h3>
+                    <h3 style="font-family: var(--font-heading); font-size: 18px;" id="selected-pool-title">Allocate Capital Reserves</h3>
                     <span class="badge badge-blue" id="selected-pool-badge">BUCK/SOL</span>
                 </div>
                 <p class="text-muted mb-20" style="font-size: 12px;">
-                    Add SOL quote-side liquidity to support immediate token depth. Seeding locks quote liquidity into Raydium constant product market maker (CPMM) accounts.
+                    Add SOL reserves to allocate quote-side liquidity. Allocations lock quote liquidity securely inside Unykorn LLC custody escrow.
                 </p>
 
                 <div class="pool-planner-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
                     <div class="planner-form gap-10">
                         <div class="form-group">
-                            <label for="lp-sol-side">SOL Pool Liquidity (Quote Side)</label>
+                            <label for="lp-sol-side">SOL Reserve Allocation (Quote Side)</label>
                             <input type="number" id="lp-sol-side" class="form-control" value="5" step="0.5" min="0.1">
                         </div>
                         <div class="form-group">
-                            <label for="lp-token-side">Tokens Seeding (Base Side)</label>
+                            <label for="lp-token-side">Base Token Allocation</label>
                             <input type="text" id="lp-token-side" class="form-control" value="200,000,000" disabled>
                             <span class="input-helper" style="font-size: 11px; color: var(--text-muted); margin-top: 6px; display: block;">
                                 Percentage of total supply: <span id="lp-supply-pct">100%</span>
                             </span>
                         </div>
                         <div class="form-group">
-                            <label>Raydium LP Fee Configuration</label>
+                            <label>Platform Fee Routing Configuration</label>
                             <select class="form-control" disabled>
                                 <option value="2500" selected>0.25% Fee Tier (Standard Launch Default)</option>
                             </select>
@@ -1076,27 +1278,27 @@
 
                 <div style="margin-top: 30px; display: flex; gap: 15px;">
                     <button id="plan-pool-btn" class="btn" style="flex: 1; max-width: 100%;">
-                        Execute Liquidity Pool Seeding Dry-Run
+                        Execute Capital Reserve Allocation
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== TAB 4: AIRDROP HUB ==================== -->
+        <!-- ==================== TAB 4: DONOR DISTRIBUTION HUB ==================== -->
         <div id="tab-airdrop" class="tab-content" style="display: none;">
             <div class="dashboard-grid">
-                <!-- Left: Contacts Directory -->
+                <!-- Left: Recipients Directory -->
                 <aside class="gap-10">
                     <div class="glass-card no-padding">
                         <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3 style="font-family: var(--font-heading); font-size: 18px;">Contacts Directory</h3>
-                            <span class="badge badge-purple" id="contacts-count">3 Contacts</span>
+                            <h3 style="font-family: var(--font-heading); font-size: 18px;">Recipients Directory</h3>
+                            <span class="badge badge-purple" id="contacts-count">3 Recipients</span>
                         </div>
                         
                         <div class="card-body">
-                            <!-- Add Contact Form -->
+                            <!-- Add Recipient Form -->
                             <form id="add-contact-form" onsubmit="return false;" style="display: flex; gap: 10px; margin-bottom: 20px;">
-                                <input type="text" id="contact-name" class="form-control" placeholder="Contact Name" style="padding: 8px 12px; font-size: 12px;" required>
+                                <input type="text" id="contact-name" class="form-control" placeholder="Recipient Name" style="padding: 8px 12px; font-size: 12px;" required>
                                 <input type="text" id="contact-wallet" class="form-control" placeholder="Solana Wallet" style="padding: 8px 12px; font-size: 12px;" required>
                                 <button id="add-contact-btn" class="btn" style="width: auto; padding: 8px 16px; font-size: 12px; margin: 0;">Add</button>
                             </form>
@@ -1120,15 +1322,15 @@
                     </div>
                 </aside>
 
-                <!-- Right: Multi-Send Airdrop Executor -->
+                <!-- Right: Multi-Send Distribution Executor -->
                 <section class="interactive-panel">
                     <div class="glass-card">
                         <div class="sidebar-title-bar">
-                            <h4 style="font-size: 15px; font-family: var(--font-heading);">Distribute Airdrop</h4>
-                            <span class="badge badge-blue">METAPLEX MULTISEND</span>
+                            <h4 style="font-size: 15px; font-family: var(--font-heading);">Distribute Cause Endowments</h4>
+                            <span class="badge badge-blue">INSTITUTIONAL MULTISEND</span>
                         </div>
                         <p class="text-muted mb-20" style="font-size: 12px;">
-                            Select target contacts on the left directory, select the cause token to distribute, and specify the amount to send per wallet.
+                            Select target recipients on the left directory, select the cause token to distribute, and specify the endowment amount to send per wallet.
                         </p>
 
                         <div class="form-group">
@@ -1138,23 +1340,23 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="airdrop-amount">Airdrop Amount (Per Contact)</label>
+                            <label for="airdrop-amount">Endowment Amount (Per Recipient)</label>
                             <input type="number" id="airdrop-amount" class="form-control" value="100" min="1">
                         </div>
 
                         <button id="send-airdrop-btn" class="btn" style="width: 100%; max-width: 100%; margin-top: 10px;">
-                            ✈️ Send Multi-Wallet Airdrop
+                            ✈️ Distribute Tokens to Recipients
                         </button>
                     </div>
 
-                    <!-- Airdrop console logger -->
+                    <!-- Distribution console logger -->
                     <div class="console-card">
                         <div class="console-header">
-                            <span>✈️ Airdrop Transfer Logs</span>
+                            <span>✈️ Distribution Stream Logs</span>
                             <span style="font-family: var(--font-mono); font-size: 9px;" id="airdrop-console-status">IDLE</span>
                         </div>
                         <div class="console-body" id="airdrop-console-logs" style="height: 140px;">
-                            <div class="console-log-row text-muted">[Airdrop Engine] Ready. Select contacts and click Send.</div>
+                            <div class="console-log-row text-muted">[Distribution Engine] Ready. Select recipients and click Distribute.</div>
                         </div>
                     </div>
                 </section>
@@ -1163,56 +1365,201 @@
 
         <!-- ==================== TAB 5: AFFILIATES ==================== -->
         <div id="tab-affiliates" class="tab-content" style="display: none;">
-            <div class="glass-card" style="max-width: 800px; margin: 0 auto;">
-                <div class="sidebar-title-bar">
-                    <h3 style="font-family: var(--font-heading); font-size: 22px;">Affiliate Referral Program</h3>
-                    <span class="badge badge-purple">10% commission</span>
+            <!-- STATE 1: SIGN-UP FORM (Not Registered) -->
+            <div id="affiliate-signup-state" class="glass-card" style="max-width: 600px; margin: 0 auto;">
+                <div class="sidebar-title-bar" style="margin-bottom: 15px;">
+                    <h3 style="font-family: var(--font-heading); font-size: 22px;">Join MOG Affiliate Network</h3>
+                    <span class="badge badge-purple">20% - 40% Commission</span>
                 </div>
-                <p class="text-muted mb-20" style="font-size: 13px;">
-                    Promote Men of God causes, refer new donors, and earn instant commissions directly to your connected wallet. Commissions are paid out immediately in SOL.
+                <p class="text-muted" style="font-size: 13px; margin-bottom: 25px;">
+                    Refer token creators, builders, and organizations to Men of God Hub and earn up to 40% commission on every qualified setup, Stripe checkout, or franchise clone referred. Payouts are redeemable instantly in USD credit or SOL cashout.
+                </p>
+                <form id="affiliate-signup-form" onsubmit="return false;" style="display: grid; gap: 16px;">
+                    <div>
+                        <label for="aff-signup-namespace" style="display: block; margin-bottom: 6px; font-weight: 600;">Choose Your Namespace</label>
+                        <div style="display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 0 12px;">
+                            <input type="text" id="aff-signup-namespace" class="form-control" style="border: none; padding: 10px 0; background: transparent; box-shadow: none; flex: 1; font-family: var(--font-mono); font-size: 13px;" placeholder="e.g. kevan" required>
+                            <span style="color: var(--gold); font-weight: 700; font-size: 12px; margin-left: 8px;">.mensofgod.id</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="aff-signup-displayname" style="display: block; margin-bottom: 6px; font-weight: 600;">Display Name</label>
+                        <input type="text" id="aff-signup-displayname" class="form-control" placeholder="e.g. Kevan BTC" required>
+                    </div>
+                    <div>
+                        <label for="aff-signup-email" style="display: block; margin-bottom: 6px; font-weight: 600;">Email Address</label>
+                        <input type="email" id="aff-signup-email" class="form-control" placeholder="you@example.com" required>
+                    </div>
+                    <div>
+                        <label for="aff-signup-wallet" style="display: block; margin-bottom: 6px; font-weight: 600;">Solana Wallet Address (Optional)</label>
+                        <input type="text" id="aff-signup-wallet" class="form-control" style="font-family: var(--font-mono); font-size: 12px;" placeholder="Enter Solana wallet for SOL payouts">
+                    </div>
+                    <button type="submit" id="register-affiliate-btn" class="btn" style="width: 100%; margin-top: 10px;">
+                        🤝 Register & Get Referral Link
+                    </button>
+                </form>
+            </div>
+
+            <!-- STATE 2: SIGNED-IN DASHBOARD -->
+            <div id="affiliate-dashboard-state" class="glass-card" style="max-width: 800px; margin: 0 auto; display: none;">
+                <div class="sidebar-title-bar" style="margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <h3 style="font-family: var(--font-heading); font-size: 22px;">Affiliate Dashboard</h3>
+                        <span id="dashboard-namespace-badge" class="badge badge-purple" style="font-family: var(--font-mono);">kevan.mensofgod.id</span>
+                    </div>
+                    <span id="dashboard-rate-badge" class="badge badge-gold">20% Commission</span>
+                </div>
+                <p class="text-muted" style="font-size: 12px; margin-bottom: 25px;">
+                    Progress through referral tiers to increase your commission rate up to 40% GMV. Track your referrals live.
                 </p>
 
-                <!-- Referral Generator -->
-                <div class="property-card" style="margin-bottom: 30px;">
-                    <h4 style="font-size: 14px; margin-bottom: 12px; font-family: var(--font-heading);">Generate Referral Link</h4>
-                    <div style="display: flex; gap: 12px;">
-                        <input type="text" id="affiliate-wallet-input" class="form-control" placeholder="Enter your Solana wallet address" style="font-family: var(--font-mono); font-size: 12px;" readonly>
-                        <button id="generate-ref-btn" class="btn" style="width: auto; padding: 10px 24px; font-size: 12px; margin: 0;">Copy Referral Link</button>
+                <!-- Unique Referral Link -->
+                <div class="property-card text-center" style="margin-bottom: 30px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15);">
+                    <h4 style="font-size: 13px; margin-bottom: 8px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px;">Your Unique Referral Link</h4>
+                    <div style="display: flex; gap: 12px; max-width: 600px; margin: 0 auto 15px auto;">
+                        <input type="text" id="affiliate-dashboard-link" class="form-control text-center" readonly style="font-family: var(--font-mono); font-size: 12px; background: rgba(0,0,0,0.2);" value="https://mensofgod.com/?ref=">
+                        <button id="copy-dashboard-link-btn" class="btn" style="width: auto; padding: 10px 20px; font-size: 11px; margin: 0; white-space: nowrap;">Copy Link</button>
                     </div>
-                    <div id="generated-link-display" style="font-size: 11px; color: var(--success); font-family: var(--font-mono); margin-top: 8px; display: none;">
-                        Referral Link: <span id="ref-link-text">https://mensofgod.com/?ref=...</span>
-                    </div>
-                </div>
-
-                <!-- Stats Dashboard -->
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
-                    <div class="property-card text-center" style="margin: 0; padding: 15px 10px;">
-                        <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: bold;">Total Clicks</span>
-                        <strong style="font-size: 22px; display: block; margin-top: 5px;" id="aff-clicks">12</strong>
-                    </div>
-                    <div class="property-card text-center" style="margin: 0; padding: 15px 10px;">
-                        <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: bold;">Mint Conversions</span>
-                        <strong style="font-size: 22px; display: block; margin-top: 5px;" id="aff-mints">2</strong>
-                    </div>
-                    <div class="property-card text-center" style="margin: 0; padding: 15px 10px;">
-                        <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: bold;">Unpaid Commission</span>
-                        <strong style="font-size: 22px; display: block; margin-top: 5px; color: var(--success);" id="aff-unpaid">0.25 SOL</strong>
-                    </div>
-                    <div class="property-card text-center" style="margin: 0; padding: 15px 10px;">
-                        <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: bold;">Paid Out SOL</span>
-                        <strong style="font-size: 22px; display: block; margin-top: 5px;" id="aff-paid">0.50 SOL</strong>
+                    <!-- Social sharing -->
+                    <div style="display: flex; justify-content: center; gap: 15px;">
+                        <button id="share-twitter-btn" class="btn btn-secondary" style="width: auto; padding: 6px 14px; font-size: 11px; margin: 0;">🐦 Share on X</button>
+                        <button id="share-telegram-btn" class="btn btn-secondary" style="width: auto; padding: 6px 14px; font-size: 11px; margin: 0;">✈️ Share Telegram</button>
+                        <button id="share-email-btn" class="btn btn-secondary" style="width: auto; padding: 6px 14px; font-size: 11px; margin: 0;">✉️ Share Email</button>
                     </div>
                 </div>
 
-                <button id="redeem-comm-btn" class="btn" style="width: 100%; max-width: 100%; margin-top: 30px;">
-                     Redeem &amp; Withdraw Commission to Wallet
-                </button>
+                <!-- Stats Grid -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 30px;">
+                    <div class="property-card text-center" style="margin: 0; padding: 15px 10px; background: rgba(0,82,255,0.06); border: 1px solid rgba(0,82,255,0.2);">
+                        <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: bold; display: block; margin-bottom: 6px;">Total Referrals GMV</span>
+                        <strong style="font-size: 24px; display: block; color: var(--text-primary);" id="aff-dash-earned">$0.00</strong>
+                    </div>
+                    <div class="property-card text-center" style="margin: 0; padding: 15px 10px; background: rgba(0,212,170,0.06); border: 1px solid rgba(0,212,170,0.2);">
+                        <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: bold; display: block; margin-bottom: 6px;">Active Tier</span>
+                        <strong style="font-size: 24px; display: block; color: var(--gold);" id="aff-dash-tier">Standard</strong>
+                    </div>
+                    <div class="property-card text-center" style="margin: 0; padding: 15px 10px; background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.2);">
+                        <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: bold; display: block; margin-bottom: 6px;">Paid Referrals</span>
+                        <strong style="font-size: 24px; display: block; color: var(--accent);" id="aff-dash-clicks">0</strong>
+                    </div>
+                </div>
+
+                <!-- Available Balances & Payout -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <!-- MOG Credit Card -->
+                    <div class="property-card" style="margin: 0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: bold;">Available MOG Credit</span>
+                            <strong style="font-size: 28px; display: block; margin: 10px 0; color: var(--success);" id="aff-credit-balance">$0.00</strong>
+                            <p class="text-muted" style="font-size: 11px; line-height: 1.4;">Apply credit directly towards token launch fees or paid platform upgrades.</p>
+                        </div>
+                        <button id="redeem-credit-btn" class="btn" style="width: 100%; margin-top: 15px; background: linear-gradient(135deg, #a855f7, #7c3aed);">Use as MOG Credit</button>
+                    </div>
+
+                    <!-- Cashout Card -->
+                    <div class="property-card" style="margin: 0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: bold;">Available for Cashout</span>
+                            <strong style="font-size: 28px; display: block; margin: 10px 0; color: var(--accent-purple);" id="aff-cashout-balance">$0.00</strong>
+                            <p class="text-muted" style="font-size: 11px; line-height: 1.4;" id="cashout-helper-text">Minimum cashout balance is $30.00. Payouts processed in SOL.</p>
+                        </div>
+                        <button id="request-cashout-btn" class="btn btn-secondary" style="width: 100%; margin-top: 15px;" disabled>Cashout Available at $30</button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- ==================== TAB 6: BACK OFFICE & AI HUB ==================== -->
         <div id="tab-backoffice" class="tab-content" style="display: none;">
-            <div class="dashboard-grid">
+            <!-- Disconnected State: Login/Verify Portal -->
+            <div id="auth-prompt-card" class="glass-card text-center mb-30" style="max-width: 600px; margin: 40px auto 30px auto; padding: 30px; border-color: rgba(168, 85, 247, 0.3);">
+                <div style="font-size: 40px; margin-bottom: 15px;">🔒</div>
+                <h3 style="margin-bottom: 10px; font-family: var(--font-heading); font-size: 22px; color: white;">Connect On-Chain Identity</h3>
+                <p class="text-muted" style="font-size: 13px; margin-bottom: 24px; line-height: 1.5; max-width: 480px; margin-left: auto; margin-right: auto;">
+                    Enter your email to claim your secure `.mensofgod.id` domain identity and allocate your institutional Solana minting keypair under Unykorn LLC.
+                </p>
+                <div id="auth-cta">
+                    <button id="show-login-btn" class="btn" style="padding: 12px 40px; font-size: 14px; width: auto; font-weight: bold; background: linear-gradient(135deg, #a855f7, #7c3aed); border: none;">Connect &amp; Onboard Now →</button>
+                </div>
+                <div id="auth-form" style="display: none;">
+                    <div class="form-group" style="max-width: 350px; margin: 0 auto 20px;">
+                        <input type="email" id="user-email" class="form-control" placeholder="name@domain.com" style="padding: 12px 16px; font-size: 13px;" required>
+                    </div>
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                        <button id="cancel-auth-btn" class="btn btn-secondary" style="width: auto; padding: 10px 20px; font-size: 12px;">Cancel</button>
+                        <button id="submit-auth-btn" class="btn" style="width: auto; padding: 10px 20px; font-size: 12px; background: linear-gradient(135deg, #00ff9d, #00b36b); border: none; color: black; font-weight: bold;">Claim Domain &amp; Login</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Connected State: Back Office Portal -->
+            <div id="backoffice-portal-dashboard" style="display: none;">
+                
+                <!-- Quick-Access Cards Directory of Hidden Features -->
+                <div class="glass-card mb-30" style="padding: 25px; border-color: rgba(139, 92, 246, 0.25);">
+                    <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 6px; color: white;">Sovereign Hub Back-Office Dashboard</h3>
+                    <p class="text-muted" style="font-size: 12px; margin-bottom: 20px;">
+                        Welcome back. Access your non-profit fundraising tools, capital reserves, and referral statistics below.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                        <!-- Card 1: Launch a Cause -->
+                        <div class="property-card" style="margin: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(0, 255, 157, 0.15); background: rgba(0, 255, 157, 0.02);">
+                            <div>
+                                <strong style="color: white; font-size: 13px; display: block; margin-bottom: 4px;">🚀 Activate Campaign</strong>
+                                <span style="font-size: 11px; color: var(--text-muted);">Launch new turnkey cause contracts and mint donor certificates.</span>
+                            </div>
+                            <button onclick="switchTab('launch')" class="btn btn-secondary" style="width: 100%; margin-top: 15px; padding: 6px 0; font-size: 11px; border-color: rgba(0, 255, 157, 0.3); color: #00ff9d;">Open Creator</button>
+                        </div>
+                        
+                        <!-- Card 2: Affiliates Dashboard -->
+                        <div class="property-card" style="margin: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(168, 85, 247, 0.15); background: rgba(168, 85, 247, 0.02);">
+                            <div>
+                                <strong style="color: white; font-size: 13px; display: block; margin-bottom: 4px;">👥 Affiliate Network</strong>
+                                <span style="font-size: 11px; color: var(--text-muted);">Track your referrals, view current tier commissions, and cashout.</span>
+                            </div>
+                            <button onclick="switchTab('affiliates')" class="btn btn-secondary" style="width: 100%; margin-top: 15px; padding: 6px 0; font-size: 11px; border-color: rgba(168, 85, 247, 0.3); color: #c084fc;">Open Affiliates</button>
+                        </div>
+
+                        <!-- Card 3: Donor Distribution -->
+                        <div class="property-card" style="margin: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(59, 130, 246, 0.15); background: rgba(59, 130, 246, 0.02);">
+                            <div>
+                                <strong style="color: white; font-size: 13px; display: block; margin-bottom: 4px;">🪂 Donor Distributions</strong>
+                                <span style="font-size: 11px; color: var(--text-muted);">Perform multi-wallet batch distributions to verified donors.</span>
+                            </div>
+                            <button onclick="switchTab('airdrop')" class="btn btn-secondary" style="width: 100%; margin-top: 15px; padding: 6px 0; font-size: 11px; border-color: rgba(59, 130, 246, 0.3); color: #60a5fa;">Open Distributions</button>
+                        </div>
+
+                        <!-- Card 4: Capital Reserves -->
+                        <div class="property-card" style="margin: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(245, 158, 11, 0.15); background: rgba(245, 158, 11, 0.02);">
+                            <div>
+                                <strong style="color: white; font-size: 13px; display: block; margin-bottom: 4px;">📊 Capital Reserves</strong>
+                                <span style="font-size: 11px; color: var(--text-muted);">Monitor Raydium liquidity deposits and secure escrow routing.</span>
+                            </div>
+                            <button onclick="switchTab('seeder')" class="btn btn-secondary" style="width: 100%; margin-top: 15px; padding: 6px 0; font-size: 11px; border-color: rgba(245, 158, 11, 0.3); color: #fbbf24;">Open Reserves</button>
+                        </div>
+
+                        <!-- Card 5: Subscription Billing -->
+                        <div class="property-card" style="margin: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(236, 72, 153, 0.15); background: rgba(236, 72, 153, 0.02);">
+                            <div>
+                                <strong style="color: white; font-size: 13px; display: block; margin-bottom: 4px;">💳 Subscriptions</strong>
+                                <span style="font-size: 11px; color: var(--text-muted);">Manage platform fees, monthly SaaS plans, and invoices.</span>
+                            </div>
+                            <button onclick="switchTab('billing')" class="btn btn-secondary" style="width: 100%; margin-top: 15px; padding: 6px 0; font-size: 11px; border-color: rgba(236, 72, 153, 0.3); color: #f472b6;">Open Billing</button>
+                        </div>
+
+                        <!-- Card 6: AI Insights Blog -->
+                        <div class="property-card" style="margin: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(0, 212, 170, 0.15); background: rgba(0, 212, 170, 0.02);">
+                            <div>
+                                <strong style="color: white; font-size: 13px; display: block; margin-bottom: 4px;">🧠 AI Insights Blog</strong>
+                                <span style="font-size: 11px; color: var(--text-muted);">Read weekly AI-generated RWA intelligence and market briefs.</span>
+                            </div>
+                            <button onclick="switchTab('insights')" class="btn btn-secondary" style="width: 100%; margin-top: 15px; padding: 6px 0; font-size: 11px; border-color: rgba(0, 212, 170, 0.3); color: #00d4aa;">Open Blog</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
                 <!-- Left: AI Agent & Poster controls -->
                 <aside class="gap-10">
                     <!-- AI Controller card -->
@@ -1303,21 +1650,22 @@
                         </form>
 
                         <!-- Live Certificate Rendering -->
-                        <div class="certificate-preview-frame" id="cert-preview-frame" style="display: none; border: 2px solid var(--accent-purple); padding: 24px; border-radius: 8px; text-align: center; background: radial-gradient(circle, #1e1b4b 0%, #030712 100%); margin-top: 20px; box-shadow: 0 0 20px rgba(139,92,246,0.2);">
+                        <div class="certificate-preview-frame" id="cert-preview-frame" style="display: none; border: 2px solid #ffd700; padding: 24px; border-radius: 8px; text-align: center; background: radial-gradient(circle, #1a1600 0%, #030712 100%); margin-top: 20px; box-shadow: 0 0 25px rgba(255,215,0,0.15); position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #ffd700, #ffb300, #ffd700);"></div>
                             <span style="font-size: 24px; display: block; margin-bottom: 8px;">📜</span>
-                            <span style="font-family: var(--font-heading); font-size: 11px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 4px;">Sovereign Contributor Certificate</span>
-                            <h4 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 12px; color: var(--text-primary);">MEN OF GOD HUMANITARIAN NETWORK</h4>
+                            <span style="font-family: var(--font-heading); font-size: 11px; color: #ffd700; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 4px;">Sovereign Contributor Certificate</span>
+                            <h4 style="font-family: var(--font-heading); font-size: 15px; margin-bottom: 12px; color: var(--text-primary); letter-spacing: 0.5px;">MEN OF GOD HUMANITARIAN NETWORK</h4>
                             <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4;">
-                                This certifies that <strong style="color: var(--text-primary);" id="preview-cert-recipient">John Doe</strong> has contributed to the network as a verified <strong style="color: var(--accent-purple);" id="preview-cert-role">Builder</strong>.
+                                This certifies that <strong style="color: var(--text-primary);" id="preview-cert-recipient">John Doe</strong> has contributed to the network as a verified <strong style="color: #ffd700;" id="preview-cert-role">Builder</strong>.
                             </p>
                             <p style="font-style: italic; font-size: 11px; color: var(--text-secondary); margin-bottom: 20px; padding: 0 10px;" id="preview-cert-msg">
                                 "Congratulations, thank you for your support!"
                             </p>
-                            <div style="font-family: var(--font-mono); font-size: 9px; color: var(--success); margin-bottom: 10px;" id="preview-cert-cid">
-                                IPFS CID: Qm...
+                            <div style="font-family: var(--font-mono); font-size: 9px; margin-bottom: 15px;">
+                                <a href="#" id="preview-cert-link" target="_blank" style="color: var(--success); text-decoration: underline; font-weight: bold;">IPFS CID: Qm...</a>
                             </div>
-                            <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 10px; font-size: 10px;">
-                                <div>Signed: <strong>Sovereignty Hub Admin</strong></div>
+                            <div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(255,215,0,0.15); padding-top: 10px; font-size: 10px;">
+                                <div>Signed: <strong>Sovereign Hub Admin</strong></div>
                                 <div>Date: <span id="preview-cert-date">July 11, 2026</span></div>
                             </div>
                         </div>
@@ -1342,6 +1690,7 @@
                     </div>
                 </section>
             </div>
+            </div> <!-- Close backoffice-portal-dashboard -->
         </div>
 
         <!-- ==================== TAB 7: BILLING & SUBSCRIPTIONS ==================== -->
@@ -1357,7 +1706,7 @@
                     <div class="property-card" style="margin: 0;">
                         <h4 style="font-family: var(--font-heading); font-size: 14px; margin-bottom: 8px; color: var(--gold);">⚖️ Platform Fee Architecture</h4>
                         <p class="text-muted" style="font-size: 12px; line-height: 1.5;">
-                            To sustain operations and host Web3 IPFS gateways, Men of God Hub retains a flat <strong>$49 one-time clone fee</strong> for standard Community tier blueprints, a <strong>$199 one-time fee</strong> for Premium customization blueprints, and optional value-added monthly SaaS subscriptions starting at <strong>$19/month</strong>.
+                            To sustain operations and host Web3 IPFS gateways, Men of God Hub offers a <strong>$0 Starter tier</strong> (devnet testing), a <strong>$25 Express tier</strong> (mainnet + pump.fun), a <strong>$49 Community tier</strong> (Express + AI content + IPFS), and a <strong>$199 Premium tier</strong> (all features + 1 month add-ons). Optional monthly SaaS subscriptions start at <strong>$19/month</strong>.
                         </p>
                     </div>
                     <div class="property-card" style="margin: 0;">
@@ -1375,18 +1724,22 @@
                     <div class="property-card" style="margin:0; border: 1px solid var(--border-color);">
                         <h4 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 4px;">One-Time Blueprint License</h4>
                         <p class="text-muted" style="font-size: 11px; margin-bottom: 15px;">Deploy pre-audited blueprints to Solana devnet or mainnet.</p>
-                        <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px;">
+                        <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
                             <div>
-                                <strong style="font-size: 20px; display: block; color: white;">$49</strong>
-                                <span style="font-size: 9px; color: var(--text-muted);">Community Tier</span>
+                                <strong style="font-size: 18px; display: block; color: #facc15;">FREE</strong>
+                                <span style="font-size: 9px; color: var(--text-muted);">🆓 Starter</span>
                             </div>
                             <div>
-                                <strong style="font-size: 20px; display: block; color: var(--accent);">$199</strong>
-                                <span style="font-size: 9px; color: var(--text-muted);">Premium Tier</span>
+                                <strong style="font-size: 18px; display: block; color: #00ff9d;">$25</strong>
+                                <span style="font-size: 9px; color: var(--text-muted);">⚡ Express</span>
                             </div>
                             <div>
-                                <strong style="font-size: 20px; display: block; color: #00ff9d;">$129</strong>
-                                <span style="font-size: 9px; color: var(--text-muted);">Best Value Bundle</span>
+                                <strong style="font-size: 18px; display: block; color: white;">$49</strong>
+                                <span style="font-size: 9px; color: var(--text-muted);">🏛️ Community</span>
+                            </div>
+                            <div>
+                                <strong style="font-size: 18px; display: block; color: var(--accent);">$199</strong>
+                                <span style="font-size: 9px; color: var(--text-muted);">👑 Premium</span>
                             </div>
                         </div>
                         <ul style="font-size: 11px; color: var(--text-secondary); margin-left: 15px; line-height: 1.8;">
@@ -1845,62 +2198,10 @@
     </div>
 
     <!-- Scrolling Go Network Counterparties Banner -->
-    <div style="background: #050a14; border-bottom: 1px solid rgba(0,82,255,0.15); padding: 20px 0; overflow: hidden;">
-        <div style="text-align: center; margin-bottom: 12px;">
-            <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #4b5563; font-weight: 600;">BitGo Go Network — Active Settlement Desk & Counterparties</span>
-        </div>
-        <div style="display: flex; animation: scroll-banner 30s linear infinite; width: max-content;">
-            <div style="display: flex; gap: 40px; padding: 0 20px; align-items: center; white-space: nowrap; font-family: var(--font-mono); font-size: 12px;">
-                <span><strong style="color: #4da3ff;">FalconX</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $24.5M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Flowdesk</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $18.2M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Flow Traders</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $45.1M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Foundry Digital</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $12.8M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">G-20 Hermes</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $8.4M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">GSR Markets</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $37.9M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Membrane Labs</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $15.3M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Nonco LLC</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $9.2M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Portofino Tech</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $11.4M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">QCP Capital</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $29.8M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Wintermute</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $62.1M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Xapo Holdings</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $5.7M</span> <span style="color: var(--success);">● Active</span></span>
-            </div>
-            <div style="display: flex; gap: 40px; padding: 0 20px; align-items: center; white-space: nowrap; font-family: var(--font-mono); font-size: 12px;">
-                <span><strong style="color: #4da3ff;">FalconX</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $24.5M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Flowdesk</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $18.2M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Flow Traders</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $45.1M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Foundry Digital</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $12.8M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">G-20 Hermes</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $8.4M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">GSR Markets</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $37.9M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Membrane Labs</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $15.3M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Nonco LLC</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $9.2M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Portofino Tech</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $11.4M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">QCP Capital</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $29.8M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Wintermute</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $62.1M</span> <span style="color: var(--success);">● Active</span></span>
-                <span style="color: #4b5563;">|</span>
-                <span><strong style="color: #4da3ff;">Xapo Holdings</strong> <span style="color: var(--text-muted); font-size: 10px;">Vol: $5.7M</span> <span style="color: var(--success);">● Active</span></span>
-            </div>
-        </div>
+    <div style="background: #050a14; border-bottom: 1px solid rgba(0,82,255,0.15); padding: 15px 0; text-align: center;">
+        <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #6b7280; font-weight: 600;">
+            Institutional Liquidity Routing Provided By: FalconX • Wintermute • GSR Markets
+        </span>
     </div>
 
     <!-- Web3 Registration / Onboarding Panel -->
@@ -1957,7 +2258,7 @@
         <!-- ==================== TAB 10: SOVEREIGN TRENCHES ==================== -->
         <div id="tab-trenches" class="tab-content" style="display: none;">
             <div class="hero-wrapper mb-30" style="max-width: 1200px; text-align: center; margin-left: auto; margin-right: auto;">
-                <div class="hero-badge" style="background: rgba(0, 255, 157, 0.1); color: #00ff9d; border: 1px solid rgba(0, 255, 157, 0.3); display: inline-block;">Sovereign Trenches</div>
+                <div class="hero-badge" style="background: rgba(0, 255, 157, 0.1); color: #00ff9d; border: 1px solid rgba(0, 255, 157, 0.3); display: inline-block;">Live Transparency Ledger</div>
                 <h1 class="hero-title" style="font-size: 2.2rem; margin-top: 10px; margin-bottom: 8px; font-family: var(--font-heading);">Live Cause &amp; RWA Tracking Explorer</h1>
                 <p class="hero-subtitle" style="font-size: 1rem; margin-bottom: 16px; max-width: 800px; margin-left: auto; margin-right: auto;">
                     Real-time transactional monitoring of newly deployed non-custodial charity contracts and audited asset programs. Verified legal structures under UnyKorn LLC (Wyoming, EIN 42-3536633).
@@ -2023,6 +2324,95 @@
                             <!-- Stream rows dynamic render -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- 🏛️ HOW WE'RE FUNDED + LEGAL + ANTI-RUG -->
+    <!-- ============================================= -->
+    <div style="background: linear-gradient(180deg, #0a0f1a, #030712); padding: 60px 24px 40px; border-top: 1px solid rgba(255,255,255,0.03);">
+        <div style="max-width: 900px; margin: 0 auto;">
+            
+            <!-- How We're Funded -->
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 6px;">FULL TRANSPARENCY</div>
+                <h3 style="font-family: var(--font-heading); font-size: 22px; color: white; margin: 0 0 8px 0;">💰 How We're Funded — No Hidden Costs</h3>
+                <p style="font-size: 12px; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.5;">
+                    UnyKorn LLC is a Wyoming-registered LLC (EIN 42-3536633). Our revenue comes from transparent, clearly-disclosed sources. We never take a cut of your donations, and we never hold your funds.
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px;">
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 28px; margin-bottom: 8px;">💳</div>
+                    <h4 style="font-family: var(--font-heading); font-size: 14px; color: white; margin: 0 0 6px 0;">Blueprint Clone Fees</h4>
+                    <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin: 0;">One-time licensing fees ($0-$199) when you deploy a pre-audited fundraising template. This covers token creation, smart contract deployment, and IPFS metadata hosting.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 28px; margin-bottom: 8px;">🔄</div>
+                    <h4 style="font-family: var(--font-heading); font-size: 14px; color: white; margin: 0 0 6px 0;">SaaS Subscriptions</h4>
+                    <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin: 0;">Optional monthly add-ons ($19-$49/mo) for advanced features like IPFS vaulting, liquidity seeding, BitGo custody desk access, and priority routing.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 28px; margin-bottom: 8px;">📊</div>
+                    <h4 style="font-family: var(--font-heading); font-size: 14px; color: white; margin: 0 0 6px 0;">LP Trading Fees</h4>
+                    <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin: 0;">Standard 0.25% LP fee on Raydium CPMM liquidity pools. 100% of collected swap fees are re-deposited directly back into pool depth — we do not extract yield.</p>
+                </div>
+            </div>
+
+            <!-- Anti-Rug Guarantee -->
+            <div style="background: rgba(0, 255, 157, 0.03); border: 1px solid rgba(0, 255, 157, 0.15); padding: 24px; border-radius: 12px; margin-bottom: 40px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h4 style="font-family: var(--font-heading); font-size: 18px; color: #00ff9d; margin: 0 0 6px 0;">🛡️ Anti-Rug Engineering Guarantee</h4>
+                    <p style="font-size: 11px; color: var(--text-muted); margin: 0;">Every token launched through this platform is protected by 5 independent, verifiable safeguards.</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;">
+                    <div style="text-align: center; padding: 12px 8px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div style="font-size: 20px; margin-bottom: 4px;">🔥</div>
+                        <div style="font-size: 10px; font-weight: bold; color: white; margin-bottom: 2px;">LP Burned</div>
+                        <div style="font-size: 8px; color: var(--text-muted);">Immutable. Cannot be withdrawn.</div>
+                    </div>
+                    <div style="text-align: center; padding: 12px 8px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div style="font-size: 20px; margin-bottom: 4px;">🔒</div>
+                        <div style="font-size: 10px; font-weight: bold; color: white; margin-bottom: 2px;">Time-Locked</div>
+                        <div style="font-size: 8px; color: var(--text-muted);">1-36 month vesting escrow.</div>
+                    </div>
+                    <div style="text-align: center; padding: 12px 8px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div style="font-size: 20px; margin-bottom: 4px;">🚨</div>
+                        <div style="font-size: 10px; font-weight: bold; color: white; margin-bottom: 2px;">Clawback</div>
+                        <div style="font-size: 8px; color: var(--text-muted);">Fraud triggers auto-recovery.</div>
+                    </div>
+                    <div style="text-align: center; padding: 12px 8px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div style="font-size: 20px; margin-bottom: 4px;">🏛️</div>
+                        <div style="font-size: 10px; font-weight: bold; color: white; margin-bottom: 2px;">EIN Verified</div>
+                        <div style="font-size: 8px; color: var(--text-muted);">Corporate identity required.</div>
+                    </div>
+                    <div style="text-align: center; padding: 12px 8px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div style="font-size: 20px; margin-bottom: 4px;">📌</div>
+                        <div style="font-size: 10px; font-weight: bold; color: white; margin-bottom: 2px;">IPFS Pinned</div>
+                        <div style="font-size: 8px; color: var(--text-muted);">Metadata locked forever.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legal Disclosures -->
+            <div style="background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.04); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h4 style="font-family: var(--font-heading); font-size: 14px; color: white; margin: 0 0 12px 0; display: flex; align-items: center; gap: 6px;">⚖️ Legal Disclosures</h4>
+                <div style="display: grid; gap: 10px; font-size: 10px; color: var(--text-muted); line-height: 1.5;">
+                    <div>
+                        <strong style="color: var(--text-secondary);">Terms of Service:</strong> By using this platform, you agree that tokens minted here are utility tokens representing digital fundraising certificates. They are not securities, do not represent ownership in any entity, and carry no promise of financial return. UnyKorn LLC acts solely as a technology provider.
+                    </div>
+                    <div>
+                        <strong style="color: var(--text-secondary);">Risk Disclosure:</strong> Cryptocurrency assets are inherently volatile. Token values may fluctuate significantly. Liquidity pool depth does not guarantee price stability. Past performance is not indicative of future results. You should only contribute funds you can afford to lose.
+                    </div>
+                    <div>
+                        <strong style="color: var(--text-secondary);">Privacy Policy:</strong> We collect minimal data — email, wallet address, and EIN for verified users. We do not sell personal data. On-chain transactions are publicly visible by design. Contact privacy@mensofgod.com for data requests.
+                    </div>
+                    <div>
+                        <strong style="color: var(--text-secondary);">Non-Custodial Guarantee:</strong> UnyKorn LLC does not hold, manage, or have access to your funds. All wallets are self-custodied. BitGo integration provides institutional-grade custody for organizations that opt-in, governed by separate custody agreements.
+                    </div>
                 </div>
             </div>
         </div>
@@ -2195,6 +2585,109 @@
         </div>
     </div>
 
+        <!-- ==================== SOVEREIGN PROFILE — Dedicated Cause Mini-Site ==================== -->
+        <div id="tab-sovereign-profile" class="tab-content" style="display: none;">
+            <div style="max-width: 900px; margin: 0 auto;">
+
+                <!-- Back Navigation -->
+                <button class="profile-back-btn" onclick="switchTab('campaigns')">
+                    ← Back to Blueprint Gallery
+                </button>
+
+                <!-- Theater-Mode Video Header -->
+                <div class="theater-video-header" id="profile-video-theater">
+                    <div class="theater-no-video">
+                        <span>🎬</span>
+                        <span>No video attached to this cause</span>
+                    </div>
+                </div>
+
+                <!-- Verified Institutional Identity Block -->
+                <div class="glass-card" style="padding: 30px; margin-bottom: 30px;">
+                    <div class="sovereign-profile-identity">
+                        <img id="profile-cause-logo" class="profile-logo" src="brand_logo_v3.jpg" alt="Cause Logo">
+                        <div class="profile-info">
+                            <h2 class="profile-name">
+                                <span id="profile-cause-title">Cause Title</span>
+                                <span class="verified-seal">✓ UnyKorn Verified</span>
+                            </h2>
+                            <p id="profile-cause-category" style="font-size: 12px; color: var(--text-muted); margin: 0 0 6px 0;">Category • Location</p>
+                            <p id="profile-cause-desc" style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">Cause description goes here...</p>
+
+                            <!-- Verified Links Module -->
+                            <div class="verified-links-module" id="profile-verified-links">
+                                <a class="verified-link-badge" href="https://mensofgod.com" target="_blank">
+                                    <span class="vl-check">✓</span> 🌐 Website
+                                </a>
+                                <a class="verified-link-badge" href="#" target="_blank">
+                                    <span class="vl-check">✓</span> 𝕏 Twitter
+                                </a>
+                                <a class="verified-link-badge" href="#" target="_blank">
+                                    <span class="vl-check">✓</span> 📸 Instagram
+                                </a>
+                                <a class="verified-link-badge" href="#" target="_blank">
+                                    <span class="vl-check">✓</span> in LinkedIn
+                                </a>
+                                <a class="verified-link-badge" href="#" target="_blank">
+                                    <span class="vl-check">✓</span> 📧 Email
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Campaign Statistics Dashboard -->
+                    <div class="profile-stats-grid">
+                        <div class="profile-stat-card">
+                            <div class="stat-value" id="profile-stat-raised">$0</div>
+                            <div class="stat-label">Total Raised</div>
+                        </div>
+                        <div class="profile-stat-card">
+                            <div class="stat-value" id="profile-stat-target">$0</div>
+                            <div class="stat-label">Target Goal</div>
+                        </div>
+                        <div class="profile-stat-card">
+                            <div class="stat-value" id="profile-stat-contributors">0</div>
+                            <div class="stat-label">Contributors</div>
+                        </div>
+                        <div class="profile-stat-card">
+                            <div class="stat-value" id="profile-stat-lp">0 SOL</div>
+                            <div class="stat-label">LP Reserve</div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="profile-progress-bar">
+                        <div class="progress-fill" id="profile-progress-fill" style="width: 0%;"></div>
+                    </div>
+
+                    <!-- IPFS Proof Section -->
+                    <div class="profile-ipfs-proof">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #c084fc; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">🔗 On-Chain Proof & Metadata</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <span style="font-size: 9px; color: var(--text-muted); display: block; margin-bottom: 2px;">Token Mint Address</span>
+                                <span style="color: #00ff9d; font-size: 11px; word-break: break-all;" id="profile-mint-address">—</span>
+                            </div>
+                            <div>
+                                <span style="font-size: 9px; color: var(--text-muted); display: block; margin-bottom: 2px;">Token Symbol</span>
+                                <span style="color: white; font-size: 11px;" id="profile-token-symbol">—</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <a id="profile-solscan-link" href="#" target="_blank" style="font-size: 10px; color: #60a5fa; text-decoration: none;">View on Solscan →</a>
+                        </div>
+                    </div>
+
+                    <!-- Donate CTA -->
+                    <button class="profile-donate-cta" id="profile-donate-btn" onclick="document.getElementById('blueprint-checkout-modal').style.display='flex';">
+                        💎 Support This Cause — Donate Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
     <!-- Stripe Checkout Modal -->
     <div id="blueprint-checkout-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 26, 0.85); backdrop-filter: blur(10px); z-index: 9999; align-items: center; justify-content: center;">
         <div class="glass-card" style="width: 100%; max-width: 450px; border-color: var(--accent); padding: 25px; box-shadow: 0 0 30px rgba(0, 255, 157, 0.2); background: #0b0f19;">
@@ -2208,22 +2701,33 @@
             <div style="margin-bottom: 20px;">
                 <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 8px;">Select Franchise Plan</label>
                 <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label style="display: flex; align-items: center; gap: 8px; background: rgba(250,204,21,0.05); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(250,204,21,0.2); cursor: pointer;" onclick="updateCheckoutPrice(0)">
+                        <input type="radio" name="checkout-plan" id="plan-starter" value="0" style="accent-color: #facc15;">
+                        <span style="font-size: 11px; flex: 1; color: white;">🆓 Starter (Devnet only — test for free)</span>
+                        <strong style="font-size: 11px; color: #facc15;">FREE</strong>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; background: rgba(0, 255, 157, 0.05); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(0, 255, 157, 0.25); cursor: pointer;" onclick="updateCheckoutPrice(25)">
+                        <input type="radio" name="checkout-plan" id="plan-express" value="25" style="accent-color: #00ff9d;">
+                        <span style="font-size: 11px; flex: 1; color: white; display: flex; align-items: center; gap: 4px;">⚡ Express (Mainnet + pump.fun) <span style="font-size: 8px; background: rgba(0,255,157,0.1); color: #00ff9d; padding: 1px 4px; border-radius: 3px;">⭐ POPULAR</span></span>
+                        <strong style="font-size: 11px; color: #00ff9d;">$25</strong>
+                    </label>
                     <label style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="updateCheckoutPrice(49)">
-                        <input type="radio" name="checkout-plan" id="plan-community" value="49" checked style="accent-color: #00ff9d;">
-                        <span style="font-size: 11px; flex: 1; color: white;">Community Plan (Launch only)</span>
+                        <input type="radio" name="checkout-plan" id="plan-community" value="49" style="accent-color: #00ff9d;">
+                        <span style="font-size: 11px; flex: 1; color: white;">🏛️ Community (Express + AI + IPFS)</span>
                         <strong style="font-size: 11px; color: #00ff9d;">$49</strong>
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="updateCheckoutPrice(199)">
                         <input type="radio" name="checkout-plan" id="plan-premium" value="199" style="accent-color: #00ff9d;">
-                        <span style="font-size: 11px; flex: 1; color: white;">Premium Plan (Custom logo upload)</span>
+                        <span style="font-size: 11px; flex: 1; color: white;">👑 Premium (All features + add-ons 1 month)</span>
                         <strong style="font-size: 11px; color: #00ff9d;">$199</strong>
                     </label>
-                    <label style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(0, 255, 157, 0.2); cursor: pointer;" onclick="updateCheckoutPrice(129)">
-                        <input type="radio" name="checkout-plan" id="plan-bundle" value="129" style="accent-color: #00ff9d;">
-                        <span style="font-size: 11px; flex: 1; color: white; display: flex; align-items: center; gap: 4px;">Best Value Bundle <span style="font-size: 8px; background: rgba(0,255,157,0.1); color: #00ff9d; padding: 1px 4px; border-radius: 3px;">3 Mo All Add-ons</span></span>
-                        <strong style="font-size: 11px; color: #00ff9d;">$129</strong>
-                    </label>
                 </div>
+                <!-- Promo Code Input -->
+                <div style="margin-top: 12px; display: flex; gap: 8px;">
+                    <input type="text" id="promo-code-input" class="form-control" placeholder="Have a promo code? e.g. FIRSTMINT" style="padding: 8px 12px; font-size: 11px; text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.5px; flex: 1; height: 34px;">
+                    <button id="apply-promo-btn" class="btn" style="width: auto; margin: 0; padding: 0 16px; font-size: 10px; height: 34px; background: #a855f7; color: white; font-weight: bold;">Apply</button>
+                </div>
+                <div id="promo-status" style="display: none; margin-top: 6px; font-size: 10px; color: #00ff9d;"></div>
             </div>
 
             <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
@@ -2315,6 +2819,6 @@
     <div id="toast-container" class="toast-container"></div>
 
     <!-- JavaScript logic -->
-    <script src="app.js?v=9"></script>
+    <script src="app.js?v=11"></script>
 </body>
 </html>

@@ -1,26 +1,26 @@
 {
-  "name": "Never Give A Buck",
-  "symbol": "BUCK",
-  "description": "Sovereign charity fundraiser by UnyKorn LLC & Men of God",
-  "image": "https://mensofgod.com/brand_logo_shield.png",
-  "videoUrl": "",
+  "name": "Gateway Center Impact",
+  "symbol": "GCI",
+  "description": "Turnkey Zero Carbon RWA Blueprint: solar arrays and energy efficiency remodels with 12-month routing.",
+  "image": "https://mensofgod.com/brand_logo_dove.png",
+  "videoUrl": "https://www.youtube.com/watch?v=P_zXryCBJfs",
   "translations": {},
   "attributes": [
     {
       "trait_type": "Custodian",
-      "value": "BitGo Multi-Sig Vault"
+      "value": "BitGo Non-Custodial Hybrid"
     },
     {
       "trait_type": "Escrow Type",
-      "value": "6-Month Linear Milestone Escrow"
+      "value": "3-Month Recipient Family Escrow"
     },
     {
       "trait_type": "Cause",
-      "value": "Never Give A Buck"
+      "value": "Gateway Center Impact"
     },
     {
       "trait_type": "Goal Amount",
-      "value": "$194707"
+      "value": "$250000"
     },
     {
       "trait_type": "Issuer Legal Structure",
@@ -32,19 +32,19 @@
     },
     {
       "trait_type": "BitGo Custody Vault",
-      "value": "Inactive"
+      "value": "Active ($39/mo)"
     },
     {
       "trait_type": "IPFS Proof Vaulting",
-      "value": "Inactive"
+      "value": "Active ($19/mo)"
     },
     {
       "trait_type": "Go Network Seeding",
-      "value": "Inactive"
+      "value": "Active ($29/mo)"
     },
     {
       "trait_type": "Charity Fee Routing",
-      "value": "Inactive"
+      "value": "Active ($19/mo)"
     }
   ]
 }

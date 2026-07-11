@@ -1,7 +1,7 @@
 {
-  "name": "Sovereign Token",
-  "symbol": "TOKEN",
-  "description": "Sovereign charity fundraiser",
+  "name": "Buck 3",
+  "symbol": "BUCK3",
+  "description": "Sovereign asset token for Buck 3 (BUCK3) supporting Charity & Humanitarian Aid. Fully backed and non-custodial.",
   "image": "https://mensofgod.com/brand_logo_dove.png",
   "videoUrl": "https://www.youtube.com/watch?v=NgkTHzXZk2U",
   "translations": {
@@ -19,7 +19,7 @@
     },
     {
       "trait_type": "Cause",
-      "value": "Humanitarian Goal"
+      "value": "Express: Charity & Humanitarian Aid"
     },
     {
       "trait_type": "Goal Amount",

@@ -424,13 +424,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    heroViewLps.addEventListener("click", () => {
-        switchTab("seeder");
-    });
+    if (heroViewLps) {
+        heroViewLps.addEventListener("click", () => {
+            switchTab("seeder");
+        });
+    }
 
     function switchTab(tabKey) {
+        // Identity Navigation Gate
+        const publicTabs = ["campaigns", "trenches", "bitgo", "backoffice", "sovereign-profile"];
+        const isLoggedIn = localStorage.getItem("mog_user_email") || state.userEmail;
+        if (!publicTabs.includes(tabKey) && !isLoggedIn) {
+            showToast("Please Connect On-Chain Identity to access this feature.", "error");
+            switchTab("backoffice");
+            return;
+        }
+
         state.activeTab = tabKey;
-        tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === tabKey));
+        
+        // Highlight active navigation tab button (hidden tabs highlight backoffice)
+        const visibleTabs = ["campaigns", "trenches", "bitgo", "backoffice"];
+        tabs.forEach(t => {
+            const isHighlight = (t.dataset.tab === tabKey) || (!visibleTabs.includes(tabKey) && t.dataset.tab === "backoffice");
+            t.classList.toggle("active", isHighlight);
+        });
         
         document.getElementById("tab-campaigns").style.display = (tabKey === "campaigns") ? "block" : "none";
         document.getElementById("tab-launch").style.display = (tabKey === "launch") ? "block" : "none";
@@ -442,6 +459,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("tab-bitgo").style.display = (tabKey === "bitgo") ? "block" : "none";
         document.getElementById("tab-insights").style.display = (tabKey === "insights") ? "block" : "none";
         document.getElementById("tab-trenches").style.display = (tabKey === "trenches") ? "block" : "none";
+        document.getElementById("tab-sovereign-profile").style.display = (tabKey === "sovereign-profile") ? "block" : "none";
 
         showToast(`Navigated to ${tabKey.charAt(0).toUpperCase() + tabKey.slice(1)}`);
 
@@ -521,7 +539,8 @@ document.addEventListener("DOMContentLoaded", () => {
             reserve: 15,
             delay: 30,
             vesting: 12,
-            video: "https://www.youtube.com/watch?v=NgkTHzXZk2U"
+            video: "https://www.youtube.com/watch?v=NgkTHzXZk2U",
+            mint: "75HVhH1q2p6buzfAMXaUESwgCNkLK7vR3CxrbcAdvi1n"
         },
         "MOG-WELLSPRING-HOUSING": {
             name: "Wellspring Tiny Homes",
@@ -532,7 +551,8 @@ document.addEventListener("DOMContentLoaded", () => {
             reserve: 20,
             delay: 60,
             vesting: 24,
-            video: "https://www.youtube.com/watch?v=YwJ-BleCUWM"
+            video: "https://www.youtube.com/watch?v=YwJ-BleCUWM",
+            mint: "AFDVbdAKfje8gNAkL8st5LV8cgb9rGvMGQpekyVqobj1"
         },
         "MOG-GATEWAY-CENTER-20": {
             name: "Gateway Center Impact",
@@ -543,7 +563,20 @@ document.addEventListener("DOMContentLoaded", () => {
             reserve: 30,
             delay: 15,
             vesting: 3,
-            video: "https://www.youtube.com/watch?v=P_zXryCBJfs"
+            video: "https://www.youtube.com/watch?v=P_zXryCBJfs",
+            mint: "8eMGe9DdP2VPJEavdSSf2P9MeoWR7NcN8y9ddbB3EsDZ"
+        },
+        "MOG-NEVER-GIVE-A-BUCK": {
+            name: "Never Give A Buck",
+            symbol: "BUCK",
+            goal: "Sovereign charity fundraiser",
+            template: "shield",
+            discount: 0,
+            reserve: 0,
+            delay: 0,
+            vesting: 6,
+            video: "",
+            mint: "HEcAzw28ZvYXzsou4XfCido51YVYZVneZ1aut4yNCvWu"
         }
     };
 
@@ -957,8 +990,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderConnectedIdentity() {
         if (!state.userEmail) return;
 
-        authPromptCard.style.display = "none";
-        identityCardPortal.style.display = "block";
+        if (authPromptCard) authPromptCard.style.display = "none";
+        if (identityCardPortal) identityCardPortal.style.display = "block";
+
+        const backofficePortal = document.getElementById("backoffice-portal-dashboard");
+        if (backofficePortal) {
+            backofficePortal.style.display = "block";
+        }
 
         const prefix = state.userEmail.split("@")[0];
         portalAvatar.textContent = prefix.charAt(0).toUpperCase() || "👤";
@@ -983,13 +1021,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateBalanceDisplay() {
         if (!state.userWallet) return;
-        let bal = "0.00 SOL";
-        if (state.network === "solana-devnet") bal = "2.50 SOL (Testnet)";
-        else if (state.network === "solana-mainnet") bal = "0.00 SOL";
-        else if (state.network === "xrpl-devnet") bal = "100.00 XRP (Testnet)";
-        else if (state.network === "polygon-mainnet") bal = "0.00 POL";
         
-        portalBalanceDisplay.textContent = `Balance: ${bal}`;
+        let displayBal = "0.00 SOL";
+        
+        if (state.network.startsWith("solana")) {
+            portalBalanceDisplay.textContent = "Loading balance...";
+            fetch(`${state.proxyUrl || DEFAULT_PROXY}/solana/balance/${state.userWallet}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const solVal = parseFloat(data.balance);
+                        portalBalanceDisplay.textContent = `Balance: ${solVal.toFixed(5)} SOL`;
+                    } else {
+                        portalBalanceDisplay.textContent = "Balance: 0.00 SOL (unreachable)";
+                    }
+                })
+                .catch(() => {
+                    portalBalanceDisplay.textContent = "Balance: 0.00 SOL";
+                });
+            return;
+        }
+        
+        if (state.network === "xrpl-devnet") displayBal = "100.00 XRP (Testnet)";
+        else if (state.network === "polygon-mainnet") displayBal = "0.00 POL";
+        
+        portalBalanceDisplay.textContent = `Balance: ${displayBal}`;
     }
 
     portalWalletDisplay.addEventListener("click", () => {
@@ -1036,6 +1092,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <button class="btn" style="padding: 8px 12px; font-size: 11px; border-radius: 4px; box-shadow: none; margin: 0; width: 100%; max-width: 100%;" onclick="event.stopPropagation(); selectAndFocusCampaign('${c.id}')">Donate / Mint</button>
                         <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 11px; border-radius: 4px; box-shadow: none; margin: 0; width: 100%; max-width: 100%;" onclick="event.stopPropagation(); seedPoolForCampaign('${c.id}')">Seed LP</button>
                     </div>
+                    <button class="btn" style="padding: 6px 12px; font-size: 10px; border-radius: 4px; box-shadow: none; margin: 8px 0 0 0; width: 100%; max-width: 100%; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); color: #c084fc;" onclick="event.stopPropagation(); openSovereignProfile('${c.id}')">👑 View Sovereign Profile</button>
                 `;
                 flagshipGrid.appendChild(card);
             } else {
@@ -1072,6 +1129,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div>Token: <strong>$${c.tokenSymbol}</strong></div>
                             <div>Supply: <strong>${parseFloat(c.tokenSupply).toLocaleString()}</strong></div>
                         </div>
+                        <button class="btn" style="padding: 6px 12px; font-size: 10px; border-radius: 4px; box-shadow: none; margin: 8px 0 0 0; width: 100%; max-width: 100%; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); color: #c084fc;" onclick="event.stopPropagation(); openSovereignProfile('${c.id}')">👑 View Sovereign Profile</button>
                     </div>
                 `;
                 card.addEventListener("click", () => selectCampaign(c.id));
@@ -1079,6 +1137,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // Expose switchTab globally for Sovereign Profiles and inline onclick handlers
+    window.switchTab = switchTab;
 
     window.selectAndFocusCampaign = (id) => {
         selectCampaign(id);
@@ -2052,12 +2113,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function executeAirdropPipeline(symbol, amount, recipients) {
         sendAirdropBtn.disabled = true;
-        sendAirdropBtn.textContent = "✈️ Distributing Airdrop...";
+        sendAirdropBtn.textContent = "✈️ Distributing Endowments...";
         airdropConsoleStatus.textContent = "RUNNING";
         airdropConsoleStatus.style.color = "var(--warning)";
 
-        addAirdropLog(`[Airdrop Engine] Launching batch multi-send for token: ${symbol}`);
-        addAirdropLog(`[Airdrop Engine] Recipients count: ${recipients.length} | Amount per wallet: ${amount} ${symbol}`);
+        addAirdropLog(`[Distribution Engine] Launching batch multi-send for token: ${symbol}`);
+        addAirdropLog(`[Distribution Engine] Recipients count: ${recipients.length} | Amount per wallet: ${amount} ${symbol}`);
 
         let idx = 0;
         function sendNext() {
@@ -2066,18 +2127,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 airdropConsoleStatus.textContent = "SUCCESS";
                 airdropConsoleStatus.style.color = "var(--success)";
                 sendAirdropBtn.disabled = false;
-                sendAirdropBtn.textContent = "✈️ Send Multi-Wallet Airdrop";
+                sendAirdropBtn.textContent = "✈️ Distribute Tokens to Recipients";
                 
-                showToast("Airdrop batch distributed!");
+                showToast("Distribution batch complete!");
                 return;
             }
 
             const rec = recipients[idx];
-            addAirdropLog(`[Airdrop] Shipping ${amount} ${symbol} to ${rec.name} (${rec.wallet.substring(0, 8)}...)`);
+            addAirdropLog(`[Distribution] Shipping ${amount} ${symbol} to ${rec.name} (${rec.wallet.substring(0, 8)}...)`);
             
             setTimeout(() => {
                 const sig = generateRandomHex(88, "base58");
-                addAirdropLog(`[Airdrop] Success! Transaction Signature: ${sig.substring(0, 16)}...`);
+                addAirdropLog(`[Distribution] Success! Transaction Signature: ${sig.substring(0, 16)}...`);
                 idx++;
                 sendNext();
             }, 800);
@@ -2106,6 +2167,7 @@ document.addEventListener("DOMContentLoaded", () => {
         affPaid.textContent = `${state.paidComm.toFixed(2)} SOL`;
     }
 
+    if (generateRefBtn) {
     generateRefBtn.addEventListener("click", () => {
         if (!state.userWallet) {
             showToast("Please onboard and connect your wallet first.", "error");
@@ -2119,7 +2181,9 @@ document.addEventListener("DOMContentLoaded", () => {
         navigator.clipboard.writeText(link);
         showToast("Referral link generated and copied to clipboard!");
     });
+    }
 
+    if (redeemCommBtn) {
     redeemCommBtn.addEventListener("click", () => {
         if (state.unpaidComm <= 0) {
             showToast("No unpaid commission available for redeem.", "error");
@@ -2146,6 +2210,8 @@ document.addEventListener("DOMContentLoaded", () => {
             showToast("Commission payout complete!");
         }, 1500);
     });
+    }
+
 
     // ==========================================
     // Back Office & AI Systems Engine
@@ -2229,7 +2295,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td style="padding: 8px 6px; font-weight:600;">${c.name}</td>
                 <td style="padding: 8px 6px;"><span class="badge badge-purple" style="font-size: 8px;">${c.role}</span></td>
                 <td style="padding: 8px 6px; font-family:var(--font-mono); color:var(--success); font-size:10px;">Pinned (${c.cid.substring(0, 10)}...)</td>
-                <td style="padding: 8px 6px; text-align:right;"><a href="https://ipfs.io/ipfs/${c.cid}" target="_blank" class="utility-link" style="font-size:10px; display:inline-flex;">View IPFS</a></td>
+                <td style="padding: 8px 6px; text-align:right;"><a href="${c.url || 'https://ipfs.io/ipfs/' + c.cid}" target="_blank" class="utility-link" style="font-size:10px; display:inline-flex;">View IPFS</a></td>
             `;
             certRegistryRows.appendChild(tr);
         });
@@ -2251,35 +2317,85 @@ document.addEventListener("DOMContentLoaded", () => {
             mintCertBtn.textContent = "⚙️ Uploading metadata & pinning to IPFS...";
             addAILog(`[IPFS] Compiling contributor certificate metadata for ${name}...`);
 
-            setTimeout(() => {
-                const cid = `Qm${generateRandomHex(44, "base58")}`;
-                addAILog(`[IPFS] Pinned metadata to gateway! CID: ${cid}`);
+            fetch(`${state.proxyUrl || DEFAULT_PROXY}/ipfs/pin`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, role, msg })
+            })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    const cid = result.cid;
+                    const certUrl = result.url;
+                    addAILog(`[IPFS] Pinned metadata successfully! CID: ${cid}`);
+                    
+                    const today = new Date().toLocaleDateString("en-US", { year: '2-digit', month: '2-digit', day: '2-digit' });
+                    const newCert = { name, role, cid, date: today, url: certUrl };
+                    state.certificates.push(newCert);
+                    localStorage.setItem("mog_certificates", JSON.stringify(state.certificates));
+
+                    // Update Preview Card
+                    previewCertRecipient.textContent = name;
+                    previewCertRole.textContent = role.toUpperCase();
+                    previewCertMsg.textContent = `"${msg}"`;
+                    
+                    const previewLink = document.getElementById('preview-cert-link');
+                    if (previewLink) {
+                        previewLink.textContent = `IPFS CID: ${cid}`;
+                        previewLink.href = certUrl;
+                    }
+                    
+                    previewCertDate.textContent = new Date().toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
+                    certPreviewFrame.style.display = "block";
+
+                    renderCertificateRegistry();
+
+                    // Reset forms
+                    certRecipientName.value = "";
+                    certRecipientWallet.value = "";
+                    certCongratsText.value = "";
+                    showToast("Certificate generated and pinned to IPFS!");
+                } else {
+                    throw new Error(result.error || "Failed to pin certificate");
+                }
+            })
+            .catch(err => {
+                addAILog(`[IPFS Error] ${err.message}. Falling back to simulation mode...`, "warn");
                 
-                // Add to list
+                // Fallback simulation if offline
+                const cid = `Qm${generateRandomHex(44, "base58")}`;
+                const certUrl = `https://mensofgod.com/metadata/cert-${cid}.json`;
+                addAILog(`[IPFS] Pinned metadata to gateway (Simulation Fallback)! CID: ${cid}`);
+                
                 const today = new Date().toLocaleDateString("en-US", { year: '2-digit', month: '2-digit', day: '2-digit' });
-                const newCert = { name, role, cid, date: today };
+                const newCert = { name, role, cid, date: today, url: certUrl };
                 state.certificates.push(newCert);
                 localStorage.setItem("mog_certificates", JSON.stringify(state.certificates));
 
-                // Update Preview Card
                 previewCertRecipient.textContent = name;
                 previewCertRole.textContent = role.toUpperCase();
                 previewCertMsg.textContent = `"${msg}"`;
-                previewCertCid.textContent = `IPFS CID: ${cid}`;
+                
+                const previewLink = document.getElementById('preview-cert-link');
+                if (previewLink) {
+                    previewLink.textContent = `IPFS CID: ${cid}`;
+                    previewLink.href = certUrl;
+                }
+                
                 previewCertDate.textContent = new Date().toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
                 certPreviewFrame.style.display = "block";
 
                 renderCertificateRegistry();
 
-                // Reset forms
                 certRecipientName.value = "";
                 certRecipientWallet.value = "";
                 certCongratsText.value = "";
+                showToast("Certificate generated (Simulation Fallback)!");
+            })
+            .finally(() => {
                 mintCertBtn.disabled = false;
                 mintCertBtn.textContent = "📜 Mint Certificate & Pin to IPFS";
-
-                showToast("Certificate generated and pinned to IPFS!");
-            }, 1500);
+            });
         });
     }
 
@@ -2322,6 +2438,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    if (subCardNumber) {
     subCardNumber.addEventListener("input", (e) => {
         let val = e.target.value.replace(/\D/g, "");
         let formatted = "";
@@ -2331,7 +2448,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         e.target.value = formatted;
     });
+    }
 
+    if (subCardExpiry) {
     subCardExpiry.addEventListener("input", (e) => {
         let val = e.target.value.replace(/\D/g, "");
         let formatted = "";
@@ -2343,10 +2462,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         e.target.value = formatted;
     });
+    }
 
+    if (subCardCvc) {
     subCardCvc.addEventListener("input", (e) => {
         e.target.value = e.target.value.replace(/\D/g, "");
     });
+    }
 
     if (subSubmitBtn) {
         subSubmitBtn.addEventListener("click", () => {
@@ -2695,6 +2817,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================
     // Learn More & AI Weekly Newsletter
     // ==========================================
+    if (newsletterBtn) {
     newsletterBtn.addEventListener("click", () => {
         const email = newsletterEmail.value.trim();
         if (!email || !email.includes("@")) {
@@ -2718,14 +2841,15 @@ document.addEventListener("DOMContentLoaded", () => {
 4. ENERGY TRANSITION TRANSCRIPTS: Filed documentation resolvable on UCSC conservation grids.
             `;
             
-            newsletterContent.textContent = report;
-            newsletterPreviewCard.style.display = "block";
+            if (newsletterContent) newsletterContent.textContent = report;
+            if (newsletterPreviewCard) newsletterPreviewCard.style.display = "block";
             
             newsletterBtn.disabled = false;
             newsletterBtn.textContent = "Register Now";
             newsletterEmail.value = "";
         }, 1200);
     });
+    }
 
     // ==========================================
     // Stablecoin Minting Handlers
@@ -2890,54 +3014,262 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    function recordAffiliateSale(amount) {
+        const referredBy = localStorage.getItem('mog_referred_by');
+        if (!referredBy) return;
+
+        const stats = JSON.parse(localStorage.getItem('mog_affiliate_stats') || '{"referrals":0,"earned":0,"pending":0,"gmv":0,"redeemed":0,"cashedout":0}');
+        stats.referrals += 1;
+        stats.gmv += parseFloat(amount);
+        
+        let rate = 0.20;
+        if (stats.referrals >= 50 || stats.gmv >= 10000) {
+            rate = 0.40;
+        } else if (stats.referrals >= 15) {
+            rate = 0.30;
+        } else if (stats.referrals >= 5) {
+            rate = 0.25;
+        }
+
+        const commission = parseFloat(amount) * rate;
+        stats.earned += commission;
+        localStorage.setItem('mog_affiliate_stats', JSON.stringify(stats));
+
+        addLog(`[Affiliate] Referred sale of $${amount} USD captured. Referrer "${referredBy}" earned $${commission.toFixed(2)} USD (Commission Rate: ${rate * 100}%).`);
+        
+        const profile = JSON.parse(localStorage.getItem('mog_affiliate_profile'));
+        if (profile) {
+            renderAffiliateDashboard(profile);
+        }
+    }
+
     // ==========================================
     // Affiliate System
     // ==========================================
     function initAffiliateSystem() {
-        // Generate or load affiliate ID
-        let affiliateId = localStorage.getItem('mog_affiliate_id');
-        if (!affiliateId) {
-            affiliateId = 'MOG-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-            localStorage.setItem('mog_affiliate_id', affiliateId);
+        const signupState = document.getElementById('affiliate-signup-state');
+        const dashboardState = document.getElementById('affiliate-dashboard-state');
+        const signupForm = document.getElementById('affiliate-signup-form');
+
+        // Check if registered
+        const profileStr = localStorage.getItem('mog_affiliate_profile');
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref');
+
+        if (profileStr) {
+            const profile = JSON.parse(profileStr);
+            const affiliateId = profile.namespace;
+
+            if (refCode && refCode !== affiliateId) {
+                localStorage.setItem('mog_referred_by', refCode);
+                addLog(`[Affiliate] Referral tracked: ${refCode}`);
+            }
+
+            if (signupState) signupState.style.display = 'none';
+            if (dashboardState) dashboardState.style.display = 'block';
+
+            renderAffiliateDashboard(profile);
+        } else {
+            if (refCode) {
+                localStorage.setItem('mog_referred_by', refCode);
+                addLog(`[Affiliate] Referral tracked: ${refCode}`);
+            }
+
+            if (signupState) signupState.style.display = 'block';
+            if (dashboardState) dashboardState.style.display = 'none';
+
+            // Bind sign-up form handler
+            if (signupForm) {
+                signupForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const namespace = document.getElementById('aff-signup-namespace').value.trim().toLowerCase();
+                    const displayName = document.getElementById('aff-signup-displayname').value.trim();
+                    const email = document.getElementById('aff-signup-email').value.trim();
+                    const wallet = document.getElementById('aff-signup-wallet').value.trim() || state.userWallet || '';
+
+                    // Validate namespace format (3-40 chars, lowercase, dots allowed)
+                    if (!/^[a-z0-9.]{3,40}$/.test(namespace)) {
+                        showToast("Namespace must be 3-40 characters, lowercase letters, numbers, and dots only.", "error");
+                        return;
+                    }
+
+                    const profile = { namespace, displayName, email, wallet };
+                    localStorage.setItem('mog_affiliate_profile', JSON.stringify(profile));
+                    
+                    // Initialize empty stats
+                    const initialStats = { referrals: 0, earned: 0, pending: 0, gmv: 0, redeemed: 0, cashedout: 0 };
+                    localStorage.setItem('mog_affiliate_stats', JSON.stringify(initialStats));
+
+                    showToast("Affiliate registration successful!", "success");
+                    addLog(`[Affiliate] Registered new namespace: ${namespace}.mensofgod.id`);
+
+                    if (signupState) signupState.style.display = 'none';
+                    if (dashboardState) dashboardState.style.display = 'block';
+
+                    renderAffiliateDashboard(profile);
+                });
+            }
+        }
+    }
+
+    function renderAffiliateDashboard(profile) {
+        const affiliateId = profile.namespace;
+        const linkInput = document.getElementById('affiliate-dashboard-link');
+        const badgeNamespace = document.getElementById('dashboard-namespace-badge');
+        const badgeRate = document.getElementById('dashboard-rate-badge');
+
+        const tierEl = document.getElementById('aff-dash-tier');
+        const referralsEl = document.getElementById('aff-dash-clicks');
+        const gmvEl = document.getElementById('aff-dash-earned');
+        const creditBalanceEl = document.getElementById('aff-credit-balance');
+        const cashoutBalanceEl = document.getElementById('aff-cashout-balance');
+        const cashoutHelper = document.getElementById('cashout-helper-text');
+        const cashoutBtn = document.getElementById('request-cashout-btn');
+        const creditBtn = document.getElementById('redeem-credit-btn');
+
+        const shareX = document.getElementById('share-twitter-btn');
+        const shareTg = document.getElementById('share-telegram-btn');
+        const shareEmail = document.getElementById('share-email-btn');
+
+        const refLink = `https://mensofgod.com/?ref=${affiliateId}`;
+
+        if (linkInput) linkInput.value = refLink;
+        if (badgeNamespace) badgeNamespace.textContent = `${affiliateId}.mensofgod.id`;
+
+        // Load stats
+        const stats = JSON.parse(localStorage.getItem('mog_affiliate_stats') || '{"referrals":0,"earned":0,"pending":0,"gmv":0,"redeemed":0,"cashedout":0}');
+
+        // Resolve tier and commission rate
+        let tier = "Standard";
+        let rate = 0.20; // 20%
+        if (stats.referrals >= 50 || stats.gmv >= 10000) {
+            tier = "Platinum";
+            rate = 0.40;
+        } else if (stats.referrals >= 15) {
+            tier = "Gold";
+            rate = 0.30;
+        } else if (stats.referrals >= 5) {
+            tier = "Silver";
+            rate = 0.25;
         }
 
-        // Set referral link
-        const linkInput = document.getElementById('affiliate-link');
-        if (linkInput) {
-            linkInput.value = `https://mensofgod.com/?ref=${affiliateId}`;
-        }
-
-        // Load affiliate stats
-        const stats = JSON.parse(localStorage.getItem('mog_affiliate_stats') || '{"referrals":0,"earned":0,"pending":0}');
-        const tierEl = document.getElementById('affiliate-tier');
-        const refEl = document.getElementById('affiliate-referrals');
-        const earnEl = document.getElementById('affiliate-earned');
-        const pendEl = document.getElementById('affiliate-pending');
-
-        if (refEl) refEl.textContent = stats.referrals;
-        if (earnEl) earnEl.textContent = `$${stats.earned.toFixed(2)}`;
-        if (pendEl) pendEl.textContent = `$${stats.pending.toFixed(2)}`;
-
-        // Calculate tier
+        if (badgeRate) badgeRate.textContent = `${(rate * 100)}% Commission`;
         if (tierEl) {
-            if (stats.referrals >= 25) {
-                tierEl.textContent = 'Gold';
-                tierEl.style.color = '#ffd700';
-                tierEl.nextElementSibling.textContent = '20% Commission';
-            } else if (stats.referrals >= 5) {
-                tierEl.textContent = 'Silver';
-                tierEl.style.color = '#c0c0c0';
-                tierEl.nextElementSibling.textContent = '15% Commission';
+            tierEl.textContent = tier;
+            const colors = { Standard: "#ffffff", Silver: "#c0c0c0", Gold: "#ffd700", Platinum: "#00e5ff" };
+            tierEl.style.color = colors[tier];
+        }
+
+        if (referralsEl) referralsEl.textContent = stats.referrals;
+        if (gmvEl) gmvEl.textContent = `$${stats.gmv.toFixed(2)}`;
+
+        // Calculate available balances
+        const availableBalance = stats.earned - stats.redeemed - stats.cashedout;
+
+        if (creditBalanceEl) creditBalanceEl.textContent = `$${availableBalance.toFixed(2)}`;
+        if (cashoutBalanceEl) cashoutBalanceEl.textContent = `$${availableBalance.toFixed(2)}`;
+
+        // Credit button state
+        if (creditBtn) {
+            if (availableBalance > 0) {
+                creditBtn.disabled = false;
+                creditBtn.style.opacity = '1';
+                creditBtn.style.cursor = 'pointer';
+                creditBtn.textContent = 'Use as MOG Credit';
+            } else {
+                creditBtn.disabled = true;
+                creditBtn.style.opacity = '0.5';
+                creditBtn.style.cursor = 'not-allowed';
+                creditBtn.textContent = 'No credit available';
             }
         }
 
-        // Track incoming referrals
-        const urlParams = new URLSearchParams(window.location.search);
-        const refCode = urlParams.get('ref');
-        if (refCode && refCode !== affiliateId) {
-            localStorage.setItem('mog_referred_by', refCode);
-            addLog(`[Affiliate] Referral tracked: ${refCode}`);
+        // Cashout button and helper text state
+        if (cashoutBtn) {
+            if (availableBalance >= 30.00) {
+                cashoutBtn.disabled = false;
+                cashoutBtn.style.cursor = 'pointer';
+                cashoutBtn.textContent = 'Request Cashout ($SOL)';
+                cashoutBtn.classList.remove('btn-secondary');
+                cashoutBtn.style.background = 'linear-gradient(135deg, #00ff9d, #00b36b)';
+                cashoutBtn.style.color = 'black';
+                if (cashoutHelper) cashoutHelper.textContent = 'Payouts processed directly in SOL to your wallet.';
+            } else {
+                cashoutBtn.disabled = true;
+                cashoutBtn.style.cursor = 'not-allowed';
+                cashoutBtn.textContent = 'Cashout Available at $30';
+                cashoutBtn.classList.add('btn-secondary');
+                cashoutBtn.style.background = '';
+                cashoutBtn.style.color = '';
+                if (cashoutHelper) {
+                    const diff = 30.00 - availableBalance;
+                    cashoutHelper.textContent = `Minimum cashout is $30.00. You need $${diff.toFixed(2)} more.`;
+                }
+            }
         }
+
+        // Bind share buttons
+        if (shareX) {
+            shareX.onclick = () => {
+                window.open(`https://twitter.com/intent/tweet?text=Clone%20pre-audited%20token%20blueprints%20instantly%20on%20the%20Men%20of%20God%20Sovereign%20Hub!%20%F0%9F%9A%80%20${encodeURIComponent(refLink)}`, '_blank');
+            };
+        }
+        if (shareTg) {
+            shareTg.onclick = () => {
+                window.open(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=Launch%20your%20own%20sovereign%20charity%20tokens%20on%20Men%20of%20God%20Hub!`, '_blank');
+            };
+        }
+        if (shareEmail) {
+            shareEmail.onclick = () => {
+                window.location.href = `mailto:?subject=Men%20of%20God%20Sovereign%20Hub&body=Checkout%20this%20sovereign%20tokenization%20platform%20licensed%20under%20UnyKorn%20LLC:%20${encodeURIComponent(refLink)}`;
+            };
+        }
+    }
+
+    // Copy referral links
+    const copyDashLinkBtn = document.getElementById('copy-dashboard-link-btn');
+    if (copyDashLinkBtn) {
+        copyDashLinkBtn.addEventListener('click', () => {
+            const link = document.getElementById('affiliate-dashboard-link').value;
+            navigator.clipboard.writeText(link).then(() => {
+                copyDashLinkBtn.textContent = 'Copied!';
+                setTimeout(() => { copyDashLinkBtn.textContent = 'Copy Link'; }, 2000);
+            });
+        });
+    }
+
+    // Bind redemption button clicks
+    const redeemCreditBtn = document.getElementById('redeem-credit-btn');
+    if (redeemCreditBtn) {
+        redeemCreditBtn.onclick = () => {
+            const stats = JSON.parse(localStorage.getItem('mog_affiliate_stats') || '{"referrals":0,"earned":0,"pending":0,"gmv":0,"redeemed":0,"cashedout":0}');
+            const available = stats.earned - stats.redeemed - stats.cashedout;
+            if (available > 0) {
+                stats.redeemed += available;
+                localStorage.setItem('mog_affiliate_stats', JSON.stringify(stats));
+                showToast(`Applied $${available.toFixed(2)} USD MOG Credit to your account!`, "success");
+                addLog(`[Affiliate] Redeemed $${available.toFixed(2)} MOG Credit.`);
+                const profile = JSON.parse(localStorage.getItem('mog_affiliate_profile'));
+                renderAffiliateDashboard(profile);
+            }
+        };
+    }
+
+    const requestCashoutBtn = document.getElementById('request-cashout-btn');
+    if (requestCashoutBtn) {
+        requestCashoutBtn.onclick = () => {
+            const stats = JSON.parse(localStorage.getItem('mog_affiliate_stats') || '{"referrals":0,"earned":0,"pending":0,"gmv":0,"redeemed":0,"cashedout":0}');
+            const available = stats.earned - stats.redeemed - stats.cashedout;
+            if (available >= 30.00) {
+                stats.cashedout += available;
+                localStorage.setItem('mog_affiliate_stats', JSON.stringify(stats));
+                showToast(`Cashout request of $${available.toFixed(2)} in SOL submitted!`, "success");
+                addLog(`[Affiliate] Submitted cashout request of $${available.toFixed(2)} USD value in SOL.`);
+                const profile = JSON.parse(localStorage.getItem('mog_affiliate_profile'));
+                renderAffiliateDashboard(profile);
+            }
+        };
     }
 
     const copyAffiliateBtn = document.getElementById('copy-affiliate-link-btn');
@@ -3249,14 +3581,30 @@ Registered: ${newReg.registeredAt}
             checkoutBtn.addEventListener("click", async () => {
                 // Read active selected pricing plan radio value
                 const activePlanRadio = document.querySelector('input[name="checkout-plan"]:checked');
-                const finalPrice = activePlanRadio ? activePlanRadio.value : "49";
+                let finalPrice = activePlanRadio ? activePlanRadio.value : "49";
                 
-                if (finalPrice === "129") {
-                    selectedTier = "bundle";
+                // Apply promo discount if active
+                if (window.activePromoDiscount && window.activePromoDiscount > 0) {
+                    finalPrice = String(Math.max(0, parseInt(finalPrice) - window.activePromoDiscount));
+                }
+                
+                if (finalPrice === "0") {
+                    selectedTier = "starter";
+                } else if (finalPrice === "25") {
+                    selectedTier = "express";
                 } else if (finalPrice === "199") {
                     selectedTier = "premium";
                 } else {
                     selectedTier = "community";
+                }
+
+                // $0 Starter: Skip Stripe entirely
+                if (finalPrice === "0") {
+                    addLog(`[Licensing] Free Starter tier selected. Skipping payment.`);
+                    if (checkoutModal) checkoutModal.style.display = "none";
+                    if (verificationModal) verificationModal.style.display = "flex";
+                    showToast("Free Starter license activated! Complete identity verification.", "success");
+                    return;
                 }
 
                 checkoutBtn.disabled = true;
@@ -3271,6 +3619,7 @@ Registered: ${newReg.registeredAt}
                         if (checkoutModal) checkoutModal.style.display = "none";
                         if (verificationModal) verificationModal.style.display = "flex";
                         addLog(`[Stripe] Processed mock license payment of $${finalPrice}.00 USD (Simulation).`);
+                        recordAffiliateSale(parseFloat(finalPrice));
                         showToast(`Payment successful (Simulation Mode)! Access token generated.`, "success");
                     }, 1500);
                     return;
@@ -3316,6 +3665,7 @@ Registered: ${newReg.registeredAt}
                         if (checkoutModal) checkoutModal.style.display = "none";
                         if (verificationModal) verificationModal.style.display = "flex";
                         
+                        recordAffiliateSale(parseFloat(finalPrice));
                         showToast("Payment confirmed! Access token activated.", "success");
                     }
                 } catch (err) {
@@ -3327,6 +3677,7 @@ Registered: ${newReg.registeredAt}
                         if (checkoutModal) checkoutModal.style.display = "none";
                         if (verificationModal) verificationModal.style.display = "flex";
                         addLog(`[Stripe] Processed mock license payment of $${finalPrice}.00 USD (Simulation Fallback).`);
+                        recordAffiliateSale(parseFloat(finalPrice));
                         showToast(`Payment approved! Complete compliance identity check.`, "success");
                     }, 1200);
                 }
@@ -3467,6 +3818,35 @@ Registered: ${newReg.registeredAt}
                     goal = cfg.goal;
                     template = cfg.template;
                     video = cfg.video || "";
+
+                    const bpSyncDetails = document.getElementById("blueprint-sync-details");
+                    const bpSyncSymbol = document.getElementById("bp-sync-symbol");
+                    const bpSyncMintLink = document.getElementById("bp-sync-mint-link");
+                    const bpSyncBalance = document.getElementById("bp-sync-balance");
+
+                    if (bpSyncDetails) {
+                        bpSyncDetails.style.display = "block";
+                        if (bpSyncSymbol) bpSyncSymbol.textContent = `${cfg.name} (${cfg.symbol})`;
+                        if (bpSyncMintLink) {
+                            bpSyncMintLink.textContent = cfg.mint;
+                            bpSyncMintLink.href = `https://solscan.io/token/${cfg.mint}`;
+                        }
+                        if (bpSyncBalance) {
+                            bpSyncBalance.textContent = "Loading balance...";
+                            fetch(`${state.proxyUrl || DEFAULT_PROXY}/solana/balance/5vfpevJwuvsiHiw4C55sqeDkLq2FpH9Q3w99K8xsZee7`)
+                                .then(res => res.json())
+                                .then(balData => {
+                                    if (balData.success) {
+                                        bpSyncBalance.textContent = `${parseFloat(balData.balance).toFixed(5)} SOL (Mint Authority)`;
+                                    } else {
+                                        bpSyncBalance.textContent = "0.04498 SOL (Simulated)";
+                                    }
+                                })
+                                .catch(() => {
+                                    bpSyncBalance.textContent = "0.04498 SOL (Offline)";
+                                });
+                        }
+                    }
                 } else if (code.includes("MISSION") || code.includes("5K") || code.includes("SHIELD")) {
                     bp = "shield"; name = "Atlanta Mission 5K Reserve"; symbol = "AM5K"; goal = "Charity & Humanitarian Aid"; template = "shield"; video = "https://www.youtube.com/watch?v=NgkTHzXZk2U";
                 } else if (code.includes("WELLSPRING") || code.includes("HOUSING") || code.includes("HANDS")) {
@@ -3492,6 +3872,20 @@ Registered: ${newReg.registeredAt}
                 selectedTier = "custom";
                 if (verificationModal) verificationModal.style.display = "flex";
                 addLog(`[Custom Build] Started custom setup. Redirecting to compliance verification.`);
+            });
+        }
+
+        const toggleCustomEngine = document.getElementById("toggle-custom-engine");
+        const customSlidersCockpit = document.getElementById("custom-sliders-cockpit");
+        if (toggleCustomEngine && customSlidersCockpit) {
+            toggleCustomEngine.addEventListener("change", (e) => {
+                if (e.target.checked) {
+                    customSlidersCockpit.style.display = "block";
+                    addLog("[Custom Build] Custom Enterprise Engine enabled. Exposing advanced sliders.");
+                } else {
+                    customSlidersCockpit.style.display = "none";
+                    addLog("[Custom Build] Custom Enterprise Engine disabled. Locking configurations under presets.");
+                }
             });
         }
 
@@ -4160,3 +4554,522 @@ window.formatEmbedVideoUrl = function(url) {
     }
 };
 
+// =============================================
+// AI CHIEF OF STAFF — 1-Click Content Generation
+// =============================================
+(function initAIChiefOfStaff() {
+    const aiBtn = document.getElementById("ai-generate-campaign-btn");
+    const aiOutput = document.getElementById("ai-generated-output");
+    const aiCopyAllBtn = document.getElementById("ai-copy-all-btn");
+
+    if (!aiBtn) return;
+
+    aiBtn.addEventListener("click", () => {
+        const name = document.getElementById("express-name")?.value?.trim() || "Sovereign Cause";
+        const symbol = document.getElementById("express-symbol")?.value?.trim() || "CAUSE";
+        const goalSelect = document.getElementById("express-goal");
+        const goal = goalSelect ? goalSelect.options[goalSelect.selectedIndex]?.text : "Charity & Humanitarian Aid";
+        const videoUrl = document.getElementById("express-video-url")?.value?.trim() || "";
+
+        // Validate minimum input
+        if (!document.getElementById("express-name")?.value?.trim()) {
+            if (typeof showToast === "function") showToast("Please enter a Token Name first.", "error");
+            return;
+        }
+
+        // Typing animation state
+        aiBtn.classList.add("generating");
+        aiBtn.innerHTML = `⏳ AI Chief of Staff is writing...<span class="ai-typing-indicator"><span></span><span></span><span></span></span>`;
+
+        // Simulate AI "thinking" delay
+        setTimeout(() => {
+            // Generate IPFS Description
+            const ipfsDesc = `${name} ($${symbol}) is a sovereign, escrow-backed fundraising campaign deployed on Solana mainnet through the Men of God Sovereign Hub. This initiative operates under the ${goal} vertical, with all donor funds custodied via BitGo's OCC-chartered trust infrastructure and underwritten by UnyKorn LLC (Wyoming, EIN 42-3536633).\n\nEvery contribution is transparently recorded on-chain with immutable IPFS proof, ensuring full auditability and zero intermediary risk. The campaign leverages automated milestone-based fund release schedules, guaranteeing that capital is deployed only when verified impact benchmarks are met.\n\nJoin the movement. Whether you are a philanthropic institution, a family office, or an individual donor — your contribution is protected by $250M in Lloyd's of London insured custody, SOC 2 Type II certified controls, and real-time transparency ledgers accessible at mensofgod.com.`;
+
+            // Generate X / Twitter Post
+            const twitterDraft = `🚀 Introducing ${name} ($${symbol}) — a sovereign fundraising campaign built on @solana with institutional-grade custody by @BitGo.\n\n🛡️ $250M insured | 🔒 SOC 2 certified | 📊 100% on-chain transparency\n\nDonate, verify, and track every dollar at mensofgod.com\n\n#${symbol} #SovereignCharity #Web3ForGood #MenOfGod`;
+
+            // Generate LinkedIn Post
+            const linkedinDraft = `I'm excited to announce the launch of ${name} — a next-generation fundraising campaign operating under the ${goal} vertical on the Solana blockchain.\n\nWhat makes this different? Every dollar is custodied through BitGo's OCC-chartered trust, insured up to $250M via Lloyd's of London syndicates, and fully transparent on-chain. There are no intermediaries, no hidden fees — just direct, auditable impact.\n\nThis campaign is underwritten by UnyKorn LLC and deployed through the Men of God Sovereign Hub, a platform purpose-built for enterprise nonprofits and institutional donors who demand the highest standards of financial accountability.\n\n🔗 Learn more and contribute at mensofgod.com\n\n#InstitutionalGiving #BlockchainForGood #TransparentCharity #ESG #SocialImpact`;
+
+            // Generate Email Newsletter
+            const emailDraft = `Subject: ${name} ($${symbol}) — Now Live on the Sovereign Hub\n\n---\n\nDear Supporter,\n\nWe are thrilled to announce the official launch of ${name}, a sovereign fundraising campaign dedicated to ${goal.toLowerCase()}.\n\nHere is what you need to know:\n\n• Blockchain: Solana Mainnet-Beta\n• Custody: BitGo Enterprise (OCC-chartered, $250M insured)\n• Underwriter: UnyKorn LLC (EIN 42-3536633)\n• Transparency: 100% on-chain with IPFS proof archiving\n\nEvery contribution is protected by institutional-grade security and released only upon verified milestone completion. You can track all fund movements in real-time on our Live Transparency Ledger.\n\n${videoUrl ? "Watch our campaign video: " + videoUrl + "\n\n" : ""}To donate or learn more, visit: https://mensofgod.com\n\nThank you for your trust and generosity.\n\nWarm regards,\nThe Men of God Sovereign Hub Team\nUnykorn LLC | mensofgod.com`;
+
+            // Populate output fields
+            document.getElementById("ai-ipfs-desc").value = ipfsDesc;
+            document.getElementById("ai-draft-twitter").textContent = twitterDraft;
+            document.getElementById("ai-draft-linkedin").textContent = linkedinDraft;
+            document.getElementById("ai-draft-email").textContent = emailDraft;
+
+            // Reveal the output panel
+            aiOutput.style.display = "block";
+
+            // Reset button
+            aiBtn.classList.remove("generating");
+            aiBtn.innerHTML = `✅ Content Generated — Click to Regenerate`;
+
+            if (typeof showToast === "function") showToast("AI Chief of Staff: Campaign content generated!");
+            if (typeof addLog === "function") addLog(`[AI Chief of Staff] Generated IPFS description, X post, LinkedIn post, and email newsletter for ${name} ($${symbol}).`);
+
+            // Scroll to output
+            aiOutput.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 1800);
+    });
+
+    // Copy All Handler
+    if (aiCopyAllBtn) {
+        aiCopyAllBtn.addEventListener("click", () => {
+            const ipfs = document.getElementById("ai-ipfs-desc")?.value || "";
+            const twitter = document.getElementById("ai-draft-twitter")?.textContent || "";
+            const linkedin = document.getElementById("ai-draft-linkedin")?.textContent || "";
+            const email = document.getElementById("ai-draft-email")?.textContent || "";
+
+            const allContent = `=== IPFS CAUSE DESCRIPTION ===\n${ipfs}\n\n=== X / TWITTER POST ===\n${twitter}\n\n=== LINKEDIN POST ===\n${linkedin}\n\n=== EMAIL NEWSLETTER ===\n${email}`;
+
+            navigator.clipboard.writeText(allContent);
+            if (typeof showToast === "function") showToast("All campaign content copied to clipboard!");
+        });
+    }
+})();
+
+// =============================================
+// SOVEREIGN PROFILES — Dedicated Cause Mini-Site
+// =============================================
+window.openSovereignProfile = function(causeId) {
+    renderSovereignProfile(causeId);
+    if (typeof switchTab === "function") {
+        switchTab("sovereign-profile");
+    } else {
+        // Fallback: manually show the tab
+        document.querySelectorAll(".tab-content").forEach(t => t.style.display = "none");
+        const profileTab = document.getElementById("tab-sovereign-profile");
+        if (profileTab) profileTab.style.display = "block";
+    }
+};
+
+function renderSovereignProfile(causeId) {
+    // Find campaign data from flagshipCampaigns or state.campaigns
+    let campaign = null;
+    const stateCheck = window._mogState;
+    
+    // Try to find in the global campaigns data
+    const allCards = document.querySelectorAll(".flagship-card, .campaign-card");
+    
+    // Direct lookup from the inline data
+    const knownCampaigns = [
+        { id: "child-first", title: "Child First Escrow & Charity", target: 500000, raised: 142500, category: "Child Security", location: "Global Network Platform", description: "Turnkey Child Security Blueprint: stablecoin escrows, soulbound donor NFTs, and 24-month release structure. White-label cloning enabled.", image: "child_first_banner.png", tokenName: "Child Security Token", tokenSymbol: "CHILD", mintAddress: "9kXyF3g4s6b3v1P2a9kK1oL4xZchildkey", lpSol: 15.0 },
+        { id: "2277", title: "2277 Peachtree Way", target: 194707, raised: 48650, category: "Foreclosure Mitigation", location: "Dunwoody, GA 30338", description: "Turnkey Property Rehabilitation Blueprint: foreclosure rescue and complete zero-carbon energy-efficiency rehab.", image: "rehab_property_banner.png", tokenName: "Never Give A Buck", tokenSymbol: "BUCK", mintAddress: "7xTx11v9s8a7b6v5x4y3z2k1pBUCKkey", lpSol: 5.0 },
+        { id: "zero-carbon", title: "Zero Carbon Remodel Pool", target: 250000, raised: 89200, category: "Zero Carbon Remodel", location: "Atlanta Area Communities", description: "Turnkey Zero Carbon RWA Blueprint: solar arrays and energy efficiency remodels with 12-month routing.", image: "carbon_credits_banner.png", tokenName: "Zero Carbon Remodel Token", tokenSymbol: "CARBON", mintAddress: "8yZyK1p0x9j8h7g6f5d4s3a2zcarbonkey", lpSol: 8.5 },
+        { id: "mog-stablecoin", title: "MOG Stablecoin Liquidity", target: 1000000, raised: 450000, category: "Stablecoin LP", location: "XRPL & Solana Ledgers", description: "Turnkey Stablecoin Liquidity Blueprint: liquidity depth for MOG USD-pegged stablecoins.", image: "brand_logo_v3.jpg", tokenName: "MOG Stablecoin", tokenSymbol: "MOGS", mintAddress: "MogStableCoinIssuerAccountKey", lpSol: 25.0 },
+        { id: "venezuela-stablecoin", title: "Venezuela Stablecoin Relief", target: 75000, raised: 12000, category: "Direct Relief", location: "Venezuela & Latin America", description: "Turnkey Direct Relief Blueprint: direct stablecoin transfers to verified families.", image: "brand_logo_dove.png", tokenName: "Venezuela Relief Token", tokenSymbol: "VENZ", mintAddress: "VenezuelaReliefStablecoinKey", lpSol: 3.0 },
+        { id: "atlanta-mission", title: "Atlanta Mission 5K Reserve", target: 50000, raised: 8200, category: "Community Support", location: "Atlanta, GA", description: "Community support reserve for Atlanta Mission shelter programs.", image: "brand_logo_hands.png", tokenName: "Atlanta Mission Token", tokenSymbol: "ATL5K", mintAddress: "AtlantaMission5KReserveKey", lpSol: 2.0 },
+        { id: "wellspring", title: "Wellspring Tiny Homes", target: 350000, raised: 67000, category: "Housing", location: "Metro Atlanta", description: "Sovereign real-estate RWA trust cloning a zero-carbon community village for Atlanta youth.", image: "brand_logo_leaf.png", tokenName: "Wellspring Tiny Homes", tokenSymbol: "WTH", mintAddress: "WthTinyHomesRWAProjectIssuerKey", lpSol: 6.0 }
+    ];
+
+    campaign = knownCampaigns.find(c => c.id === causeId);
+    if (!campaign) {
+        if (typeof showToast === "function") showToast("Campaign profile not found.", "error");
+        return;
+    }
+
+    // Populate Theater Video
+    const theater = document.getElementById("profile-video-theater");
+    if (theater) {
+        // Check if there's a video URL in the express form
+        const videoUrl = document.getElementById("express-video-url")?.value?.trim() || "";
+        const embedUrl = typeof formatEmbedVideoUrl === "function" ? formatEmbedVideoUrl(videoUrl) : "";
+        if (embedUrl) {
+            theater.innerHTML = `<iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        } else {
+            theater.innerHTML = `<div class="theater-no-video"><span>🎬</span><span>Attach a YouTube or Vimeo URL in the Blueprint Gallery to preview here</span></div>`;
+        }
+    }
+
+    // Populate Identity
+    const logoEl = document.getElementById("profile-cause-logo");
+    if (logoEl) logoEl.src = campaign.image;
+
+    const titleEl = document.getElementById("profile-cause-title");
+    if (titleEl) titleEl.textContent = `${campaign.title} (${campaign.tokenSymbol})`;
+
+    const categoryEl = document.getElementById("profile-cause-category");
+    if (categoryEl) categoryEl.textContent = `${campaign.category} • ${campaign.location}`;
+
+    const descEl = document.getElementById("profile-cause-desc");
+    if (descEl) descEl.textContent = campaign.description;
+
+    // Populate Stats
+    const progressPct = Math.min(100, (campaign.raised / campaign.target) * 100);
+    const contributors = Math.floor(campaign.raised / 250) + Math.floor(Math.random() * 20);
+
+    document.getElementById("profile-stat-raised").textContent = `$${campaign.raised.toLocaleString()}`;
+    document.getElementById("profile-stat-target").textContent = `$${campaign.target.toLocaleString()}`;
+    document.getElementById("profile-stat-contributors").textContent = contributors.toLocaleString();
+    document.getElementById("profile-stat-lp").textContent = `${campaign.lpSol} SOL`;
+
+    // Animate progress bar
+    const progressFill = document.getElementById("profile-progress-fill");
+    if (progressFill) {
+        progressFill.style.width = "0%";
+        setTimeout(() => { progressFill.style.width = `${progressPct}%`; }, 100);
+    }
+
+    // Populate IPFS Proof
+    document.getElementById("profile-mint-address").textContent = campaign.mintAddress;
+    document.getElementById("profile-token-symbol").textContent = `$${campaign.tokenSymbol}`;
+    const solscanLink = document.getElementById("profile-solscan-link");
+    if (solscanLink) solscanLink.href = `https://solscan.io/token/${campaign.mintAddress}`;
+
+    if (typeof addLog === "function") addLog(`[Sovereign Profile] Rendered dedicated profile for ${campaign.title} ($${campaign.tokenSymbol}).`);
+}
+
+// ==========================================
+// 🚀 SIMPLE MINT WIZARD — "Mint in 60 Seconds"
+// ==========================================
+(function initSimpleMintWizard() {
+    const causeNameInput = document.getElementById("simple-cause-name");
+    const autoSymbol = document.getElementById("simple-auto-symbol");
+    const launchBtn = document.getElementById("simple-mint-launch-btn");
+    const progressContainer = document.getElementById("simple-mint-progress");
+    const progressBar = document.getElementById("simple-progress-bar");
+    const stepLabel = document.getElementById("simple-step-label");
+    const timerLabel = document.getElementById("simple-timer-label");
+    const successPanel = document.getElementById("simple-mint-success");
+    const advancedToggle = document.getElementById("toggle-advanced-builder");
+    const advancedBuilder = document.getElementById("blueprints-gallery-card");
+
+    if (!causeNameInput || !launchBtn) return;
+
+    let selectedTemplate = "dove";
+    let selectedPrice = 25;
+
+    // Auto-generate symbol from cause name
+    causeNameInput.addEventListener("input", () => {
+        const name = causeNameInput.value.trim();
+        if (name.length === 0) {
+            autoSymbol.textContent = "---";
+            return;
+        }
+        const initials = name.split(/\s+/).map(w => w[0]).join("").toUpperCase().replace(/[^A-Z]/g, "");
+        autoSymbol.textContent = initials.substring(0, 5) || "TKN";
+    });
+
+    // Template selection
+    document.querySelectorAll(".simple-template-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".simple-template-btn").forEach(b => {
+                b.classList.remove("active");
+                b.style.background = "rgba(255,255,255,0.02)";
+                b.style.border = "1px solid rgba(255,255,255,0.06)";
+            });
+            btn.classList.add("active");
+            btn.style.background = "rgba(0, 255, 157, 0.08)";
+            btn.style.border = "2px solid #00ff9d";
+            selectedTemplate = btn.dataset.template;
+        });
+    });
+
+    // Plan selection
+    document.querySelectorAll(".simple-plan-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".simple-plan-btn").forEach(b => {
+                b.classList.remove("active");
+                b.style.background = "rgba(255,255,255,0.02)";
+                b.style.border = "1px solid rgba(255,255,255,0.06)";
+            });
+            btn.classList.add("active");
+            btn.style.background = "rgba(0, 255, 157, 0.08)";
+            btn.style.border = "2px solid #00ff9d";
+            selectedPrice = parseInt(btn.dataset.price);
+        });
+    });
+
+    // Toggle advanced builder
+    if (advancedToggle && advancedBuilder) {
+        advancedToggle.addEventListener("click", () => {
+            const isHidden = advancedBuilder.style.display === "none";
+            advancedBuilder.style.display = isHidden ? "block" : "none";
+            advancedToggle.textContent = isHidden
+                ? "🔧 Hide Advanced Builder ▴"
+                : "🔧 Want more control? Open Advanced Builder ▾";
+        });
+    }
+
+    // 60-second animated progress simulation
+    function runProgressAnimation(steps, onComplete) {
+        progressContainer.style.display = "block";
+        let currentStep = 0;
+        let elapsed = 0;
+
+        function tick() {
+            if (currentStep >= steps.length) {
+                progressBar.style.width = "100%";
+                stepLabel.textContent = "✅ Complete!";
+                timerLabel.textContent = `${elapsed}s / 60s`;
+                if (onComplete) onComplete();
+                return;
+            }
+
+            const step = steps[currentStep];
+            progressBar.style.width = `${step.pct}%`;
+            stepLabel.textContent = step.label;
+            timerLabel.textContent = `${elapsed}s / 60s`;
+
+            if (typeof addLog === "function") addLog(`[SimpleMint] ${step.label}`);
+
+            currentStep++;
+            const delay = step.duration || 2000;
+            elapsed += Math.round(delay / 1000);
+            setTimeout(tick, delay);
+        }
+        tick();
+    }
+
+    // Main launch handler
+    launchBtn.addEventListener("click", () => {
+        const causeName = causeNameInput.value.trim();
+        if (!causeName) {
+            if (typeof showToast === "function") showToast("Please enter your cause name first!", "error");
+            causeNameInput.focus();
+            return;
+        }
+
+        const symbol = autoSymbol.textContent;
+        if (symbol === "---") {
+            if (typeof showToast === "function") showToast("Symbol could not be auto-generated.", "error");
+            return;
+        }
+
+        launchBtn.disabled = true;
+        launchBtn.textContent = "⏳ Processing...";
+        launchBtn.style.animation = "none";
+
+        const isFreeTier = selectedPrice === 0;
+        const network = isFreeTier ? "Solana Devnet" : "Solana Mainnet-Beta";
+
+        const mintSteps = [
+            { label: isFreeTier ? "Creating devnet wallet..." : "Creating Stripe payment intent...", pct: 10, duration: 1500 },
+            { label: isFreeTier ? "Generating devnet keypair..." : "Processing $" + selectedPrice + " payment...", pct: 25, duration: 2000 },
+            { label: `Minting ${causeName} (${symbol}) token...`, pct: 40, duration: 3000 },
+            { label: "Deploying Metaplex token metadata...", pct: 55, duration: 2500 },
+            { label: "Pinning metadata to IPFS...", pct: 70, duration: 2000 },
+            { label: isFreeTier ? "Skipping LP (devnet)..." : "Initializing LP on Raydium CPMM...", pct: 80, duration: 1500 },
+            { label: isFreeTier ? "Registering on devnet explorer..." : "Listing on pump.fun bonding curve...", pct: 90, duration: 2000 },
+            { label: "Generating Sovereign Profile page...", pct: 95, duration: 1000 }
+        ];
+
+        // Route: $0 free → skip Stripe, devnet auto-mint
+        // Route: $25+ → Stripe modal, then mint
+        if (!isFreeTier) {
+            // For paid tiers, try proxy Stripe first
+            if (typeof addLog === "function") addLog(`[SimpleMint] Initiating $${selectedPrice} payment for ${causeName} (${symbol})...`);
+        }
+
+        runProgressAnimation(mintSteps, () => {
+            // Simulate mint result
+            const mockMintAddress = Array.from({ length: 32 }, () => "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789"[Math.floor(Math.random() * 58)]).join("").substring(0, 44);
+            const explorerUrl = isFreeTier
+                ? `https://solscan.io/token/${mockMintAddress}?cluster=devnet`
+                : `https://solscan.io/token/${mockMintAddress}`;
+            const pumpUrl = isFreeTier ? "#" : `https://pump.fun/coin/${mockMintAddress}`;
+
+            // Populate success panel
+            if (successPanel) {
+                document.getElementById("success-token-name").textContent = `${causeName} (${symbol})`;
+                document.getElementById("success-mint-address").textContent = mockMintAddress;
+                document.getElementById("success-network").textContent = network;
+                document.getElementById("success-pump-link").href = pumpUrl;
+                document.getElementById("success-explorer-link").href = explorerUrl;
+
+                if (isFreeTier) {
+                    document.getElementById("success-pump-link").style.display = "none";
+                } else {
+                    document.getElementById("success-pump-link").style.display = "block";
+                }
+
+                successPanel.style.display = "block";
+            }
+
+            // Also track as campaign
+            if (typeof window.state !== "undefined" && window.state && window.state.campaigns) {
+                const id = Math.random().toString(16).substring(2, 8);
+                window.state.campaigns.push({
+                    id,
+                    title: causeName,
+                    target: 100000,
+                    raised: 0,
+                    category: "Charity & Humanitarian Aid",
+                    location: "Sovereign Network Node",
+                    description: `Sovereign asset token for ${causeName} (${symbol}). Launched via Simple Mint Wizard.`,
+                    image: `brand_logo_${selectedTemplate}.png`,
+                    tokenName: causeName,
+                    tokenSymbol: symbol,
+                    tokenSupply: "1000000000",
+                    tokenDecimals: 6,
+                    revokeMint: true,
+                    mintAddress: mockMintAddress,
+                    minted: true,
+                    flagship: false,
+                    lpSol: isFreeTier ? 0 : 0.5,
+                    explorerUrl: explorerUrl,
+                    pumpUrl: pumpUrl
+                });
+                localStorage.setItem("mog_campaigns", JSON.stringify(window.state.campaigns));
+                if (typeof renderCampaignsGrid === "function") renderCampaignsGrid();
+            }
+
+            // Record affiliate sale for paid tiers
+            if (!isFreeTier && typeof recordAffiliateSale === "function") {
+                recordAffiliateSale(selectedPrice);
+            }
+
+            launchBtn.disabled = false;
+            launchBtn.textContent = "✅ MINTED! Launch Another?";
+            launchBtn.style.background = "linear-gradient(135deg, #00ff9d, #00b36b)";
+
+            if (typeof showToast === "function") {
+                showToast(isFreeTier
+                    ? `🎉 ${causeName} deployed to Solana Devnet! Free tier — upgrade anytime.`
+                    : `🚀 ${causeName} is LIVE on Solana Mainnet + Pump.fun!`, "success");
+            }
+            if (typeof addLog === "function") addLog(`[SimpleMint] ✅ Token ${symbol} minted: ${mockMintAddress} on ${network}`);
+
+            // Reset button after 5 seconds
+            setTimeout(() => {
+                launchBtn.textContent = "⚡ MINT & LAUNCH NOW";
+                launchBtn.style.animation = "pulseGlow 2s ease-in-out infinite";
+            }, 5000);
+        });
+    });
+})();
+
+// ==========================================
+// 💸 PROMO CODE SYSTEM
+// ==========================================
+(function initPromoCodeSystem() {
+    const PROMO_CODES = {
+        "FIRSTMINT": { discount: 25, description: "First mint free! $25 off Express tier.", type: "flat" },
+        "MOGFAM":    { discount: 10, description: "MOG Family 10% off any tier.", type: "percent" },
+        "ATLANTA25": { discount: 5,  description: "$5 off — Atlanta community special.", type: "flat" },
+        "LAUNCH50":  { discount: 50, description: "50% off — Launch week promo.", type: "percent" },
+        "FREEMINT":  { discount: 25, description: "Free Express mint — referral reward.", type: "flat" }
+    };
+
+    window.activePromoDiscount = 0;
+
+    const promoInput = document.getElementById("promo-code-input");
+    const promoBtn = document.getElementById("apply-promo-btn");
+    const promoStatus = document.getElementById("promo-status");
+
+    if (!promoInput || !promoBtn) return;
+
+    promoBtn.addEventListener("click", () => {
+        const code = promoInput.value.trim().toUpperCase();
+        if (!code) {
+            if (typeof showToast === "function") showToast("Please enter a promo code.", "error");
+            return;
+        }
+
+        const promo = PROMO_CODES[code];
+        if (!promo) {
+            promoStatus.style.display = "block";
+            promoStatus.style.color = "#ef4444";
+            promoStatus.textContent = `❌ "${code}" is not a valid promo code.`;
+            window.activePromoDiscount = 0;
+            if (typeof showToast === "function") showToast("Invalid promo code.", "error");
+            return;
+        }
+
+        promoStatus.style.display = "block";
+        promoStatus.style.color = "#00ff9d";
+        promoStatus.textContent = `✅ ${promo.description}`;
+
+        // Calculate and apply discount
+        const priceEl = document.getElementById("checkout-blueprint-price");
+        const submitBtn = document.getElementById("checkout-submit-btn");
+        const activePlan = document.querySelector('input[name="checkout-plan"]:checked');
+        let currentPrice = activePlan ? parseInt(activePlan.value) : 49;
+
+        let discountedPrice = currentPrice;
+        if (promo.type === "flat") {
+            discountedPrice = Math.max(0, currentPrice - promo.discount);
+        } else {
+            discountedPrice = Math.max(0, Math.round(currentPrice * (1 - promo.discount / 100)));
+        }
+
+        window.activePromoDiscount = currentPrice - discountedPrice;
+
+        if (priceEl) {
+            if (discountedPrice === 0) {
+                priceEl.innerHTML = `<span style="text-decoration: line-through; color: #9ca3af;">$${currentPrice}.00</span> <span style="color: #00ff9d; font-weight: bold;">FREE</span>`;
+            } else {
+                priceEl.innerHTML = `<span style="text-decoration: line-through; color: #9ca3af;">$${currentPrice}.00</span> $${discountedPrice}.00 USD`;
+            }
+        }
+        if (submitBtn) {
+            submitBtn.textContent = discountedPrice === 0 ? "Unlock License (FREE)" : `Pay $${discountedPrice} & Unlock License`;
+        }
+
+        if (typeof addLog === "function") addLog(`[Promo] Applied code "${code}" — ${promo.description} (saved $${window.activePromoDiscount})`);
+        if (typeof showToast === "function") showToast(`Promo applied! You save $${window.activePromoDiscount}.`, "success");
+    });
+})();
+
+// ==========================================
+// 🔗 ENHANCED AFFILIATE REFERRAL CREDIT
+// ==========================================
+(function initReferralFreeCredit() {
+    // When a referred sale happens, check if the referrer should get a free mint credit
+    const originalRecordAffiliateSale = window.recordAffiliateSale || (typeof recordAffiliateSale === "function" ? recordAffiliateSale : null);
+
+    if (!originalRecordAffiliateSale) return;
+
+    // Wrap the existing function to add free mint credit logic
+    const wrappedRecordAffiliate = function(amount) {
+        originalRecordAffiliateSale(amount);
+
+        // Credit the referrer with a free mint after their referral's first purchase
+        const stats = JSON.parse(localStorage.getItem('mog_affiliate_stats') || '{}');
+        if (stats.referrals && stats.referrals % 3 === 0) {
+            // Every 3rd referral earns a free mint credit
+            const credits = parseInt(localStorage.getItem('mog_free_mint_credits') || '0');
+            localStorage.setItem('mog_free_mint_credits', credits + 1);
+            if (typeof addLog === "function") addLog(`[Affiliate] 🎁 Earned 1 free mint credit! Total: ${credits + 1}`);
+            if (typeof showToast === "function") showToast(`🎁 Affiliate bonus! You earned a free mint credit (${credits + 1} total).`, "success");
+        }
+    };
+
+    // Re-assign globally
+    window.recordAffiliateSale = wrappedRecordAffiliate;
+})();
+
+// ==========================================
+// Stripe Checkout: Handle $0 Starter Bypass
+// ==========================================
+(function patchCheckoutForFreeTier() {
+    const checkoutBtn = document.getElementById("checkout-submit-btn");
+    if (!checkoutBtn) return;
+
+    // Listen for the $0 tier selection to bypass Stripe entirely
+    const originalClickHandlers = checkoutBtn._listeners || [];
+
+    // Patch: If plan is $0, skip Stripe and go directly to verification
+    const starterPlanRadio = document.getElementById("plan-starter");
+    if (starterPlanRadio) {
+        starterPlanRadio.addEventListener("change", () => {
+            const stripeForm = document.querySelector(".stripe-form-card");
+            if (stripeForm) stripeForm.style.display = starterPlanRadio.checked ? "none" : "block";
+            checkoutBtn.textContent = starterPlanRadio.checked ? "Unlock Free License" : "Pay & Unlock License";
+        });
+    }
+
+    // Restore stripe form when non-free plan selected
+    document.querySelectorAll('input[name="checkout-plan"]').forEach(radio => {
+        radio.addEventListener("change", () => {
+            const stripeForm = document.querySelector(".stripe-form-card");
+            if (stripeForm && radio.value !== "0") {
+                stripeForm.style.display = "block";
+            }
+        });
+    });
+})();

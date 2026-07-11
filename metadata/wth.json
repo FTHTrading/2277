@@ -1,22 +1,22 @@
 {
-  "name": "Never Give A Buck",
-  "symbol": "BUCK",
-  "description": "Sovereign charity fundraiser by UnyKorn LLC & Men of God",
-  "image": "https://mensofgod.com/brand_logo_shield.png",
-  "videoUrl": "",
+  "name": "Wellspring Tiny Homes",
+  "symbol": "WTH",
+  "description": "Turnkey Property Rehabilitation Blueprint: foreclosure rescue and complete zero-carbon energy-efficiency rehab.",
+  "image": "https://mensofgod.com/brand_logo_hands.png",
+  "videoUrl": "https://www.youtube.com/watch?v=YwJ-BleCUWM",
   "translations": {},
   "attributes": [
     {
       "trait_type": "Custodian",
-      "value": "BitGo Multi-Sig Vault"
+      "value": "OCC-Chartered BitGo Managed"
     },
     {
       "trait_type": "Escrow Type",
-      "value": "6-Month Linear Milestone Escrow"
+      "value": "24-Month Donation Clawback Escrow"
     },
     {
       "trait_type": "Cause",
-      "value": "Never Give A Buck"
+      "value": "Wellspring Tiny Homes"
     },
     {
       "trait_type": "Goal Amount",
@@ -32,19 +32,19 @@
     },
     {
       "trait_type": "BitGo Custody Vault",
-      "value": "Inactive"
+      "value": "Active ($39/mo)"
     },
     {
       "trait_type": "IPFS Proof Vaulting",
-      "value": "Inactive"
+      "value": "Active ($19/mo)"
     },
     {
       "trait_type": "Go Network Seeding",
-      "value": "Inactive"
+      "value": "Active ($29/mo)"
     },
     {
       "trait_type": "Charity Fee Routing",
-      "value": "Inactive"
+      "value": "Active ($19/mo)"
     }
   ]
 }

@@ -685,6 +685,92 @@ async function ensureSolBalance() {
     }
 }
 
+// ====================== IPFS CERTIFICATE PINNING GATEWAY ======================
+const crypto = require('crypto');
+app.post('/ipfs/pin', async (req, res) => {
+    try {
+        const { name, role, msg } = req.body;
+        if (!name || !role || !msg) {
+            return res.status(400).json({ success: false, error: "Missing required fields: name, role, msg" });
+        }
+
+        // Generate unique simulated IPFS CID hash
+        const dataStr = `${name}-${role}-${msg}-${Date.now()}`;
+        const hash = crypto.createHash('sha256').update(dataStr).digest('hex').substring(0, 32);
+        const simulatedCid = `QmCert${hash}`;
+
+        const metadataFilename = `cert-${simulatedCid}.json`;
+        const metadataDir = path.join(__dirname, 'metadata');
+        if (!fs.existsSync(metadataDir)) {
+            fs.mkdirSync(metadataDir, { recursive: true });
+        }
+        const metadataPath = path.join(metadataDir, metadataFilename);
+
+        const metadataContent = {
+            name: "Sovereign Contributor Certificate",
+            description: `This certifies that ${name} has contributed to the Men of God network as a verified ${role}.`,
+            image: "https://mensofgod.com/brand_logo_shield.png",
+            attributes: [
+                {
+                    trait_type: "Recipient Name",
+                    value: name
+                },
+                {
+                    trait_type: "Contributor Role",
+                    value: role
+                },
+                {
+                    trait_type: "Congratulations Message",
+                    value: msg
+                },
+                {
+                    trait_type: "Issue Date",
+                    value: new Date().toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })
+                }
+            ]
+        };
+
+        fs.writeFileSync(metadataPath, JSON.stringify(metadataContent, null, 2), 'utf8');
+        console.log(`[IPFS] Certificate written to ${metadataPath}`);
+
+        // Trigger secure Pages deploy
+        const deployCmd = `node deploy.js`;
+        console.log(`[IPFS] Triggering background Pages deploy: ${deployCmd}`);
+        exec(deployCmd, (err, stdout, stderr) => {
+            if (err) {
+                console.error(`[IPFS] Background Pages deploy failed: ${err.message}`);
+                return;
+            }
+            console.log(`[IPFS] Background Pages deploy successful.`);
+        });
+
+        res.json({
+            success: true,
+            cid: simulatedCid,
+            url: `https://mensofgod.com/metadata/${metadataFilename}`
+        });
+    } catch (error) {
+        console.error("[IPFS] Pinning failed:", error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ====================== SOLANA BALANCE CHECKER ======================
+app.get('/solana/balance/:address', async (req, res) => {
+    try {
+        const { address } = req.params;
+        const pubkey = new PublicKey(address);
+        const balance = await connection.getBalance(pubkey);
+        res.json({
+            success: true,
+            balance: balance / 1e9
+        });
+    } catch (error) {
+        console.error("[SOLANA] Get balance failed:", error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // ====================== FULL PUMP.FUN AUTO LAUNCH (Mint + Metadata + Bonding Curve) ======================
 app.post('/solana/mint', async (req, res) => {
     try {
@@ -856,7 +942,7 @@ app.post('/solana/mint', async (req, res) => {
         console.log(`[PUMP.FUN] Launch confirmed successfully!`);
 
         // 5. Run Cloudflare Pages deployment in background to publish the new metadata file
-        const deployCmd = `npx wrangler pages deploy "${__dirname}" --project-name=mog-liquidity-desk --commit-dirty=true --branch=main`;
+        const deployCmd = `node deploy.js`;
         console.log(`[PUMP.FUN] Triggering background Cloudflare Pages deploy: ${deployCmd}`);
         exec(deployCmd, (err, stdout, stderr) => {
             if (err) {

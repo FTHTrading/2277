@@ -1,0 +1,23 @@
+{
+  "name": "Sovereign Contributor Certificate",
+  "description": "This certifies that John Doe has contributed to the Men of God network as a verified Builder.",
+  "image": "https://mensofgod.com/brand_logo_shield.png",
+  "attributes": [
+    {
+      "trait_type": "Recipient Name",
+      "value": "John Doe"
+    },
+    {
+      "trait_type": "Contributor Role",
+      "value": "Builder"
+    },
+    {
+      "trait_type": "Congratulations Message",
+      "value": "Thank you for your service!"
+    },
+    {
+      "trait_type": "Issue Date",
+      "value": "July 11, 2026"
+    }
+  ]
+}
