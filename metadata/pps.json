@@ -1,0 +1,28 @@
+{
+  "name": "Peachtree Prep Shield",
+  "symbol": "PPS",
+  "description": "Sovereign asset token for Peachtree Prep Shield (PPS) supporting Community Defense & Prep. Fully backed and non-custodial.",
+  "image": "https://mensofgod.com/brand_logo_shield.png",
+  "attributes": [
+    {
+      "trait_type": "Custodian",
+      "value": "BitGo Enterprise"
+    },
+    {
+      "trait_type": "Cause",
+      "value": "Express: Community Defense & Prep"
+    },
+    {
+      "trait_type": "Goal Amount",
+      "value": "$100000"
+    },
+    {
+      "trait_type": "Issuer Legal Structure",
+      "value": "UnyKorn LLC (Wyoming, EIN 42-3536633)"
+    },
+    {
+      "trait_type": "Registry Status",
+      "value": "Audited & Verified"
+    }
+  ]
+}

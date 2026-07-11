@@ -691,7 +691,9 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "Augusta Flood Shield", symbol: "AFS", category: "Defense", logo: "brand_logo_shield.png" },
         { name: "Savannah Harbor Prep", symbol: "SHP", category: "Defense", logo: "brand_logo_shield.png" },
         { name: "Peachtree Solar RWA", symbol: "PSR", category: "RWA", logo: "brand_logo_leaf.png" },
-        { name: "Savannah Timber Trust", symbol: "STT", category: "RWA", logo: "brand_logo_leaf.png" }
+        { name: "Savannah Timber Trust", symbol: "STT", category: "RWA", logo: "brand_logo_leaf.png" },
+        { name: "Macon Transparency Audit", symbol: "MTA", category: "Charity", logo: "brand_logo_dove.png" },
+        { name: "Sovereign Truth Registry", symbol: "STR", category: "RWA", logo: "brand_logo_dove.png" }
     ];
 
     setInterval(() => {
@@ -1140,6 +1142,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (template === "shield") imgUrl = "brand_logo_shield.png";
                     else if (template === "leaf") imgUrl = "brand_logo_leaf.png";
                     else if (template === "hands") imgUrl = "brand_logo_hands.png";
+                    else if (template === "dove") imgUrl = "brand_logo_dove.png";
 
                     if (ledgerCard) {
                         ledgerName.textContent = `${name} (${symbol})`;
@@ -2273,9 +2276,9 @@ document.addEventListener("DOMContentLoaded", () => {
         'global-emergency': 'global'
     };
 
-    const DEFAULT_PROXY = 'https://tzq0ba-ip-76-230-229-105.tunnelmole.net';
+    const DEFAULT_PROXY = 'https://fasx1e-ip-76-230-229-105.tunnelmole.net';
     let savedProxy = localStorage.getItem('mog_bitgo_proxy');
-    if (!savedProxy || savedProxy.includes('localhost') || savedProxy.includes('127.0.0.1') || savedProxy === 'http://localhost:3377' || savedProxy.includes('electricity-hygiene-taken-setup') || savedProxy.includes('trycloudflare.com')) {
+    if (!savedProxy || savedProxy.includes('localhost') || savedProxy.includes('127.0.0.1') || savedProxy === 'http://localhost:3377' || savedProxy.includes('electricity-hygiene-taken-setup') || savedProxy.includes('trycloudflare.com') || savedProxy.includes('tzq0ba-ip-76-230-229-105.tunnelmole.net')) {
         localStorage.setItem('mog_bitgo_proxy', DEFAULT_PROXY);
         savedProxy = DEFAULT_PROXY;
     }
@@ -3312,6 +3315,22 @@ window.trenchesData = [
         escrow: "BitGo Multi-Sig",
         lpStatus: "FalconX Desk (Active Routing)",
         timestamp: Date.now() - 3600000 * 12 // 12 hours ago
+    },
+    {
+        name: "Sovereign Audit Ledger",
+        symbol: "SAL",
+        issuer: "UnyKorn LLC WY",
+        ein: "42-3536633",
+        category: "Charity",
+        fundingDepthUsd: 220000,
+        fundingDepthSol: 1466,
+        milestoneMonths: 18,
+        logo: "brand_logo_dove.png",
+        mint: "DovE111111111111111111111111111111111111111",
+        ipfs: "https://mensofgod.com/metadata/sal.json",
+        escrow: "BitGo Managed",
+        lpStatus: "Wintermute Desk (Active Routing)",
+        timestamp: Date.now() - 3600000 * 24 // 24 hours ago
     }
 ];
 

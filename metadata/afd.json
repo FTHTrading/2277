@@ -1,0 +1,20 @@
+{
+  "name": "Atlanta Food Defense",
+  "symbol": "AFD",
+  "description": "Sovereign asset token for Atlanta Food Defense (AFD) supporting Community Defense & Prep. Fully backed and non-custodial.",
+  "image": "https://mensofgod.com/brand_logo_v3.png",
+  "attributes": [
+    {
+      "trait_type": "Custodian",
+      "value": "BitGo Enterprise"
+    },
+    {
+      "trait_type": "Cause",
+      "value": "Express: Community Defense & Prep"
+    },
+    {
+      "trait_type": "Goal Amount",
+      "value": "$100000"
+    }
+  ]
+}

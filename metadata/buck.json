@@ -1,0 +1,20 @@
+{
+  "name": "Never Give A Buck",
+  "symbol": "BUCK",
+  "description": "Sovereign charity fundraiser token powered by UnyKorn LLC & Men of God",
+  "image": "https://mensofgod.com/brand_logo_v3.png",
+  "attributes": [
+    {
+      "trait_type": "Custodian",
+      "value": "BitGo Enterprise"
+    },
+    {
+      "trait_type": "Regulated",
+      "value": "OCC Chartered"
+    },
+    {
+      "trait_type": "Security",
+      "value": "Multi-Sig Cold Storage"
+    }
+  ]
+}

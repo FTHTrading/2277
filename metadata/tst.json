@@ -1,0 +1,20 @@
+{
+  "name": "Test",
+  "symbol": "TST",
+  "description": "Test description",
+  "image": "https://mensofgod.com/brand_logo_v3.png",
+  "attributes": [
+    {
+      "trait_type": "Custodian",
+      "value": "BitGo Enterprise"
+    },
+    {
+      "trait_type": "Cause",
+      "value": "Express: test"
+    },
+    {
+      "trait_type": "Goal Amount",
+      "value": "$100000"
+    }
+  ]
+}

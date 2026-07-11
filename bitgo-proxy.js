@@ -683,6 +683,8 @@ app.post('/solana/mint', async (req, res) => {
             imageUrl = "https://mensofgod.com/brand_logo_leaf.png";
         } else if (logoTemplate === "hands") {
             imageUrl = "https://mensofgod.com/brand_logo_hands.png";
+        } else if (logoTemplate === "dove") {
+            imageUrl = "https://mensofgod.com/brand_logo_dove.png";
         }
 
         // 2. Write metadata JSON file locally so it will be served at https://mensofgod.com/metadata/symbol.json
@@ -828,6 +830,8 @@ app.post('/solana/mint', async (req, res) => {
                     fallbackImageUrl = "https://mensofgod.com/brand_logo_leaf.png";
                 } else if (reqLogoTemplate === "hands") {
                     fallbackImageUrl = "https://mensofgod.com/brand_logo_hands.png";
+                } else if (reqLogoTemplate === "dove") {
+                    fallbackImageUrl = "https://mensofgod.com/brand_logo_dove.png";
                 }
 
                 const reqVideoUrl = req.body.videoUrl || "";

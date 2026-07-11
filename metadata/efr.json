@@ -1,0 +1,20 @@
+{
+  "name": "Eco Forest Reserve",
+  "symbol": "EFR",
+  "description": "Sovereign asset token for Eco Forest Reserve (EFR) supporting Zero-Carbon / Real-Estate RWA. Fully backed and non-custodial.",
+  "image": "https://mensofgod.com/brand_logo_leaf.png",
+  "attributes": [
+    {
+      "trait_type": "Custodian",
+      "value": "BitGo Enterprise"
+    },
+    {
+      "trait_type": "Cause",
+      "value": "Express: Zero-Carbon / Real-Estate RWA"
+    },
+    {
+      "trait_type": "Goal Amount",
+      "value": "$100000"
+    }
+  ]
+}
