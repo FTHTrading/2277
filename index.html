@@ -87,7 +87,7 @@
         "postalCode": "30092",
         "addressCountry": "US"
       },
-      "telephone": "+1-404-555-7777"
+      "telephone": "+1-307-201-9877"
     }
     </script>
 </head>
@@ -357,7 +357,7 @@
                     <div>
                         <label style="font-size: 11px; color: var(--text-muted); font-weight: bold; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">OPTION B: SYNC PARTNER FRANCHISE CODE</label>
                         <div style="display: flex; gap: 8px;">
-                            <input type="text" id="express-blueprint-code" class="form-control" placeholder="e.g. UNYKORN-RELIEF-DOVE-7777" style="padding: 8px 12px; font-size: 12px; text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.5px; height: 36px; border-color: rgba(255,255,255,0.1);">
+                            <input type="text" id="express-blueprint-code" class="form-control" placeholder="e.g. MOG-ATLANTA-MISSION-5K" style="padding: 8px 12px; font-size: 12px; text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.5px; height: 36px; border-color: rgba(255,255,255,0.1);">
                             <button id="blueprint-code-btn" class="btn" style="width: auto; margin: 0; padding: 0 16px; font-size: 11px; height: 36px; background: #a855f7; color: white;">Sync</button>
                         </div>
                     </div>
@@ -441,7 +441,7 @@
                     <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 20px;">
                         <div class="form-group" style="margin-bottom: 0;">
                             <label style="font-size: 11px; color: var(--text-muted);">Attach Cause Video URL</label>
-                            <input type="url" id="express-video-url" class="form-control" placeholder="e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ" style="padding: 10px 14px; font-size: 13px;">
+                            <input type="url" id="express-video-url" class="form-control" placeholder="e.g. https://www.youtube.com/watch?v=YwJ-BleCUWM" style="padding: 10px 14px; font-size: 13px;">
                         </div>
                         <div class="form-group" style="margin-bottom: 0;">
                             <label style="font-size: 11px; color: var(--text-muted);">🌐 Translation Regions</label>
@@ -589,7 +589,7 @@
             </div>
 
             <!-- Sovereign Explorer & Token Profile Ledger -->
-            <div id="sovereign-ledger-card" class="glass-card mb-30" style="max-width: 650px; margin-left: auto; margin-right: auto; display: none;">
+            <div id="sovereign-ledger-card" class="glass-card mb-30" style="max-width: 650px; margin-left: auto; margin-right: auto; display: block;">
                 <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
                     <h3 style="font-family: var(--font-heading); font-size: 16px; margin: 0; color: white; display: flex; align-items: center; gap: 8px;">
                         👑 Live Sovereign Ledger Profile
@@ -598,18 +598,18 @@
                 </div>
                 
                 <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px;">
-                    <img id="ledger-token-img" src="brand_logo_v3.png" style="width: 70px; height: 70px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);" alt="Token Logo">
+                    <img id="ledger-token-img" src="brand_logo_hands.png" style="width: 70px; height: 70px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);" alt="Token Logo">
                     <div style="flex: 1;">
-                        <h4 id="ledger-token-name" style="font-family: var(--font-heading); font-size: 20px; color: white; margin: 0 0 4px 0;">Never Give A Buck (BUCK)</h4>
+                        <h4 id="ledger-token-name" style="font-family: var(--font-heading); font-size: 20px; color: white; margin: 0 0 4px 0;">Wellspring Tiny Homes (WTH)</h4>
                         <div id="ledger-token-address-container" style="display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; color: #9ca3af; background: rgba(0,0,0,0.2); padding: 6px 10px; border-radius: 6px; width: fit-content; margin-bottom: 8px;">
-                            <span id="ledger-token-address">6EF8rrec...F6P</span>
+                            <span id="ledger-token-address">WthTinyHomesRWAProjectIssuerKey</span>
                             <button onclick="navigator.clipboard.writeText(document.getElementById('ledger-token-address').textContent); showToast('Address copied!');" style="background: none; border: none; color: #00ff9d; cursor: pointer; padding: 0;">📋</button>
                         </div>
-                        <p id="ledger-token-desc" style="font-size: 12px; color: #9ca3af; margin: 0; line-height: 1.4;">Sovereign charity fundraiser token powered by UnyKorn LLC.</p>
+                        <p id="ledger-token-desc" style="font-size: 12px; color: #9ca3af; margin: 0; line-height: 1.4;">Sovereign real-estate RWA trust cloning a zero-carbon community village for Atlanta youth. Escrow managed with 24-month linear milestone routing.</p>
                         <!-- Anti-Rug Seals & Trust Badges -->
                         <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px;">
                             <span class="trust-badge" style="font-size: 8px; background: rgba(0, 255, 157, 0.08); border: 1px solid rgba(0, 255, 157, 0.2); color: #00ff9d; padding: 2px 6px; border-radius: 4px; font-weight: bold;">🛡️ LP Burned</span>
-                            <span class="trust-badge" id="ledger-badge-escrow" style="font-size: 8px; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.2); color: #c084fc; padding: 2px 6px; border-radius: 4px; font-weight: bold;">🔒 Time-Locked (12-Mo Vesting)</span>
+                            <span class="trust-badge" id="ledger-badge-escrow" style="font-size: 8px; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.2); color: #c084fc; padding: 2px 6px; border-radius: 4px; font-weight: bold;">🔒 Time-Locked (24-Mo Linear Vesting)</span>
                             <span class="trust-badge" style="font-size: 8px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 2px 6px; border-radius: 4px; font-weight: bold;">🤝 Verified Root – UnyKorn KYC</span>
                             <span class="trust-badge" style="font-size: 8px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: bold;">🚨 Clawback Enabled</span>
                         </div>
@@ -617,19 +617,19 @@
                 </div>
 
                 <!-- Glowing 3D Media Container -->
-                <div id="ledger-media-container" style="display: none; margin-bottom: 20px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(0, 255, 157, 0.3); box-shadow: 0 0 15px rgba(0, 255, 157, 0.15); background: #000; position: relative; padding-top: 56.25%;">
-                    <iframe id="ledger-video-iframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <div id="ledger-media-container" style="display: block; margin-bottom: 20px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(0, 255, 157, 0.3); box-shadow: 0 0 15px rgba(0, 255, 157, 0.15); background: #000; position: relative; padding-top: 56.25%;">
+                    <iframe id="ledger-video-iframe" src="https://www.youtube.com/embed/YwJ-BleCUWM?autoplay=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                     <div style="background: rgba(0,0,0,0.15); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
                         <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Total Supply</div>
-                        <div id="ledger-token-supply" style="font-size: 16px; font-weight: 700; color: white; font-family: var(--font-mono);">1,000,000,000 BUCK</div>
+                        <div id="ledger-token-supply" style="font-size: 16px; font-weight: 700; color: white; font-family: var(--font-mono);">1,000,000 WTH</div>
                     </div>
                     <div style="background: rgba(0,0,0,0.15); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
                         <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Liquidity Pool Status</div>
                         <div id="ledger-lp-status" style="font-size: 14px; font-weight: bold; color: #00ff9d; display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-                            <span style="width: 8px; height: 8px; background: #00ff9d; border-radius: 50%; display: inline-block;"></span> Active Curve
+                            <span style="width: 8px; height: 8px; background: #00ff9d; border-radius: 50%; display: inline-block;"></span> Active Curve + Go Network
                         </div>
                     </div>
                 </div>

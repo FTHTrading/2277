@@ -512,45 +512,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const blueprintCodeInput = document.getElementById("express-blueprint-code");
     
     const BLUEPRINTS = {
-        "UNYKORN-RELIEF-DOVE-7777": {
-            name: "Direct Humanitarian Relief",
-            symbol: "DHR",
+        "MOG-ATLANTA-MISSION-5K": {
+            name: "Atlanta Mission 5K Reserve",
+            symbol: "AM5K",
             goal: "Charity & Humanitarian Aid",
-            template: "dove",
+            template: "shield",
             discount: 10,
             reserve: 15,
             delay: 30,
-            vesting: 3
+            vesting: 12,
+            video: "https://www.youtube.com/watch?v=NgkTHzXZk2U"
         },
-        "UNYKORN-CIVIC-SHIELD-7777": {
-            name: "Civic Defense Reserve",
-            symbol: "CDR",
-            goal: "Community Defense & Prep",
-            template: "shield",
+        "MOG-WELLSPRING-HOUSING": {
+            name: "Wellspring Tiny Homes",
+            symbol: "WTH",
+            goal: "Zero-Carbon / Real-Estate RWA",
+            template: "hands",
             discount: 5,
             reserve: 20,
-            delay: 15,
-            vesting: 6
+            delay: 60,
+            vesting: 24,
+            video: "https://www.youtube.com/watch?v=YwJ-BleCUWM"
         },
-        "UNYKORN-RWA-LEAF-7777": {
-            name: "Green Property Yield",
-            symbol: "GPY",
-            goal: "Zero-Carbon / Real-Estate RWA",
-            template: "leaf",
-            discount: 15,
-            reserve: 25,
-            delay: 45,
-            vesting: 12
-        },
-        "UNYKORN-CHARITY-HANDS-7777": {
-            name: "Open Hands Sanctuary",
-            symbol: "OHS",
+        "MOG-GATEWAY-CENTER-20": {
+            name: "Gateway Center Impact",
+            symbol: "GCI",
             goal: "Charity & Humanitarian Aid",
-            template: "hands",
+            template: "dove",
             discount: 0,
             reserve: 30,
-            delay: 60,
-            vesting: 24
+            delay: 15,
+            vesting: 3,
+            video: "https://www.youtube.com/watch?v=P_zXryCBJfs"
         }
     };
 
@@ -564,6 +557,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (expressNameInput) expressNameInput.value = config.name;
                 if (expressSymbolInput) expressSymbolInput.value = config.symbol;
                 if (expressGoalSelect) expressGoalSelect.value = config.goal;
+                
+                const expressVideoInput = document.getElementById("express-video-url");
+                if (expressVideoInput) expressVideoInput.value = config.video || "";
                 
                 // 2. Select logo template option
                 if (templateInput) templateInput.value = config.template;
@@ -3365,6 +3361,9 @@ Registered: ${newReg.registeredAt}
                         document.getElementById("express-goal").value = selectedTemplate.goal;
                         document.getElementById("express-template").value = selectedTemplate.template;
                         
+                        const expressVideoInput = document.getElementById("express-video-url");
+                        if (expressVideoInput) expressVideoInput.value = selectedTemplate.video || "";
+                        
                         // Set active template logo visually
                         document.querySelectorAll(".logo-template-option").forEach(opt => {
                             opt.classList.remove("active");
@@ -3458,18 +3457,25 @@ Registered: ${newReg.registeredAt}
                 let symbol = "PRT";
                 let goal = "Charity & Humanitarian Aid";
                 let template = "shield";
+                let video = "";
 
-                if (code.includes("DOVE")) {
-                    bp = "dove"; name = "Direct Humanitarian Relief"; symbol = "DHR"; goal = "Charity & Humanitarian Aid"; template = "dove";
-                } else if (code.includes("SHIELD")) {
-                    bp = "shield"; name = "Civic Defense Reserve"; symbol = "CDR"; goal = "Community Defense & Prep"; template = "shield";
-                } else if (code.includes("LEAF")) {
-                    bp = "leaf"; name = "Zero-Carbon Eco Reserve"; symbol = "ZCR"; goal = "Zero-Carbon / Real-Estate RWA"; template = "leaf";
-                } else if (code.includes("HANDS")) {
-                    bp = "hands"; name = "Sovereign Open Hands Ministry"; symbol = "SOH"; goal = "Charity & Humanitarian Aid"; template = "hands";
+                if (BLUEPRINTS[code]) {
+                    const cfg = BLUEPRINTS[code];
+                    bp = cfg.template;
+                    name = cfg.name;
+                    symbol = cfg.symbol;
+                    goal = cfg.goal;
+                    template = cfg.template;
+                    video = cfg.video || "";
+                } else if (code.includes("MISSION") || code.includes("5K") || code.includes("SHIELD")) {
+                    bp = "shield"; name = "Atlanta Mission 5K Reserve"; symbol = "AM5K"; goal = "Charity & Humanitarian Aid"; template = "shield"; video = "https://www.youtube.com/watch?v=NgkTHzXZk2U";
+                } else if (code.includes("WELLSPRING") || code.includes("HOUSING") || code.includes("HANDS")) {
+                    bp = "hands"; name = "Wellspring Tiny Homes"; symbol = "WTH"; goal = "Zero-Carbon / Real-Estate RWA"; template = "hands"; video = "https://www.youtube.com/watch?v=YwJ-BleCUWM";
+                } else if (code.includes("GATEWAY") || code.includes("CENTER") || code.includes("DOVE")) {
+                    bp = "dove"; name = "Gateway Center Impact"; symbol = "GCI"; goal = "Charity & Humanitarian Aid"; template = "dove"; video = "https://www.youtube.com/watch?v=P_zXryCBJfs";
                 }
 
-                selectedTemplate = { bp, name, symbol, goal, template };
+                selectedTemplate = { bp, name, symbol, goal, template, video };
                 window.selectedBp = bp;
                 selectedTier = "partner";
                 
