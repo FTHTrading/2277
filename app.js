@@ -1209,6 +1209,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? window.generateAITranslations(`Sovereign asset token for ${name} (${symbol}) supporting ${goal}. Fully backed and non-custodial.`, selectedLanguages) 
                 : {};
 
+            const custodyChecked = document.getElementById("upsell-custody")?.checked || false;
+            const vaultingChecked = document.getElementById("upsell-vaulting")?.checked || false;
+            const seedingChecked = document.getElementById("upsell-seeding")?.checked || false;
+            const routingChecked = document.getElementById("upsell-routing")?.checked || false;
+
             expressLaunchBtn.disabled = true;
             expressLaunchBtn.textContent = "⚡ MINTING ON-CHAIN...";
             addLog(`[SOLANA] Express launching token: ${name} (${symbol})`);
@@ -1229,7 +1234,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     description: `Sovereign asset token for ${name} (${symbol}) supporting ${goal}. Fully backed and non-custodial.`,
                     logoTemplate: template,
                     videoUrl: videoUrl,
-                    translations: translations
+                    translations: translations,
+                    custodyEnabled: custodyChecked,
+                    vaultingEnabled: vaultingChecked,
+                    seedingEnabled: seedingChecked,
+                    routingEnabled: routingChecked
                 })
             })
             .then(res => res.json())
@@ -3061,6 +3070,356 @@ Registered: ${newReg.registeredAt}
 
     initAffiliateSystem();
 
+    function initBlueprintGallery() {
+        const checkoutModal = document.getElementById("blueprint-checkout-modal");
+        const verificationModal = document.getElementById("tokenizer-verification-modal");
+        const salesModal = document.getElementById("sales-contact-modal");
+        const expressForm = document.getElementById("express-launch-form");
+        const checkoutBtn = document.getElementById("checkout-submit-btn");
+        const verifyBtn = document.getElementById("verify-submit-btn");
+        const salesBtn = document.getElementById("sales-submit-btn");
+        const codeInput = document.getElementById("express-blueprint-code");
+        const codeBtn = document.getElementById("blueprint-code-btn");
+        const customSlidersBtn = document.getElementById("custom-sliders-btn");
+        const complianceLock = document.getElementById("compliance-lock-area");
+        const gateVerifyBtn = document.getElementById("gate-verify-modal-btn");
+        const launchBtn = document.getElementById("express-launch-btn");
+        
+        let selectedTemplate = null;
+        let selectedTier = "community";
+        window.selectedBp = null;
+
+        // Modal Close handlers
+        window.closeCheckoutModal = () => {
+            if (checkoutModal) checkoutModal.style.display = "none";
+        };
+        window.closeVerificationModal = () => {
+            if (verificationModal) verificationModal.style.display = "none";
+        };
+        window.closeSalesModal = () => {
+            if (salesModal) salesModal.style.display = "none";
+        };
+
+        // 1. Template Selection Handler
+        document.querySelectorAll(".btn-select-blueprint").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const bp = btn.dataset.blueprint;
+                const name = btn.dataset.name;
+                const symbol = btn.dataset.symbol;
+                const goal = btn.dataset.goal;
+                const template = btn.dataset.template;
+
+                selectedTemplate = { bp, name, symbol, goal, template };
+                window.selectedBp = bp;
+
+                // Update visual active state
+                document.querySelectorAll(".blueprint-card").forEach(card => {
+                    card.style.borderColor = "rgba(255, 255, 255, 0.06)";
+                    card.style.background = "rgba(13, 19, 33, 0.6)";
+                });
+
+                const selectedCard = document.getElementById(`bp-card-${bp}`);
+                if (selectedCard) {
+                    selectedCard.style.borderColor = "#00ff9d";
+                    selectedCard.style.background = "rgba(0, 255, 157, 0.05)";
+                }
+
+                // Voice guidance cue
+                if (window.sovereignChatbot && typeof window.sovereignChatbot.speakGuide === "function") {
+                    window.sovereignChatbot.speakGuide(`${name} template selected. Please choose your franchise plan below to proceed.`);
+                }
+                
+                showToast(`Staged: ${name}. Choose a licensing tier next!`, "info");
+                addLog(`[Blueprint] Selected template: ${bp}`);
+            });
+        });
+
+        // 2. Buy Tier Handler (Community/Premium Checkout)
+        document.querySelectorAll(".btn-buy-tier").forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (!selectedTemplate) {
+                    showToast("Please select a pre-audited blueprint template above first!", "error");
+                    if (window.sovereignChatbot && typeof window.sovereignChatbot.speakGuide === "function") {
+                        window.sovereignChatbot.speakGuide("Hold on. You need to select a blueprint template before picking a plan.");
+                    }
+                    return;
+                }
+
+                const tier = btn.dataset.tier;
+                const price = btn.dataset.price;
+                selectedTier = tier;
+
+                // Sync Checkout radio option and price text
+                const radioPlan = document.getElementById(`plan-${tier}`);
+                if (radioPlan) radioPlan.checked = true;
+                if (typeof window.updateCheckoutPrice === "function") {
+                    window.updateCheckoutPrice(price);
+                }
+
+                document.getElementById("checkout-blueprint-desc").textContent = `Licensing the ${selectedTemplate.name} template.`;
+                if (checkoutModal) checkoutModal.style.display = "flex";
+                
+                addLog(`[Licensing] Started ${tier} tier checkout ($${price}) for template: ${selectedTemplate.bp}`);
+            });
+        });
+
+        // 3. Sales Tier Handler (Institutional / Master)
+        document.querySelectorAll(".btn-sales-tier").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const tier = btn.dataset.tier;
+                const price = btn.dataset.price;
+                selectedTier = tier;
+
+                const descEl = document.getElementById("sales-modal-desc");
+                if (tier === "institutional") {
+                    descEl.textContent = `Inquire about the Institutional Franchise License ($2,500 one-time fee). Includes white-label rights, custom vesting delays, and unlimited launches.`;
+                } else {
+                    descEl.textContent = `Inquire about the Master Regional Franchise License ($15,000/year or $25,000 lifetime). Includes territorial monopoly, revenue share, and regional node routing.`;
+                }
+
+                if (salesModal) salesModal.style.display = "flex";
+                addLog(`[Sales Inquiry] Opened sales modal for ${tier} tier ($${price}).`);
+            });
+        });
+
+        // 4. Sales Request Submission Simulation
+        if (salesBtn) {
+            salesBtn.addEventListener("click", () => {
+                const name = document.getElementById("sales-contact-name").value.trim();
+                const email = document.getElementById("sales-contact-email").value.trim();
+                const desc = document.getElementById("sales-contact-desc").value.trim();
+
+                if (!name || !email) {
+                    showToast("Please enter your name and email address.", "error");
+                    return;
+                }
+
+                salesBtn.disabled = true;
+                salesBtn.textContent = "Submitting request to UnyKorn LLC...";
+
+                setTimeout(() => {
+                    salesBtn.disabled = false;
+                    salesBtn.textContent = "Submit Request";
+                    if (salesModal) salesModal.style.display = "none";
+
+                    showToast("Inquiry submitted! Our regional desk will contact you within 2 hours.", "success");
+                    addLog(`[Sales] Received inquiry from ${name} (${email}) for ${selectedTier} tier. Description: ${desc}`);
+
+                    // Clean inputs
+                    document.getElementById("sales-contact-name").value = "";
+                    document.getElementById("sales-contact-email").value = "";
+                    document.getElementById("sales-contact-desc").value = "";
+                }, 1500);
+            });
+        }
+
+        // 5. Stripe Checkout Simulation
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener("click", () => {
+                const cardNum = document.getElementById("checkout-card-number").value.trim();
+                if (!cardNum) {
+                    showToast("Please enter credit card details.", "error");
+                    return;
+                }
+
+                // Read active selected pricing plan radio value
+                const activePlanRadio = document.querySelector('input[name="checkout-plan"]:checked');
+                const finalPrice = activePlanRadio ? activePlanRadio.value : "49";
+                
+                if (finalPrice === "129") {
+                    selectedTier = "bundle";
+                } else if (finalPrice === "199") {
+                    selectedTier = "premium";
+                } else {
+                    selectedTier = "community";
+                }
+
+                checkoutBtn.disabled = true;
+                checkoutBtn.textContent = "Processing payment via Stripe...";
+
+                setTimeout(() => {
+                    checkoutBtn.disabled = false;
+                    checkoutBtn.textContent = `Pay $${finalPrice} & Unlock License`;
+                    if (checkoutModal) checkoutModal.style.display = "none";
+                    if (verificationModal) verificationModal.style.display = "flex";
+                    addLog(`[Stripe] Processed license payment of $${finalPrice}.00 USD for tier: ${selectedTier}`);
+                    showToast(`Payment successful! License code generated. Complete compliance next.`, "success");
+                }, 1500);
+            });
+        }
+
+        // 6. Compliance EIN Verification
+        if (verifyBtn) {
+            verifyBtn.addEventListener("click", () => {
+                const orgName = document.getElementById("verify-org-name").value.trim();
+                const orgEin = document.getElementById("verify-org-ein").value.trim();
+
+                if (!orgName || !orgEin) {
+                    showToast("Please provide legal name and EIN.", "error");
+                    return;
+                }
+                verifyBtn.disabled = true;
+                verifyBtn.textContent = "Verifying with BitGo Custody Desk...";
+
+                setTimeout(() => {
+                    verifyBtn.disabled = false;
+                    verifyBtn.textContent = "Verify Identity & Bind Custody";
+                    if (verificationModal) verificationModal.style.display = "none";
+                    
+                    // Unlock Form & Autofill
+                    if (expressForm) expressForm.style.display = "block";
+                    
+                    // Fill selected blueprint fields
+                    if (selectedTemplate) {
+                        document.getElementById("express-name").value = selectedTemplate.name;
+                        document.getElementById("express-symbol").value = selectedTemplate.symbol;
+                        document.getElementById("express-goal").value = selectedTemplate.goal;
+                        document.getElementById("express-template").value = selectedTemplate.template;
+                        
+                        // Set active template logo visually
+                        document.querySelectorAll(".logo-template-option").forEach(opt => {
+                            opt.classList.remove("active");
+                            opt.style.borderColor = "var(--border-color)";
+                            opt.style.background = "rgba(255,255,255,0.02)";
+                            if (opt.dataset.template === selectedTemplate.template) {
+                                opt.classList.add("active");
+                                opt.style.borderColor = "#00ff9d";
+                                opt.style.background = "rgba(0, 255, 157, 0.05)";
+                            }
+                        });
+
+                        // Set custom vesting slider based on blueprint
+                        const vestingSlider = document.getElementById("slider-vesting");
+                        const vestingVal = document.getElementById("slider-vesting-val");
+                        if (vestingSlider && vestingVal) {
+                            let mos = 12;
+                            if (selectedTemplate.bp === "dove") mos = 6;
+                            if (selectedTemplate.bp === "shield") mos = 6;
+                            if (selectedTemplate.bp === "leaf") mos = 6;
+                            if (selectedTemplate.bp === "hands") mos = 6;
+                            vestingSlider.value = mos;
+                            vestingVal.textContent = `${mos} Mos`;
+                        }
+                    }
+
+                    // Apply pricing plan rules & add-on toggles
+                    const custodyChk = document.getElementById("upsell-custody");
+                    const vaultingChk = document.getElementById("upsell-vaulting");
+                    const seedingChk = document.getElementById("upsell-seeding");
+                    const routingChk = document.getElementById("upsell-routing");
+
+                    if (selectedTier === "bundle") {
+                        // Pre-paid bundle checks and disables all checkboxes
+                        if (custodyChk) { custodyChk.checked = true; custodyChk.disabled = true; }
+                        if (vaultingChk) { vaultingChk.checked = true; vaultingChk.disabled = true; }
+                        if (seedingChk) { seedingChk.checked = true; seedingChk.disabled = true; }
+                        if (routingChk) { routingChk.checked = true; routingChk.disabled = true; }
+                        showToast("Value Bundle activated: All monthly add-ons pre-paid for 3 months!", "success");
+                    } else if (selectedTier === "premium") {
+                        // Priority routing fee active, others open
+                        if (custodyChk) { custodyChk.checked = false; custodyChk.disabled = false; }
+                        if (vaultingChk) { vaultingChk.checked = false; vaultingChk.disabled = false; }
+                        if (seedingChk) { seedingChk.checked = false; seedingChk.disabled = false; }
+                        if (routingChk) { routingChk.checked = true; routingChk.disabled = false; } // routing active
+                        showToast("Premium Tier activated: Priority routing active. Configure additional add-ons as needed.", "success");
+                    } else {
+                        // Community: standard
+                        if (custodyChk) { custodyChk.checked = false; custodyChk.disabled = false; }
+                        if (vaultingChk) { vaultingChk.checked = false; vaultingChk.disabled = false; }
+                        if (seedingChk) { seedingChk.checked = false; seedingChk.disabled = false; }
+                        if (routingChk) { routingChk.checked = false; routingChk.disabled = false; }
+                    }
+
+                    // Remove compliance lock overlay from the launch button
+                    if (complianceLock) complianceLock.style.display = "none";
+                    if (launchBtn) {
+                        launchBtn.disabled = false;
+                        launchBtn.style.background = "linear-gradient(135deg, #00ff9d, #00b36b)";
+                        launchBtn.style.color = "black";
+                        launchBtn.style.cursor = "pointer";
+                        launchBtn.textContent = "⚡ LAUNCH TOKEN NOW";
+                    }
+
+                    // Save verified state to localStorage
+                    localStorage.setItem("mog_identity_verified", "true");
+                    localStorage.setItem("mog_verified_ein", orgEin);
+
+                    addLog(`[Compliance] EIN ${orgEin} verified. Selected Tier: ${selectedTier}. BitGo Custody bound.`);
+                    showToast("Identity verified! Franchise ready for launch.", "success");
+
+                    // Trigger Voice Guide Speech
+                    if (window.sovereignChatbot && typeof window.sovereignChatbot.speakGuide === "function") {
+                        window.sovereignChatbot.speakGuide("Access granted! Identity verified and franchise cloned. You are cleared to launch.");
+                    }
+                }, 1500);
+            });
+        }
+
+        // 7. Partner Code Sync Handler
+        if (codeBtn) {
+            codeBtn.addEventListener("click", () => {
+                const code = codeInput.value.trim().toUpperCase();
+                if (!code) {
+                    showToast("Please enter a partner code.", "error");
+                    return;
+                }
+                
+                let bp = "shield";
+                let name = "Partner Cause";
+                let symbol = "PRT";
+                let goal = "Charity & Humanitarian Aid";
+                let template = "shield";
+
+                if (code.includes("DOVE")) {
+                    bp = "dove"; name = "Direct Humanitarian Relief"; symbol = "DHR"; goal = "Charity & Humanitarian Aid"; template = "dove";
+                } else if (code.includes("SHIELD")) {
+                    bp = "shield"; name = "Civic Defense Reserve"; symbol = "CDR"; goal = "Community Defense & Prep"; template = "shield";
+                } else if (code.includes("LEAF")) {
+                    bp = "leaf"; name = "Zero-Carbon Eco Reserve"; symbol = "ZCR"; goal = "Zero-Carbon / Real-Estate RWA"; template = "leaf";
+                } else if (code.includes("HANDS")) {
+                    bp = "hands"; name = "Sovereign Open Hands Ministry"; symbol = "SOH"; goal = "Charity & Humanitarian Aid"; template = "hands";
+                }
+
+                selectedTemplate = { bp, name, symbol, goal, template };
+                window.selectedBp = bp;
+                selectedTier = "partner";
+                
+                if (verificationModal) verificationModal.style.display = "flex";
+                addLog(`[Partner Code] Synced partner code ${code}. Redirecting to compliance verification.`);
+                showToast("Partner code verified! Please complete identity check.", "success");
+            });
+        }
+
+        // 8. Custom Sliders Option Handler
+        if (customSlidersBtn) {
+            customSlidersBtn.addEventListener("click", () => {
+                selectedTemplate = null;
+                selectedTier = "custom";
+                if (verificationModal) verificationModal.style.display = "flex";
+                addLog(`[Custom Build] Started custom setup. Redirecting to compliance verification.`);
+            });
+        }
+
+        // 6. Manual trigger verification button from inside the form if locked
+        if (gateVerifyBtn) {
+            gateVerifyBtn.addEventListener("click", () => {
+                if (verificationModal) verificationModal.style.display = "flex";
+            });
+        }
+
+        // Initial Compliance Check
+        if (localStorage.getItem("mog_identity_verified") === "true") {
+            if (complianceLock) complianceLock.style.display = "none";
+            if (launchBtn) {
+                launchBtn.disabled = false;
+                launchBtn.style.background = "linear-gradient(135deg, #00ff9d, #00b36b)";
+                launchBtn.style.color = "black";
+                launchBtn.style.cursor = "pointer";
+                launchBtn.textContent = "⚡ LAUNCH TOKEN NOW";
+            }
+        }
+    }
+
     // ==========================================
     // App Initialization
     // ==========================================
@@ -3086,6 +3445,7 @@ Registered: ${newReg.registeredAt}
         renderConnectedIdentity();
     }
     checkTokenizerVerificationGate();
+    initBlueprintGallery();
 
     // Start background processes
     startAIAgentLoop();

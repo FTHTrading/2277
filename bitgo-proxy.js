@@ -669,7 +669,11 @@ app.post('/solana/mint', async (req, res) => {
             description = "Sovereign charity fundraiser by UnyKorn LLC & Men of God",
             logoTemplate = "shield",
             videoUrl = "",
-            translations = {}
+            translations = {},
+            custodyEnabled = false,
+            vaultingEnabled = false,
+            seedingEnabled = false,
+            routingEnabled = false
         } = req.body;
 
         if (!MINT_AUTHORITY) {
@@ -753,6 +757,22 @@ app.post('/solana/mint', async (req, res) => {
                 {
                     trait_type: "Registry Status",
                     value: "Audited & Verified"
+                },
+                {
+                    trait_type: "BitGo Custody Vault",
+                    value: custodyEnabled ? "Active ($39/mo)" : "Inactive"
+                },
+                {
+                    trait_type: "IPFS Proof Vaulting",
+                    value: vaultingEnabled ? "Active ($19/mo)" : "Inactive"
+                },
+                {
+                    trait_type: "Go Network Seeding",
+                    value: seedingEnabled ? "Active ($29/mo)" : "Inactive"
+                },
+                {
+                    trait_type: "Charity Fee Routing",
+                    value: routingEnabled ? "Active ($19/mo)" : "Inactive"
                 }
             ]
         };
@@ -914,6 +934,22 @@ app.post('/solana/mint', async (req, res) => {
                         {
                             trait_type: "Registry Status",
                             value: "Audited & Verified"
+                        },
+                        {
+                            trait_type: "BitGo Custody Vault",
+                            value: req.body.custodyEnabled ? "Active ($599/mo)" : "Inactive"
+                        },
+                        {
+                            trait_type: "IPFS Proof Vaulting",
+                            value: req.body.vaultingEnabled ? "Active ($399/mo)" : "Inactive"
+                        },
+                        {
+                            trait_type: "Go Network Seeding",
+                            value: req.body.seedingEnabled ? "Active ($299/mo)" : "Inactive"
+                        },
+                        {
+                            trait_type: "Charity Fee Routing",
+                            value: req.body.routingEnabled ? "Active ($199/mo)" : "Inactive"
                         }
                     ]
                 };
