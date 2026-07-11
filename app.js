@@ -3944,6 +3944,21 @@ Registered: ${newReg.registeredAt}
     // ==========================================
     let deferredPrompt;
     const installPwaBtn = document.getElementById("install-pwa-btn");
+    const pwaInstallContainer = document.getElementById("pwa-install-container");
+    const pwaInstallBtn = document.getElementById("pwa-install-btn");
+
+    function showInstallPromoter() {
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            return;
+        }
+        if (installPwaBtn) installPwaBtn.style.display = "inline-block";
+        if (pwaInstallContainer) pwaInstallContainer.style.display = "flex";
+    }
+
+    function hideInstallPromoter() {
+        if (installPwaBtn) installPwaBtn.style.display = "none";
+        if (pwaInstallContainer) pwaInstallContainer.style.display = "none";
+    }
 
     window.addEventListener("beforeinstallprompt", (e) => {
         // Prevent Chrome from automatically showing the prompt
@@ -3951,47 +3966,50 @@ Registered: ${newReg.registeredAt}
         // Stash the event so it can be triggered later.
         deferredPrompt = e;
         // Update UI to notify the user they can install the PWA
-        if (installPwaBtn) {
-            installPwaBtn.style.display = "inline-block";
-        }
+        showInstallPromoter();
     });
 
-    if (installPwaBtn) {
-        installPwaBtn.addEventListener("click", () => {
-            if (deferredPrompt) {
-                // Show the prompt
-                deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === "accepted") {
-                        console.log("User accepted the install prompt");
-                    } else {
-                        console.log("User dismissed the install prompt");
-                    }
-                    deferredPrompt = null;
-                    installPwaBtn.style.display = "none";
-                });
-            } else {
-                // Check if iOS
-                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                if (isIOS) {
-                    alert("To install Men of God App on iPhone:\n\n1. Tap the Share button in Safari (box with up arrow at bottom).\n2. Scroll down the menu and tap 'Add to Home Screen'.\n3. Launch it directly from your screen!");
+    function triggerInstallFlow() {
+        if (deferredPrompt) {
+            // Show the prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === "accepted") {
+                    console.log("User accepted the install prompt");
                 } else {
-                    alert("This app is ready to install. To add it to your screen, tap the three dots menu in Chrome/Firefox and select 'Add to Home screen' or 'Install App'.");
+                    console.log("User dismissed the install prompt");
                 }
+                deferredPrompt = null;
+                hideInstallPromoter();
+            });
+        } else {
+            // Check if iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            if (isIOS) {
+                alert("To install Men of God App on iPhone:\n\n1. Tap the Share button in Safari (box with up arrow at bottom).\n2. Scroll down the menu and tap 'Add to Home Screen'.\n3. Launch it directly from your screen!");
+            } else {
+                alert("This app is ready to install. To add it to your screen, tap the three dots menu in Chrome/Firefox and select 'Add to Home screen' or 'Install App'.");
             }
-        });
+        }
+    }
+
+    if (installPwaBtn) {
+        installPwaBtn.addEventListener("click", triggerInstallFlow);
+    }
+    if (pwaInstallBtn) {
+        pwaInstallBtn.addEventListener("click", triggerInstallFlow);
     }
 
     // Check if running in standalone mode (installed)
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        if (installPwaBtn) installPwaBtn.style.display = "none";
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+        hideInstallPromoter();
     } else {
         // If iOS Safari and not installed, show helper button
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        if (isIOS && isSafari && installPwaBtn) {
-            installPwaBtn.style.display = "inline-block";
+        if (isIOS && isSafari) {
+            showInstallPromoter();
         }
     }
 
