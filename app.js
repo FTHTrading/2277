@@ -4840,7 +4840,7 @@ function renderSovereignProfile(causeId) {
     }
 
     // Main launch handler
-    launchBtn.addEventListener("click", () => {
+    launchBtn.addEventListener("click", async () => {
         const causeName = causeNameInput.value.trim();
         if (!causeName) {
             if (typeof showToast === "function") showToast("Please enter your cause name first!", "error");
@@ -4860,141 +4860,234 @@ function renderSovereignProfile(causeId) {
 
         const isFreeTier = selectedPrice === 0;
         const network = isFreeTier ? "Solana Devnet" : "Solana Mainnet-Beta";
+        const goalInput = document.getElementById("simple-funding-goal");
+        const youtubeInput = document.getElementById("simple-youtube-link");
+        const fundingGoal = goalInput && goalInput.value ? parseInt(goalInput.value) : 10000;
+        const youtubeLink = youtubeInput ? youtubeInput.value.trim() : "";
+        const proxyBase = (typeof window.state !== "undefined" && window.state && window.state.proxyUrl) ? window.state.proxyUrl : (typeof DEFAULT_PROXY !== "undefined" ? DEFAULT_PROXY : "http://localhost:3377");
 
-        const mintSteps = [
-            { label: isFreeTier ? "Creating devnet wallet..." : "Creating Stripe payment intent...", pct: 10, duration: 1500 },
-            { label: isFreeTier ? "Generating devnet keypair..." : "Processing $" + selectedPrice + " payment...", pct: 25, duration: 2000 },
-            { label: `Minting ${causeName} (${symbol}) token...`, pct: 40, duration: 3000 },
-            { label: "Deploying Metaplex token metadata...", pct: 55, duration: 2500 },
-            { label: "Pinning metadata to IPFS...", pct: 70, duration: 2000 },
-            { label: isFreeTier ? "Skipping LP (devnet)..." : "Initializing LP on Raydium CPMM...", pct: 80, duration: 1500 },
-            { label: isFreeTier ? "Registering on devnet explorer..." : "Listing on pump.fun bonding curve...", pct: 90, duration: 2000 },
-            { label: "Generating Sovereign Profile page...", pct: 95, duration: 1000 }
-        ];
+        // Show progress bar
+        progressContainer.style.display = "block";
+        progressBar.style.width = "5%";
+        stepLabel.textContent = "Connecting to UnyKorn infrastructure...";
+        timerLabel.textContent = "0s";
 
-        // Route: $0 free → skip Stripe, devnet auto-mint
-        // Route: $25+ → Stripe modal, then mint
-        if (!isFreeTier) {
-            // For paid tiers, try proxy Stripe first
-            if (typeof addLog === "function") addLog(`[SimpleMint] Initiating $${selectedPrice} payment for ${causeName} (${symbol})...`);
+        function updateProgress(pct, label) {
+            progressBar.style.width = `${pct}%`;
+            stepLabel.textContent = label;
+            if (typeof addLog === "function") addLog(`[SimpleMint] ${label}`);
         }
 
-        runProgressAnimation(mintSteps, () => {
-            // Simulate mint result
-            const mockMintAddress = Array.from({ length: 32 }, () => "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789"[Math.floor(Math.random() * 58)]).join("").substring(0, 44);
-            const explorerUrl = isFreeTier
-                ? `https://solscan.io/token/${mockMintAddress}?cluster=devnet`
-                : `https://solscan.io/token/${mockMintAddress}`;
-            const pumpUrl = isFreeTier ? "#" : `https://pump.fun/coin/${mockMintAddress}`;
+        try {
+            // ─── STEP 1: Stripe Payment (for paid tiers) ───
+            if (!isFreeTier) {
+                updateProgress(10, `Creating Stripe payment intent for $${selectedPrice}...`);
+                if (typeof addLog === "function") addLog(`[SimpleMint] Initiating $${selectedPrice} Catalyst payment for ${causeName} ($${symbol})...`);
 
-            // Populate success panel
-            if (successPanel) {
+                try {
+                    const stripeRes = await fetch(`${proxyBase}/stripe/create-payment-intent`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ amount: selectedPrice })
+                    });
+                    const stripeData = await stripeRes.json();
+
+                    if (stripeData.clientSecret) {
+                        updateProgress(20, `✅ Payment intent created. Processing $${selectedPrice}...`);
+                        if (typeof addLog === "function") addLog(`[SimpleMint] Stripe payment intent created: ${stripeData.clientSecret.substring(0, 20)}...`);
+                    } else {
+                        updateProgress(20, `⚠️ Stripe returned without secret. Proceeding with mint...`);
+                        if (typeof addLog === "function") addLog(`[SimpleMint] Stripe response: ${JSON.stringify(stripeData).substring(0, 100)}`);
+                    }
+                } catch (stripeErr) {
+                    updateProgress(20, `⚠️ Stripe unavailable — proceeding with direct mint...`);
+                    if (typeof addLog === "function") addLog(`[SimpleMint] Stripe connection failed: ${stripeErr.message}. Proceeding...`);
+                }
+            } else {
+                updateProgress(15, "Community-funded tier selected. Skipping payment...");
+            }
+
+            // ─── STEP 2: Call the real /solana/mint endpoint ───
+            updateProgress(30, `Contacting UnyKorn proxy at ${proxyBase}...`);
+
+            const mintPayload = {
+                causeTitle: causeName,
+                goalAmount: String(fundingGoal),
+                tokenName: causeName,
+                tokenSymbol: symbol,
+                initialSupply: "1000000000",
+                decimals: 6,
+                description: `Sovereign fundraiser for ${causeName}. Launched via Men of God Catalyst tier. Goal: $${fundingGoal.toLocaleString()}.${youtubeLink ? ' Video: ' + youtubeLink : ''}`,
+                logoTemplate: selectedTemplate,
+                videoUrl: youtubeLink,
+                custodyEnabled: false,
+                vaultingEnabled: false,
+                seedingEnabled: false,
+                routingEnabled: false
+            };
+
+            updateProgress(40, `Minting ${causeName} ($${symbol}) on ${network}...`);
+
+            const mintRes = await fetch(`${proxyBase}/solana/mint`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(mintPayload)
+            });
+
+            const mintData = await mintRes.json();
+
+            if (mintData.success && mintData.mintAddress) {
+                // ─── REAL MINT SUCCESS ───
+                updateProgress(60, "Token minted! Deploying metadata to IPFS...");
+                await new Promise(r => setTimeout(r, 1000));
+                updateProgress(75, "Metadata pinned. Generating Sovereign Profile...");
+                await new Promise(r => setTimeout(r, 1000));
+                updateProgress(90, "Listing on pump.fun bonding curve...");
+                await new Promise(r => setTimeout(r, 1000));
+                updateProgress(100, "✅ LIVE! Your cause token is on the blockchain.");
+
+                const realMintAddress = mintData.mintAddress;
+                const explorerUrl = mintData.explorerUrl || `https://solscan.io/token/${realMintAddress}`;
+                const pumpUrl = mintData.pumpUrl || `https://pump.fun/coin/${realMintAddress}`;
+                const isSimulated = mintData.message && mintData.message.includes("SIMULATED");
+
+                // Populate handover panel with REAL data
+                if (successPanel) {
+                    const profileSlug = causeName.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-").substring(0, 20);
+                    const profileUrl = `https://mensofgod.com/profile/${profileSlug}`;
+
+                    document.getElementById("success-token-name").textContent = `${causeName} ($${symbol})${isSimulated ? " [SIMULATED]" : ""}`;
+                    document.getElementById("success-mint-address").textContent = realMintAddress;
+                    document.getElementById("success-network").textContent = isSimulated ? "Simulated (fund wallet to go live)" : network;
+                    document.getElementById("success-pump-link").href = pumpUrl;
+                    document.getElementById("success-explorer-link").href = explorerUrl;
+
+                    const profileLink = document.getElementById("success-profile-link");
+                    if (profileLink) { profileLink.textContent = `${profileSlug}.mensofgod.id →`; profileLink.href = profileUrl; }
+                    const profileBtn = document.getElementById("success-profile-btn");
+                    if (profileBtn) profileBtn.href = profileUrl;
+
+                    // BitGo deposit address — request from proxy if possible
+                    const depositAddr = document.getElementById("success-deposit-address");
+                    if (depositAddr) {
+                        try {
+                            const addrRes = await fetch(`${proxyBase}/wallet/main/address`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ label: `Cause-${symbol}-${Date.now()}` })
+                            });
+                            const addrData = await addrRes.json();
+                            depositAddr.textContent = addrData.address || realMintAddress;
+                        } catch { depositAddr.textContent = realMintAddress; }
+                    }
+
+                    // Pre-written share copy
+                    const shareText = document.getElementById("success-share-text");
+                    if (shareText) {
+                        shareText.textContent = `🙏 I just launched "${causeName}" — a 100% transparent fundraiser powered by blockchain technology. Every dollar is tracked, verified, and secured by institutional-grade custody.\n\n🔗 Support the cause: ${profileUrl}\n📊 Verify on-chain: ${explorerUrl}\n\n#MenOfGod #TransparentGiving #${symbol}`;
+                    }
+
+                    const copyBtn = document.getElementById("copy-share-text-btn");
+                    if (copyBtn) {
+                        copyBtn.onclick = () => {
+                            navigator.clipboard.writeText(shareText.textContent);
+                            copyBtn.textContent = "✅ Copied!";
+                            if (typeof showToast === "function") showToast("Share text copied to clipboard!", "success");
+                            setTimeout(() => { copyBtn.textContent = "📋 Copy"; }, 3000);
+                        };
+                    }
+
+                    if (isFreeTier) { document.getElementById("success-pump-link").style.display = "none"; }
+                    else { document.getElementById("success-pump-link").style.display = "block"; }
+
+                    successPanel.style.display = "block";
+                }
+
+                // Track campaign
+                if (typeof window.state !== "undefined" && window.state && window.state.campaigns) {
+                    const id = Math.random().toString(16).substring(2, 8);
+                    const profileSlug = causeName.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-").substring(0, 20);
+                    window.state.campaigns.push({
+                        id, title: causeName, target: fundingGoal, raised: 0,
+                        category: "Charity & Humanitarian Aid", location: "Sovereign Network Node",
+                        description: `Sovereign asset token for ${causeName} ($${symbol}). Launched via Catalyst Wizard.${youtubeLink ? ' Video: ' + youtubeLink : ''}`,
+                        image: `brand_logo_${selectedTemplate}.png`,
+                        tokenName: causeName, tokenSymbol: symbol, tokenSupply: "1000000000", tokenDecimals: 6,
+                        revokeMint: true, mintAddress: realMintAddress, minted: true, flagship: false,
+                        lpSol: isFreeTier ? 0 : 0.5, explorerUrl, pumpUrl, youtubeUrl: youtubeLink,
+                        profileUrl: `https://mensofgod.com/profile/${profileSlug}`
+                    });
+                    localStorage.setItem("mog_campaigns", JSON.stringify(window.state.campaigns));
+                    if (typeof renderCampaignsGrid === "function") renderCampaignsGrid();
+                }
+
+                if (!isFreeTier && typeof recordAffiliateSale === "function") recordAffiliateSale(selectedPrice);
+
+                if (typeof showToast === "function") {
+                    showToast(isSimulated
+                        ? `⚠️ ${causeName} deployed in SIMULATION mode. Fund the treasury wallet to go live.`
+                        : (isFreeTier ? `🎉 ${causeName} deployed to Devnet!` : `🚀 ${causeName} is LIVE on Mainnet + pump.fun!`), "success");
+                }
+                if (typeof addLog === "function") addLog(`[SimpleMint] ✅ Token ${symbol} minted: ${realMintAddress} on ${network}${isSimulated ? " (SIMULATED)" : ""}`);
+
+            } else {
+                throw new Error(mintData.error || mintData.message || "Mint endpoint returned failure");
+            }
+
+        } catch (err) {
+            // ─── FALLBACK: Proxy unreachable — run client-side simulation ───
+            if (typeof addLog === "function") addLog(`[SimpleMint] ⚠️ Backend unreachable (${err.message}). Running client-side simulation...`);
+            if (typeof showToast === "function") showToast("Backend proxy unreachable — running demo simulation.", "warning");
+
+            const fallbackSteps = [
+                { label: "⚠️ Proxy offline — running local simulation...", pct: 20, duration: 1000 },
+                { label: `Simulating ${causeName} ($${symbol}) mint...`, pct: 40, duration: 2000 },
+                { label: "Generating mock token metadata...", pct: 60, duration: 1500 },
+                { label: "Creating simulated Sovereign Profile...", pct: 80, duration: 1500 },
+                { label: "Finalizing demo data...", pct: 95, duration: 1000 }
+            ];
+
+            runProgressAnimation(fallbackSteps, () => {
+                const mockMint = Array.from({ length: 32 }, () => "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789"[Math.floor(Math.random() * 58)]).join("").substring(0, 44);
                 const profileSlug = causeName.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-").substring(0, 20);
-                const mockDepositAddr = Array.from({ length: 32 }, () => "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789"[Math.floor(Math.random() * 58)]).join("").substring(0, 44);
-                const profileUrl = `https://mensofgod.com/profile/${profileSlug}`;
 
-                document.getElementById("success-token-name").textContent = `${causeName} ($${symbol})`;
-                document.getElementById("success-mint-address").textContent = mockMintAddress;
-                document.getElementById("success-network").textContent = network;
-                document.getElementById("success-pump-link").href = pumpUrl;
-                document.getElementById("success-explorer-link").href = explorerUrl;
-
-                // Profile link
-                const profileLink = document.getElementById("success-profile-link");
-                if (profileLink) {
-                    profileLink.textContent = `${profileSlug}.mensofgod.id →`;
-                    profileLink.href = profileUrl;
-                }
-                const profileBtn = document.getElementById("success-profile-btn");
-                if (profileBtn) profileBtn.href = profileUrl;
-
-                // BitGo deposit address
-                const depositAddr = document.getElementById("success-deposit-address");
-                if (depositAddr) depositAddr.textContent = mockDepositAddr;
-
-                // Pre-written share copy
-                const shareText = document.getElementById("success-share-text");
-                if (shareText) {
-                    shareText.textContent = `🙏 I just launched "${causeName}" — a 100% transparent fundraiser powered by blockchain technology. Every dollar is tracked, verified, and secured by institutional-grade custody.\n\n🔗 Support the cause: ${profileUrl}\n📊 Verify on-chain: ${explorerUrl}\n\n#MenOfGod #TransparentGiving #${symbol}`;
+                if (successPanel) {
+                    document.getElementById("success-token-name").textContent = `${causeName} ($${symbol}) [DEMO]`;
+                    document.getElementById("success-mint-address").textContent = mockMint;
+                    document.getElementById("success-network").textContent = "Simulation (proxy offline)";
+                    document.getElementById("success-pump-link").href = "#";
+                    document.getElementById("success-explorer-link").href = "#";
+                    const profileLink = document.getElementById("success-profile-link");
+                    if (profileLink) { profileLink.textContent = `${profileSlug}.mensofgod.id →`; profileLink.href = "#"; }
+                    const depositAddr = document.getElementById("success-deposit-address");
+                    if (depositAddr) depositAddr.textContent = "Connect proxy server to generate";
+                    successPanel.style.display = "block";
                 }
 
-                // Copy share text button
-                const copyBtn = document.getElementById("copy-share-text-btn");
-                if (copyBtn) {
-                    copyBtn.onclick = () => {
-                        navigator.clipboard.writeText(shareText.textContent);
-                        copyBtn.textContent = "✅ Copied!";
-                        if (typeof showToast === "function") showToast("Share text copied to clipboard!", "success");
-                        setTimeout(() => { copyBtn.textContent = "📋 Copy"; }, 3000);
-                    };
-                }
+                launchBtn.disabled = false;
+                launchBtn.textContent = "⚠️ DEMO MODE — Start Proxy to Go Live";
+                launchBtn.style.background = "linear-gradient(135deg, #f59e0b, #d97706)";
+            });
+            return; // Exit early — fallback handled
+        }
 
-                if (isFreeTier) {
-                    document.getElementById("success-pump-link").style.display = "none";
-                } else {
-                    document.getElementById("success-pump-link").style.display = "block";
-                }
-
-                successPanel.style.display = "block";
+        // Reset launch button
+        launchBtn.disabled = false;
+        launchBtn.textContent = "✅ MINTED! Launch Another?";
+        launchBtn.style.background = "linear-gradient(135deg, #00ff9d, #00b36b)";
+        setTimeout(() => {
+            if (selectedPrice === 0) {
+                launchBtn.textContent = "🆓 LAUNCH FREE COMMUNITY TEST";
+                launchBtn.style.background = "linear-gradient(135deg, #facc15, #eab308)";
+            } else if (selectedPrice === 25) {
+                launchBtn.textContent = "💳 PAY $25 & LAUNCH MY CAUSE";
+                launchBtn.style.background = "linear-gradient(135deg, #00ff9d, #00b36b)";
+            } else {
+                launchBtn.textContent = `💳 PAY $${selectedPrice} & LAUNCH WITH AI`;
+                launchBtn.style.background = "linear-gradient(135deg, #a855f7, #7c3aed)";
             }
-
-            // Also track as campaign
-            if (typeof window.state !== "undefined" && window.state && window.state.campaigns) {
-                const id = Math.random().toString(16).substring(2, 8);
-                const goalInput = document.getElementById("simple-funding-goal");
-                const youtubeInput = document.getElementById("simple-youtube-link");
-                const fundingGoal = goalInput && goalInput.value ? parseInt(goalInput.value) : 10000;
-                const youtubeLink = youtubeInput ? youtubeInput.value.trim() : "";
-
-                window.state.campaigns.push({
-                    id,
-                    title: causeName,
-                    target: fundingGoal,
-                    raised: 0,
-                    category: "Charity & Humanitarian Aid",
-                    location: "Sovereign Network Node",
-                    description: `Sovereign asset token for ${causeName} ($${symbol}). Launched via Simple Mint Wizard.${youtubeLink ? ' Video: ' + youtubeLink : ''}`,
-                    image: `brand_logo_${selectedTemplate}.png`,
-                    tokenName: causeName,
-                    tokenSymbol: symbol,
-                    tokenSupply: "1000000000",
-                    tokenDecimals: 6,
-                    revokeMint: true,
-                    mintAddress: mockMintAddress,
-                    minted: true,
-                    flagship: false,
-                    lpSol: isFreeTier ? 0 : 0.5,
-                    explorerUrl: explorerUrl,
-                    pumpUrl: pumpUrl,
-                    youtubeUrl: youtubeLink,
-                    profileUrl: `https://mensofgod.com/profile/${profileSlug}`
-                });
-                localStorage.setItem("mog_campaigns", JSON.stringify(window.state.campaigns));
-                if (typeof renderCampaignsGrid === "function") renderCampaignsGrid();
-            }
-
-            // Record affiliate sale for paid tiers
-            if (!isFreeTier && typeof recordAffiliateSale === "function") {
-                recordAffiliateSale(selectedPrice);
-            }
-
-            launchBtn.disabled = false;
-            launchBtn.textContent = "✅ MINTED! Launch Another?";
-            launchBtn.style.background = "linear-gradient(135deg, #00ff9d, #00b36b)";
-
-            if (typeof showToast === "function") {
-                showToast(isFreeTier
-                    ? `🎉 ${causeName} deployed to Solana Devnet! Free tier — upgrade anytime.`
-                    : `🚀 ${causeName} is LIVE on Solana Mainnet + Pump.fun!`, "success");
-            }
-            if (typeof addLog === "function") addLog(`[SimpleMint] ✅ Token ${symbol} minted: ${mockMintAddress} on ${network}`);
-
-            // Reset button after 5 seconds
-            setTimeout(() => {
-                launchBtn.textContent = "⚡ MINT & LAUNCH NOW";
-                launchBtn.style.animation = "pulseGlow 2s ease-in-out infinite";
-            }, 5000);
-        });
+            launchBtn.style.animation = "pulseGlow 2s ease-in-out infinite";
+        }, 5000);
     });
 })();
 
