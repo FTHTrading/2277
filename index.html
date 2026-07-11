@@ -40,7 +40,7 @@
     </script>
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="stylesheet" href="style.css?v=12">
     <!-- SEO & AI-Discovery Structured Schema Markup -->
     <script type="application/ld+json">
     {
@@ -211,32 +211,41 @@
             <!-- ============================================= -->
             <div id="simple-mint-wizard" class="glass-card mb-30" style="max-width: 800px; margin-left: auto; margin-right: auto; border-color: rgba(0, 255, 157, 0.4); background: linear-gradient(145deg, rgba(0, 255, 157, 0.03), rgba(168, 85, 247, 0.03)); padding: 30px; position: relative; overflow: hidden;">
                 <!-- Animated glow border -->
-                <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #00ff9d, #a855f7, transparent); animation: shimmerSlide 3s ease-in-out infinite;"></div>
+                <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #00ff9d, #a855f7, transparent); background-size: 200% 100%; animation: shimmerSlide 3s ease-in-out infinite;"></div>
 
                 <div style="text-align: center; margin-bottom: 24px;">
-                    <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #00ff9d; margin-bottom: 6px;">NO EXPERIENCE NEEDED</div>
-                    <h3 style="font-family: var(--font-heading); font-size: 26px; color: white; margin: 0 0 8px 0;">🚀 Mint Your Cause Token in 60 Seconds</h3>
-                    <p style="font-size: 12px; color: var(--text-muted); max-width: 550px; margin: 0 auto; line-height: 1.5;">
-                        Enter a name, pick a template, choose your plan. That's it. We handle everything — token creation, smart contracts, IPFS proof, pump.fun listing, and sending everything to your wallet.
+                    <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #00ff9d; margin-bottom: 6px;">NO WALLET. NO CRYPTO. NO EXPERIENCE NEEDED.</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 26px; color: white; margin: 0 0 8px 0;">🚀 Launch Your Fundraiser in 60 Seconds</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); max-width: 580px; margin: 0 auto; line-height: 1.6;">
+                        Name your cause, set a goal, swipe a card. We handle <em>everything</em> — token creation, smart contracts, listing, and custody. You get a fully secured fundraising page you can share instantly.
                     </p>
                 </div>
 
-                <!-- Step 1: Name Your Cause -->
+                <!-- Step 1: Tell Us About Your Cause -->
                 <div style="margin-bottom: 20px;">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
                         <span style="width: 24px; height: 24px; border-radius: 50%; background: #00ff9d; color: black; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center;">1</span>
-                        <span style="font-size: 13px; font-weight: 600; color: white;">Name Your Cause</span>
+                        <span style="font-size: 13px; font-weight: 600; color: white;">Tell Us About Your Cause</span>
                     </div>
-                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
-                        <input type="text" id="simple-cause-name" class="form-control" placeholder="e.g. Atlanta Food Drive, Youth Soccer Fund, Church Roof Repair..." style="padding: 12px 16px; font-size: 14px; border-color: rgba(0, 255, 157, 0.2);">
-                        <div style="background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 6px;">
-                            <span style="font-size: 10px; color: var(--text-muted);">Symbol:</span>
-                            <span id="simple-auto-symbol" style="font-size: 14px; font-weight: bold; color: #00ff9d; font-family: var(--font-mono);">---</span>
+                    <div style="display: grid; gap: 10px;">
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+                            <input type="text" id="simple-cause-name" class="form-control" placeholder="Cause name — e.g. Atlanta Food Drive, Church Roof Fund..." style="padding: 12px 16px; font-size: 14px; border-color: rgba(0, 255, 157, 0.2);">
+                            <div style="background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 6px;">
+                                <span style="font-size: 10px; color: var(--text-muted);">Ticker:</span>
+                                <span id="simple-auto-symbol" style="font-size: 14px; font-weight: bold; color: #00ff9d; font-family: var(--font-mono);">---</span>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--text-muted);">$</span>
+                                <input type="number" id="simple-funding-goal" class="form-control" placeholder="Funding goal (e.g. 10000)" style="padding: 12px 16px 12px 28px; font-size: 14px; border-color: rgba(255,255,255,0.08);">
+                            </div>
+                            <input type="url" id="simple-youtube-link" class="form-control" placeholder="YouTube video link (optional)" style="padding: 12px 16px; font-size: 14px; border-color: rgba(255,255,255,0.08);">
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 2: Pick Template -->
+                <!-- Step 2: Pick Your Template -->
                 <div style="margin-bottom: 20px;">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
                         <span style="width: 24px; height: 24px; border-radius: 50%; background: #a855f7; color: white; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center;">2</span>
@@ -266,33 +275,41 @@
                     </div>
                 </div>
 
-                <!-- Step 3: Choose Plan & Launch -->
+                <!-- Step 3: Choose Your Plan & Launch -->
                 <div style="margin-bottom: 20px;">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
                         <span style="width: 24px; height: 24px; border-radius: 50%; background: #3b82f6; color: white; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center;">3</span>
-                        <span style="font-size: 13px; font-weight: 600; color: white;">Choose Your Plan</span>
+                        <span style="font-size: 13px; font-weight: 600; color: white;">Pay & Launch</span>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px;">
                         <button type="button" class="simple-plan-btn" data-price="0" style="background: rgba(250,204,21,0.05); border: 1px solid rgba(250,204,21,0.2); padding: 12px; border-radius: 8px; cursor: pointer; text-align: center; color: white; transition: all 0.2s;">
                             <div style="font-size: 18px; font-weight: bold; color: #facc15;">FREE</div>
-                            <div style="font-size: 9px; color: var(--text-muted);">Devnet only • Test it</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">Hardship • Community funded</div>
+                            <div style="font-size: 8px; color: #facc15; margin-top: 2px;">2% on funds raised</div>
                         </button>
                         <button type="button" class="simple-plan-btn active" data-price="25" style="background: rgba(0, 255, 157, 0.08); border: 2px solid #00ff9d; padding: 12px; border-radius: 8px; cursor: pointer; text-align: center; color: white; transition: all 0.2s; position: relative;">
-                            <div style="position: absolute; top: -6px; left: 50%; transform: translateX(-50%); font-size: 7px; background: #00ff9d; color: black; padding: 1px 6px; border-radius: 8px; font-weight: bold;">BEST VALUE</div>
+                            <div style="position: absolute; top: -6px; left: 50%; transform: translateX(-50%); font-size: 7px; background: #00ff9d; color: black; padding: 1px 6px; border-radius: 8px; font-weight: bold;">⚡ CATALYST</div>
                             <div style="font-size: 18px; font-weight: bold; color: #00ff9d;">$25</div>
-                            <div style="font-size: 9px; color: var(--text-muted);">Mainnet • pump.fun</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">Mainnet • pump.fun • LIVE</div>
+                            <div style="font-size: 8px; color: #00ff9d; margin-top: 2px;">1% protocol fee</div>
                         </button>
-                        <button type="button" class="simple-plan-btn" data-price="49" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 12px; border-radius: 8px; cursor: pointer; text-align: center; color: white; transition: all 0.2s;">
-                            <div style="font-size: 18px; font-weight: bold;">$49</div>
-                            <div style="font-size: 9px; color: var(--text-muted);">+ AI content + IPFS</div>
+                        <button type="button" class="simple-plan-btn" data-price="49" style="background: rgba(168, 85, 247, 0.05); border: 1px solid rgba(168, 85, 247, 0.2); padding: 12px; border-radius: 8px; cursor: pointer; text-align: center; color: white; transition: all 0.2s;">
+                            <div style="font-size: 18px; font-weight: bold; color: #c084fc;">$49</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">+ AI content + IPFS vault</div>
+                            <div style="font-size: 8px; color: #c084fc; margin-top: 2px;">1% protocol fee</div>
                         </button>
                     </div>
                 </div>
 
-                <!-- Launch Button + Progress Bar -->
+                <!-- Launch Button -->
                 <button type="button" id="simple-mint-launch-btn" class="btn btn-3d-action" style="width: 100%; padding: 16px 20px; font-size: 16px; margin: 0 0 12px 0; background: linear-gradient(135deg, #00ff9d, #00b36b); color: black; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 255, 157, 0.3); transition: all 0.3s;">
-                    ⚡ MINT &amp; LAUNCH NOW
+                    💳 PAY $25 & LAUNCH MY CAUSE
                 </button>
+
+                <!-- Plain-English Trust Disclosure -->
+                <div style="text-align: center; padding: 10px 16px; font-size: 10px; color: var(--text-muted); line-height: 1.5; background: rgba(0,0,0,0.15); border-radius: 8px; margin-bottom: 6px;">
+                    🏛️ <strong style="color: var(--text-secondary);">UnyKorn LLC covers all Web3 infrastructure and deployment costs.</strong> We sustain this platform by retaining a 1% protocol fee on liquidity routing when your cause successfully reaches its funding goal. We never hold your funds — all custody is powered by BitGo institutional wallets. <a href="#" onclick="document.querySelector('[id*=how-funded]')?.scrollIntoView({behavior:'smooth'}); return false;" style="color: #a855f7; text-decoration: underline;">Learn more →</a>
+                </div>
 
                 <!-- 60-Second Progress Bar (hidden until launch) -->
                 <div id="simple-mint-progress" style="display: none;">
@@ -305,41 +322,58 @@
                     </div>
                 </div>
 
-                <!-- Post-Mint Success Panel (hidden until complete) -->
-                <div id="simple-mint-success" style="display: none; margin-top: 16px; padding: 20px; background: rgba(0, 255, 157, 0.05); border: 1px solid rgba(0, 255, 157, 0.25); border-radius: 12px;">
-                    <div style="text-align: center; margin-bottom: 16px;">
-                        <div style="font-size: 36px; margin-bottom: 6px;">✅</div>
-                        <h4 style="font-family: var(--font-heading); font-size: 18px; color: #00ff9d; margin: 0 0 4px 0;">YOUR SOVEREIGN TOKEN IS LIVE!</h4>
-                        <p style="font-size: 11px; color: var(--text-muted); margin: 0;">Everything has been created, minted, and sent to your wallet.</p>
+                <!-- ========================================= -->
+                <!-- POST-MINT: "Here Are Your Keys" Handover -->
+                <!-- ========================================= -->
+                <div id="simple-mint-success" style="display: none; margin-top: 16px; padding: 24px; background: rgba(0, 255, 157, 0.04); border: 1px solid rgba(0, 255, 157, 0.2); border-radius: 12px;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 42px; margin-bottom: 8px;">🎉</div>
+                        <h4 style="font-family: var(--font-heading); font-size: 20px; color: #00ff9d; margin: 0 0 6px 0;">SUCCESS! HERE ARE YOUR KEYS.</h4>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0; max-width: 400px; display: inline-block;">Your cause is live on the blockchain. Share the links below and start raising funds immediately.</p>
                     </div>
-                    <div style="display: grid; gap: 8px; font-size: 11px; margin-bottom: 16px;">
-                        <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
-                            <span style="color: var(--text-muted);">Token Name</span>
+
+                    <!-- Key Deliverables Grid -->
+                    <div style="display: grid; gap: 10px; font-size: 11px; margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(0,0,0,0.25); border-radius: 8px; align-items: center;">
+                            <span style="color: var(--text-muted);">📛 Token Name</span>
                             <strong id="success-token-name" style="color: white;">—</strong>
                         </div>
-                        <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
-                            <span style="color: var(--text-muted);">Mint Address</span>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(0,0,0,0.25); border-radius: 8px; align-items: center;">
+                            <span style="color: var(--text-muted);">🔗 Mint Address</span>
                             <strong id="success-mint-address" style="color: #00ff9d; font-family: var(--font-mono); font-size: 10px; cursor: pointer;" onclick="navigator.clipboard.writeText(this.textContent); showToast('Copied!');">—</strong>
                         </div>
-                        <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
-                            <span style="color: var(--text-muted);">Network</span>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(0,0,0,0.25); border-radius: 8px; align-items: center;">
+                            <span style="color: var(--text-muted);">🌐 Network</span>
                             <strong id="success-network" style="color: white;">Solana Mainnet-Beta</strong>
                         </div>
-                        <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
-                            <span style="color: var(--text-muted);">Supply</span>
-                            <strong style="color: white;">1,000,000,000</strong>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(0, 255, 157, 0.06); border-radius: 8px; border: 1px solid rgba(0, 255, 157, 0.15); align-items: center;">
+                            <span style="color: var(--text-muted);">🏠 Your Sovereign Profile</span>
+                            <a id="success-profile-link" href="#" target="_blank" style="color: #00ff9d; font-weight: bold; text-decoration: underline; font-size: 10px;">yourname.mensofgod.id →</a>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(0, 255, 157, 0.06); border-radius: 8px; border: 1px solid rgba(0, 255, 157, 0.15); align-items: center;">
+                            <span style="color: var(--text-muted);">🏦 BitGo Deposit Address</span>
+                            <strong id="success-deposit-address" style="color: #00ff9d; font-family: var(--font-mono); font-size: 10px; cursor: pointer;" onclick="navigator.clipboard.writeText(this.textContent); showToast('Copied!');">—</strong>
                         </div>
                     </div>
-                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 12px; padding: 10px; background: rgba(250, 204, 21, 0.05); border: 1px solid rgba(250, 204, 21, 0.15); border-radius: 6px;">
-                        📎 <strong>What was delivered to you:</strong> Token mint address, Sovereign Profile page, IPFS metadata proof, pump.fun listing, and Solscan explorer link.<br>
-                        ⚠️ <strong>Important:</strong> You must accept the token in your Phantom/Solflare wallet to finalize. <a href="https://support.phantom.app/" target="_blank" style="color: #a855f7; text-decoration: underline;">How to accept →</a>
+
+                    <!-- Quick Action Buttons -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+                        <a id="success-pump-link" href="#" target="_blank" class="btn" style="padding: 10px; font-size: 10px; margin: 0; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; text-align: center; text-decoration: none; display: block;">🔗 Pump.fun</a>
+                        <a id="success-explorer-link" href="#" target="_blank" class="btn" style="padding: 10px; font-size: 10px; margin: 0; background: rgba(0, 255, 157, 0.08); border: 1px solid rgba(0, 255, 157, 0.2); color: #00ff9d; text-align: center; text-decoration: none; display: block;">📊 Solscan</a>
+                        <a id="success-profile-btn" href="#" target="_blank" class="btn" style="padding: 10px; font-size: 10px; margin: 0; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.25); color: #60a5fa; text-align: center; text-decoration: none; display: block;">🏠 My Profile</a>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <a id="success-pump-link" href="#" target="_blank" class="btn" style="padding: 10px; font-size: 11px; margin: 0; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; text-align: center; text-decoration: none; display: block;">🔗 View on Pump.fun</a>
-                        <a id="success-explorer-link" href="#" target="_blank" class="btn" style="padding: 10px; font-size: 11px; margin: 0; background: rgba(0, 255, 157, 0.08); border: 1px solid rgba(0, 255, 157, 0.2); color: #00ff9d; text-align: center; text-decoration: none; display: block;">📊 View on Solscan</a>
+
+                    <!-- Pre-Written Share Copy -->
+                    <div style="background: rgba(0,0,0,0.2); padding: 14px; border-radius: 10px; margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 10px; font-weight: 600; color: white;">📱 Share This — Copy & Paste</span>
+                            <button id="copy-share-text-btn" style="background: #a855f7; border: none; color: white; font-size: 9px; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">📋 Copy</button>
+                        </div>
+                        <div id="success-share-text" style="font-size: 11px; color: var(--text-muted); line-height: 1.5; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 6px; font-family: var(--font-mono); white-space: pre-wrap;">I just launched a fundraiser for my community using decentralized technology — 100% transparent, no middlemen. Check it out and support the cause! 🙏</div>
                     </div>
-                    <div style="text-align: center; margin-top: 10px;">
-                        <span style="font-size: 10px; color: var(--text-muted);">📧 Confirmation receipt sent to your registered email.</span>
+
+                    <div style="text-align: center; font-size: 9px; color: var(--text-muted);">
+                        📧 Confirmation receipt sent to your registered email. • 🏛️ Secured by BitGo institutional custody.
                     </div>
                 </div>
 
@@ -350,6 +384,7 @@
                     </button>
                 </div>
             </div>
+
 
             <!-- Sovereign Blueprint Gallery & Tokenizer (Advanced Builder — hidden by default for simple users) -->
             <div id="blueprints-gallery-card" class="express-tokenizer-card glass-card mb-30" style="max-width: 800px; margin-left: auto; margin-right: auto; border-color: rgba(0, 255, 157, 0.3); background: rgba(13, 19, 33, 0.5); padding: 25px; display: none;">
@@ -2355,10 +2390,10 @@
                     <h4 style="font-family: var(--font-heading); font-size: 14px; color: white; margin: 0 0 6px 0;">SaaS Subscriptions</h4>
                     <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin: 0;">Optional monthly add-ons ($19-$49/mo) for advanced features like IPFS vaulting, liquidity seeding, BitGo custody desk access, and priority routing.</p>
                 </div>
-                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center;">
+                <div style="background: rgba(0, 255, 157, 0.03); border: 1px solid rgba(0, 255, 157, 0.1); padding: 20px; border-radius: 10px; text-align: center;">
                     <div style="font-size: 28px; margin-bottom: 8px;">📊</div>
-                    <h4 style="font-family: var(--font-heading); font-size: 14px; color: white; margin: 0 0 6px 0;">LP Trading Fees</h4>
-                    <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin: 0;">Standard 0.25% LP fee on Raydium CPMM liquidity pools. 100% of collected swap fees are re-deposited directly back into pool depth — we do not extract yield.</p>
+                    <h4 style="font-family: var(--font-heading); font-size: 14px; color: #00ff9d; margin: 0 0 6px 0;">1% Protocol Fee</h4>
+                    <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin: 0;">We retain a 1% protocol fee on liquidity routing <strong>only when your cause successfully reaches its funding goal.</strong> If you don't hit your goal, you pay nothing beyond the initial launch fee. Community-funded ($0) causes pay 2%.</p>
                 </div>
             </div>
 
@@ -2819,6 +2854,6 @@
     <div id="toast-container" class="toast-container"></div>
 
     <!-- JavaScript logic -->
-    <script src="app.js?v=11"></script>
+    <script src="app.js?v=12"></script>
 </body>
 </html>

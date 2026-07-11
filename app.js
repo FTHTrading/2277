@@ -4781,6 +4781,20 @@ function renderSovereignProfile(causeId) {
             btn.style.background = "rgba(0, 255, 157, 0.08)";
             btn.style.border = "2px solid #00ff9d";
             selectedPrice = parseInt(btn.dataset.price);
+
+            // Dynamic launch button text
+            if (launchBtn) {
+                if (selectedPrice === 0) {
+                    launchBtn.textContent = "🆓 LAUNCH FREE COMMUNITY TEST";
+                    launchBtn.style.background = "linear-gradient(135deg, #facc15, #eab308)";
+                } else if (selectedPrice === 25) {
+                    launchBtn.textContent = "💳 PAY $25 & LAUNCH MY CAUSE";
+                    launchBtn.style.background = "linear-gradient(135deg, #00ff9d, #00b36b)";
+                } else {
+                    launchBtn.textContent = `💳 PAY $${selectedPrice} & LAUNCH WITH AI`;
+                    launchBtn.style.background = "linear-gradient(135deg, #a855f7, #7c3aed)";
+                }
+            }
         });
     });
 
@@ -4875,11 +4889,45 @@ function renderSovereignProfile(causeId) {
 
             // Populate success panel
             if (successPanel) {
-                document.getElementById("success-token-name").textContent = `${causeName} (${symbol})`;
+                const profileSlug = causeName.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-").substring(0, 20);
+                const mockDepositAddr = Array.from({ length: 32 }, () => "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789"[Math.floor(Math.random() * 58)]).join("").substring(0, 44);
+                const profileUrl = `https://mensofgod.com/profile/${profileSlug}`;
+
+                document.getElementById("success-token-name").textContent = `${causeName} ($${symbol})`;
                 document.getElementById("success-mint-address").textContent = mockMintAddress;
                 document.getElementById("success-network").textContent = network;
                 document.getElementById("success-pump-link").href = pumpUrl;
                 document.getElementById("success-explorer-link").href = explorerUrl;
+
+                // Profile link
+                const profileLink = document.getElementById("success-profile-link");
+                if (profileLink) {
+                    profileLink.textContent = `${profileSlug}.mensofgod.id →`;
+                    profileLink.href = profileUrl;
+                }
+                const profileBtn = document.getElementById("success-profile-btn");
+                if (profileBtn) profileBtn.href = profileUrl;
+
+                // BitGo deposit address
+                const depositAddr = document.getElementById("success-deposit-address");
+                if (depositAddr) depositAddr.textContent = mockDepositAddr;
+
+                // Pre-written share copy
+                const shareText = document.getElementById("success-share-text");
+                if (shareText) {
+                    shareText.textContent = `🙏 I just launched "${causeName}" — a 100% transparent fundraiser powered by blockchain technology. Every dollar is tracked, verified, and secured by institutional-grade custody.\n\n🔗 Support the cause: ${profileUrl}\n📊 Verify on-chain: ${explorerUrl}\n\n#MenOfGod #TransparentGiving #${symbol}`;
+                }
+
+                // Copy share text button
+                const copyBtn = document.getElementById("copy-share-text-btn");
+                if (copyBtn) {
+                    copyBtn.onclick = () => {
+                        navigator.clipboard.writeText(shareText.textContent);
+                        copyBtn.textContent = "✅ Copied!";
+                        if (typeof showToast === "function") showToast("Share text copied to clipboard!", "success");
+                        setTimeout(() => { copyBtn.textContent = "📋 Copy"; }, 3000);
+                    };
+                }
 
                 if (isFreeTier) {
                     document.getElementById("success-pump-link").style.display = "none";
@@ -4893,14 +4941,19 @@ function renderSovereignProfile(causeId) {
             // Also track as campaign
             if (typeof window.state !== "undefined" && window.state && window.state.campaigns) {
                 const id = Math.random().toString(16).substring(2, 8);
+                const goalInput = document.getElementById("simple-funding-goal");
+                const youtubeInput = document.getElementById("simple-youtube-link");
+                const fundingGoal = goalInput && goalInput.value ? parseInt(goalInput.value) : 10000;
+                const youtubeLink = youtubeInput ? youtubeInput.value.trim() : "";
+
                 window.state.campaigns.push({
                     id,
                     title: causeName,
-                    target: 100000,
+                    target: fundingGoal,
                     raised: 0,
                     category: "Charity & Humanitarian Aid",
                     location: "Sovereign Network Node",
-                    description: `Sovereign asset token for ${causeName} (${symbol}). Launched via Simple Mint Wizard.`,
+                    description: `Sovereign asset token for ${causeName} ($${symbol}). Launched via Simple Mint Wizard.${youtubeLink ? ' Video: ' + youtubeLink : ''}`,
                     image: `brand_logo_${selectedTemplate}.png`,
                     tokenName: causeName,
                     tokenSymbol: symbol,
@@ -4912,7 +4965,9 @@ function renderSovereignProfile(causeId) {
                     flagship: false,
                     lpSol: isFreeTier ? 0 : 0.5,
                     explorerUrl: explorerUrl,
-                    pumpUrl: pumpUrl
+                    pumpUrl: pumpUrl,
+                    youtubeUrl: youtubeLink,
+                    profileUrl: `https://mensofgod.com/profile/${profileSlug}`
                 });
                 localStorage.setItem("mog_campaigns", JSON.stringify(window.state.campaigns));
                 if (typeof renderCampaignsGrid === "function") renderCampaignsGrid();
