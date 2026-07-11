@@ -1025,6 +1025,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                     <span class="badge badge-purple" style="align-self: flex-start;">${c.category}</span>
                     <h3 class="flagship-card-title">${c.title}</h3>
+                    <!-- Trust Badges -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0;">
+                        <span class="trust-badge" style="font-size: 7px; background: rgba(0, 255, 157, 0.08); border: 1px solid rgba(0, 255, 157, 0.2); color: #00ff9d; padding: 1px 4px; border-radius: 3px; font-weight: bold;">🛡️ LP Burned</span>
+                        <span class="trust-badge" style="font-size: 7px; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.2); color: #c084fc; padding: 1px 4px; border-radius: 3px; font-weight: bold;">🔒 Time-Locked</span>
+                        <span class="trust-badge" style="font-size: 7px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 1px 4px; border-radius: 3px; font-weight: bold;">🤝 Verified</span>
+                    </div>
                     <p class="text-muted" style="font-size: 11px; height: 32px; overflow: hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">${c.description}</p>
                     
                     <div class="flagship-card-stats">
@@ -1050,6 +1056,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="campaign-card-content">
                         <span class="badge badge-purple" style="align-self: flex-start;">${c.category}</span>
                         <h3 class="campaign-card-title">${c.title}</h3>
+                        <!-- Trust Badges -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0;">
+                            <span class="trust-badge" style="font-size: 7px; background: rgba(0, 255, 157, 0.08); border: 1px solid rgba(0, 255, 157, 0.2); color: #00ff9d; padding: 1px 4px; border-radius: 3px; font-weight: bold;">🛡️ LP Burned</span>
+                            <span class="trust-badge" style="font-size: 7px; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.2); color: #c084fc; padding: 1px 4px; border-radius: 3px; font-weight: bold;">🔒 Time-Locked</span>
+                            <span class="trust-badge" style="font-size: 7px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 1px 4px; border-radius: 3px; font-weight: bold;">🤝 Verified</span>
+                        </div>
                         <p class="text-muted" style="font-size: 12px; height: 36px; overflow: hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">${c.description}</p>
                         
                         <div class="progress-container" style="margin-bottom: 0;">
@@ -1254,6 +1266,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         ledgerExplorer.href = result.explorerUrl;
                         ledgerIpfs.href = `https://mensofgod.com/metadata/${symbol.toLowerCase()}.json`;
                         if (ledgerImg) ledgerImg.src = imgUrl;
+                        
+                        const ledgerBadgeEscrow = document.getElementById("ledger-badge-escrow");
+                        if (ledgerBadgeEscrow) {
+                            const vestingSlider = document.getElementById("slider-vesting");
+                            const milestoneMos = vestingSlider ? parseInt(vestingSlider.value) : 12;
+                            ledgerBadgeEscrow.textContent = `🔒 Time-Locked (${milestoneMos}-Mo Vesting)`;
+                        }
                         
                         if (lpSeeding) {
                             ledgerLp.innerHTML = `<span style="width: 8px; height: 8px; background: #00ff9d; border-radius: 50%; display: inline-block;"></span> Active Curve + Go Network`;
@@ -3016,6 +3035,7 @@ Registered: ${newReg.registeredAt}
                 <span style="color: var(--success);">Account created! ID: <strong>${walletId}</strong></span><br>
                 <span style="font-size: 10px; color: var(--text-muted);">Welcome email sent to ${email}. Admin notifications dispatched to ${adminEmails.length} addresses.</span>
             `;
+            if (typeof checkTokenizerVerificationGate === 'function') checkTokenizerVerificationGate();
 
             // Update affiliate referral if applicable
             const referredBy = localStorage.getItem('mog_referred_by');
@@ -3044,11 +3064,28 @@ Registered: ${newReg.registeredAt}
     // ==========================================
     // App Initialization
     // ==========================================
+    function checkTokenizerVerificationGate() {
+        const registrations = JSON.parse(localStorage.getItem('mog_registrations') || '[]');
+        const gateOverlay = document.getElementById("tokenizer-gate-overlay");
+        const expressForm = document.getElementById("express-launch-form");
+        
+        if (registrations.length > 0) {
+            if (gateOverlay) gateOverlay.style.display = "none";
+            if (expressForm) expressForm.style.display = "block";
+            addLog("[System] Web3 Custody account verified. Tokenizer unlocked.");
+        } else {
+            if (gateOverlay) gateOverlay.style.display = "block";
+            if (expressForm) expressForm.style.display = "none";
+            addLog("[System] Launch blocked. Non-profit/corporate registration required.");
+        }
+    }
+
     renderCampaignsGrid();
     setMode(state.mode);
     if (state.userEmail) {
         renderConnectedIdentity();
     }
+    checkTokenizerVerificationGate();
 
     // Start background processes
     startAIAgentLoop();

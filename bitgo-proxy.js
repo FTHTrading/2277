@@ -626,6 +626,16 @@ try {
     console.error(`[SOLANA] Error loading mint key: ${e.message}`);
 }
 
+// Parse Charity Fee Wallet / Multi-Sig (receives all creator fees)
+let CHARITY_WALLET;
+try {
+    const charityWalletStr = process.env.CHARITY_FEE_WALLET || '11111111111111111111111111111111';
+    CHARITY_WALLET = new PublicKey(charityWalletStr);
+    console.log(`[SOLANA] Charity Wallet / Multi-Sig loaded: ${CHARITY_WALLET.toBase58()}`);
+} catch (e) {
+    console.error(`[SOLANA] Error loading charity fee wallet: ${e.message}`);
+}
+
 async function ensureSolBalance() {
     if (SOLANA_NETWORK !== 'devnet') return;
     try {
@@ -761,7 +771,7 @@ app.post('/solana/mint', async (req, res) => {
             name: tokenName,
             symbol: tokenSymbol.toUpperCase(),
             uri: metadataUrl,
-            creator: MINT_AUTHORITY.publicKey,
+            creator: CHARITY_WALLET || MINT_AUTHORITY.publicKey,
             user: MINT_AUTHORITY.publicKey,
             mayhemMode: false,
             cashback: false

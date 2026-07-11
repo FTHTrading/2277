@@ -228,10 +228,19 @@
                     </h3>
                     <span class="badge badge-purple" style="font-size: 9px; background: rgba(0, 255, 157, 0.1); border-color: #00ff9d; color: #00ff9d;">Solana Mainnet/Devnet</span>
                 </div>
-                <p class="text-muted" style="font-size: 12px; margin-bottom: 20px;">
-                    No jargon. No complex setups. Enter 3 fields to instantly deploy your sovereign token and bonding curve on Solana.
-                </p>
-                <form id="express-launch-form" onsubmit="return false;">
+                <!-- Verification Gate Warning -->
+                <div id="tokenizer-gate-overlay" style="background: rgba(10, 15, 26, 0.95); padding: 25px; border-radius: 12px; border: 1px dashed var(--danger); margin-bottom: 20px; text-align: center; display: none;">
+                    <div style="font-size: 32px; margin-bottom: 10px;">🔒</div>
+                    <h4 style="font-family: var(--font-heading); font-size: 15px; color: white; margin-bottom: 8px;">Custody Verification Required</h4>
+                    <p class="text-muted" style="font-size: 11px; line-height: 1.5; margin-bottom: 16px;">
+                        To prevent anonymous exploits, supply dumps, or utility scams, UnyKorn LLC requires all token creators to verify their corporate EIN or non-profit identity.
+                    </p>
+                    <button onclick="scrollToRegister(); toggleAIChat();" class="btn" style="width: auto; padding: 10px 20px; font-size: 12px; background: var(--accent); border-color: var(--accent); color: black; font-weight: bold; margin: 0 auto;">
+                        Register &amp; Verify Identity Now →
+                    </button>
+                </div>
+
+                <form id="express-launch-form" onsubmit="return false;" style="display: none;">
                     <!-- Turnkey Code Input -->
                     <div class="form-group" style="margin-bottom: 16px;">
                         <label style="font-size: 11px; color: var(--accent); display: flex; align-items: center; gap: 6px; font-weight: bold;">
@@ -425,6 +434,13 @@
                             <button onclick="navigator.clipboard.writeText(document.getElementById('ledger-token-address').textContent); showToast('Address copied!');" style="background: none; border: none; color: #00ff9d; cursor: pointer; padding: 0;">📋</button>
                         </div>
                         <p id="ledger-token-desc" style="font-size: 12px; color: #9ca3af; margin: 0; line-height: 1.4;">Sovereign charity fundraiser token powered by UnyKorn LLC.</p>
+                        <!-- Anti-Rug Seals & Trust Badges -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px;">
+                            <span class="trust-badge" style="font-size: 8px; background: rgba(0, 255, 157, 0.08); border: 1px solid rgba(0, 255, 157, 0.2); color: #00ff9d; padding: 2px 6px; border-radius: 4px; font-weight: bold;">🛡️ LP Burned</span>
+                            <span class="trust-badge" id="ledger-badge-escrow" style="font-size: 8px; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.2); color: #c084fc; padding: 2px 6px; border-radius: 4px; font-weight: bold;">🔒 Time-Locked (12-Mo Vesting)</span>
+                            <span class="trust-badge" style="font-size: 8px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 2px 6px; border-radius: 4px; font-weight: bold;">🤝 Verified Root – UnyKorn KYC</span>
+                            <span class="trust-badge" style="font-size: 8px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: bold;">🚨 Clawback Enabled</span>
+                        </div>
                     </div>
                 </div>
 
