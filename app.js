@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tokenDecimals: "6",
             revokeMint: true,
             zillowId: "14584916",
-            mintAddress: "7xTx11v9s8a7b6v5x4y3z2k1pBUCKkey",
+            mintAddress: "HEcAzw28ZvYXzsou4XfCido51YVYZVneZ1aut4yNCvWu",
             minted: true,
             flagship: true,
             lpSol: 5.0
@@ -4658,12 +4658,12 @@ function renderSovereignProfile(causeId) {
     // Direct lookup from the inline data
     const knownCampaigns = [
         { id: "child-first", title: "Child First Escrow & Charity", target: 500000, raised: 142500, category: "Child Security", location: "Global Network Platform", description: "Turnkey Child Security Blueprint: stablecoin escrows, soulbound donor NFTs, and 24-month release structure. White-label cloning enabled.", image: "child_first_banner.png", tokenName: "Child Security Token", tokenSymbol: "CHILD", mintAddress: "9kXyF3g4s6b3v1P2a9kK1oL4xZchildkey", lpSol: 15.0 },
-        { id: "2277", title: "2277 Peachtree Way", target: 194707, raised: 48650, category: "Foreclosure Mitigation", location: "Dunwoody, GA 30338", description: "Turnkey Property Rehabilitation Blueprint: foreclosure rescue and complete zero-carbon energy-efficiency rehab.", image: "rehab_property_banner.png", tokenName: "Never Give A Buck", tokenSymbol: "BUCK", mintAddress: "7xTx11v9s8a7b6v5x4y3z2k1pBUCKkey", lpSol: 5.0 },
+        { id: "2277", title: "2277 Peachtree Way", target: 194707, raised: 48650, category: "Foreclosure Mitigation", location: "Dunwoody, GA 30338", description: "Turnkey Property Rehabilitation Blueprint: foreclosure rescue and complete zero-carbon energy-efficiency rehab.", image: "rehab_property_banner.png", tokenName: "Never Give A Buck", tokenSymbol: "BUCK", mintAddress: "HEcAzw28ZvYXzsou4XfCido51YVYZVneZ1aut4yNCvWu", lpSol: 5.0 },
         { id: "zero-carbon", title: "Zero Carbon Remodel Pool", target: 250000, raised: 89200, category: "Zero Carbon Remodel", location: "Atlanta Area Communities", description: "Turnkey Zero Carbon RWA Blueprint: solar arrays and energy efficiency remodels with 12-month routing.", image: "carbon_credits_banner.png", tokenName: "Zero Carbon Remodel Token", tokenSymbol: "CARBON", mintAddress: "8yZyK1p0x9j8h7g6f5d4s3a2zcarbonkey", lpSol: 8.5 },
         { id: "mog-stablecoin", title: "MOG Stablecoin Liquidity", target: 1000000, raised: 450000, category: "Stablecoin LP", location: "XRPL & Solana Ledgers", description: "Turnkey Stablecoin Liquidity Blueprint: liquidity depth for MOG USD-pegged stablecoins.", image: "brand_logo_v3.jpg", tokenName: "MOG Stablecoin", tokenSymbol: "MOGS", mintAddress: "MogStableCoinIssuerAccountKey", lpSol: 25.0 },
         { id: "venezuela-stablecoin", title: "Venezuela Stablecoin Relief", target: 75000, raised: 12000, category: "Direct Relief", location: "Venezuela & Latin America", description: "Turnkey Direct Relief Blueprint: direct stablecoin transfers to verified families.", image: "brand_logo_dove.png", tokenName: "Venezuela Relief Token", tokenSymbol: "VENZ", mintAddress: "VenezuelaReliefStablecoinKey", lpSol: 3.0 },
-        { id: "atlanta-mission", title: "Atlanta Mission 5K Reserve", target: 50000, raised: 8200, category: "Community Support", location: "Atlanta, GA", description: "Community support reserve for Atlanta Mission shelter programs.", image: "brand_logo_hands.png", tokenName: "Atlanta Mission Token", tokenSymbol: "ATL5K", mintAddress: "AtlantaMission5KReserveKey", lpSol: 2.0 },
-        { id: "wellspring", title: "Wellspring Tiny Homes", target: 350000, raised: 67000, category: "Housing", location: "Metro Atlanta", description: "Sovereign real-estate RWA trust cloning a zero-carbon community village for Atlanta youth.", image: "brand_logo_leaf.png", tokenName: "Wellspring Tiny Homes", tokenSymbol: "WTH", mintAddress: "WthTinyHomesRWAProjectIssuerKey", lpSol: 6.0 }
+        { id: "atlanta-mission", title: "Atlanta Mission 5K Reserve", target: 50000, raised: 8200, category: "Community Support", location: "Atlanta, GA", description: "Community support reserve for Atlanta Mission shelter programs.", image: "brand_logo_hands.png", tokenName: "Atlanta Mission Token", tokenSymbol: "ATL5K", mintAddress: "75HVhH1q2p6buzfAMXaUESwgCNkLK7vR3CxrbcAdvi1n", lpSol: 2.0 },
+        { id: "wellspring", title: "Wellspring Tiny Homes", target: 350000, raised: 67000, category: "Housing", location: "Metro Atlanta", description: "Sovereign real-estate RWA trust cloning a zero-carbon community village for Atlanta youth.", image: "brand_logo_leaf.png", tokenName: "Wellspring Tiny Homes", tokenSymbol: "WTH", mintAddress: "AFDVbdAKfje8gNAkL8st5LV8cgb9rGvMGQpekyVqobj1", lpSol: 6.0 }
     ];
 
     campaign = knownCampaigns.find(c => c.id === causeId);

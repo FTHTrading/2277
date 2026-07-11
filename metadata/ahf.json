@@ -1,0 +1,50 @@
+{
+  "name": "Atlanta Hope Fund",
+  "symbol": "AHF",
+  "description": "Sovereign fundraiser for Atlanta Hope Fund. Launched via Men of God Catalyst tier. Goal: $50,000. Video: https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "image": "https://mensofgod.com/brand_logo_dove.png",
+  "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "translations": {},
+  "attributes": [
+    {
+      "trait_type": "Custodian",
+      "value": "BitGo Non-Custodial Hybrid"
+    },
+    {
+      "trait_type": "Escrow Type",
+      "value": "3-Month Recipient Family Escrow"
+    },
+    {
+      "trait_type": "Cause",
+      "value": "Atlanta Hope Fund"
+    },
+    {
+      "trait_type": "Goal Amount",
+      "value": "$50000"
+    },
+    {
+      "trait_type": "Issuer Legal Structure",
+      "value": "UnyKorn LLC (Wyoming, EIN 42-3536633)"
+    },
+    {
+      "trait_type": "Registry Status",
+      "value": "Audited & Verified"
+    },
+    {
+      "trait_type": "BitGo Custody Vault",
+      "value": "Inactive"
+    },
+    {
+      "trait_type": "IPFS Proof Vaulting",
+      "value": "Inactive"
+    },
+    {
+      "trait_type": "Go Network Seeding",
+      "value": "Inactive"
+    },
+    {
+      "trait_type": "Charity Fee Routing",
+      "value": "Inactive"
+    }
+  ]
+}
