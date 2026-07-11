@@ -1,21 +1,33 @@
 const { Connection, PublicKey, Keypair } = require('@solana/web3.js');
 const fs = require('fs');
+const path = require('path');
+const os = require('os');
 
 async function checkBalance() {
-    const oldAddress = new PublicKey('D1xUmVqAjda18tmrh2fDTsmc3fonzuRxA3i3Tffdbdca');
-    console.log(`Checking old address: ${oldAddress.toString()}`);
-    await queryBalance(oldAddress);
+    // Old BURNED addresses (DO NOT SEND SOL)
+    console.log('=== BURNED ADDRESSES (DO NOT USE) ===');
+    const burned1 = new PublicKey('D1xUmVqAjda18tmrh2fDTsmc3fonzuRxA3i3Tffdbdca');
+    console.log(`[BURNED] ${burned1.toString()}`);
+    await queryBalance(burned1);
 
+    const burned2 = new PublicKey('5vfpevJwuvsiHiw4C55sqeDkLq2FpH9Q3w99K8xsZee7');
+    console.log(`\n[BURNED] ${burned2.toString()}`);
+    await queryBalance(burned2);
+
+    // New secure mint authority (key stored OUTSIDE project)
+    console.log('\n=== ACTIVE MINT AUTHORITY ===');
     try {
-        if (fs.existsSync('new-mint-authority.json')) {
-            const secret = JSON.parse(fs.readFileSync('new-mint-authority.json', 'utf8'));
+        const keyPath = path.join(os.homedir(), '.config', 'solana', 'mog-mint-authority.json');
+        if (fs.existsSync(keyPath)) {
+            const secret = JSON.parse(fs.readFileSync(keyPath, 'utf8'));
             const keypair = Keypair.fromSecretKey(Uint8Array.from(secret));
-            const newAddress = keypair.publicKey;
-            console.log(`\nChecking new address: ${newAddress.toString()}`);
-            await queryBalance(newAddress);
+            console.log(`[ACTIVE] ${keypair.publicKey.toString()}`);
+            await queryBalance(keypair.publicKey);
+        } else {
+            console.log('Key file not found at:', keyPath);
         }
     } catch (e) {
-        console.error('Failed to read new-mint-authority.json:', e.message);
+        console.error('Failed to read mint authority:', e.message);
     }
 }
 
