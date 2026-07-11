@@ -1,20 +1,49 @@
 {
   "name": "Never Give A Buck",
   "symbol": "BUCK",
-  "description": "Sovereign charity fundraiser token powered by UnyKorn LLC & Men of God",
-  "image": "https://mensofgod.com/brand_logo_v3.png",
+  "description": "Sovereign charity fundraiser by UnyKorn LLC & Men of God",
+  "image": "https://mensofgod.com/brand_logo_shield.png",
+  "videoUrl": "",
+  "translations": {},
   "attributes": [
     {
       "trait_type": "Custodian",
-      "value": "BitGo Enterprise"
+      "value": "BitGo Multi-Sig Vault"
     },
     {
-      "trait_type": "Regulated",
-      "value": "OCC Chartered"
+      "trait_type": "Escrow Type",
+      "value": "6-Month Linear Milestone Escrow"
     },
     {
-      "trait_type": "Security",
-      "value": "Multi-Sig Cold Storage"
+      "trait_type": "Cause"
+    },
+    {
+      "trait_type": "Goal Amount",
+      "value": "$undefined"
+    },
+    {
+      "trait_type": "Issuer Legal Structure",
+      "value": "UnyKorn LLC (Wyoming, EIN 42-3536633)"
+    },
+    {
+      "trait_type": "Registry Status",
+      "value": "Audited & Verified"
+    },
+    {
+      "trait_type": "BitGo Custody Vault",
+      "value": "Inactive"
+    },
+    {
+      "trait_type": "IPFS Proof Vaulting",
+      "value": "Inactive"
+    },
+    {
+      "trait_type": "Go Network Seeding",
+      "value": "Inactive"
+    },
+    {
+      "trait_type": "Charity Fee Routing",
+      "value": "Inactive"
     }
   ]
 }

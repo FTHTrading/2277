@@ -2250,25 +2250,16 @@
                 <strong style="font-size: 16px; color: #00ff9d;" id="checkout-blueprint-price">$49.00 USD</strong>
             </div>
             
-            <!-- Stripe Elements Simulated Form -->
+            <!-- Stripe Elements Real Form -->
             <div class="stripe-form-card" style="margin-bottom: 20px; background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
                 <div class="stripe-header" style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
                     <span class="stripe-logo" style="color: #635bff; font-weight: bold; font-size: 18px;">stripe</span>
-                    <span style="font-size: 9px; background: rgba(99,91,255,0.1); color: #818cf8; padding: 2px 6px; border-radius: 4px;">Demo Mode</span>
+                    <span style="font-size: 9px; background: rgba(0,255,157,0.1); color: #00ff9d; padding: 2px 6px; border-radius: 4px;">Real-Time API</span>
                 </div>
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 4px;">Card Number</label>
-                    <input type="text" id="checkout-card-number" class="form-control" placeholder="4242 4242 4242 4242" maxlength="19" required style="padding: 10px; font-size: 13px; background: #07090e; color: white; border: 1px solid rgba(255,255,255,0.1);">
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 4px;">Expiry Date</label>
-                        <input type="text" id="checkout-card-expiry" class="form-control" placeholder="MM/YY" maxlength="5" required style="padding: 10px; font-size: 13px; background: #07090e; color: white; border: 1px solid rgba(255,255,255,0.1);">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 4px;">CVC</label>
-                        <input type="text" id="checkout-card-cvc" class="form-control" placeholder="123" maxlength="3" required style="padding: 10px; font-size: 13px; background: #07090e; color: white; border: 1px solid rgba(255,255,255,0.1);">
-                    </div>
+                <div class="form-group">
+                    <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 6px;">Credit or Debit Card</label>
+                    <div id="card-element" style="padding: 12px; background: #07090e; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;"></div>
+                    <div id="card-errors" role="alert" style="color: #ef4444; font-size: 11px; margin-top: 8px;"></div>
                 </div>
             </div>
             

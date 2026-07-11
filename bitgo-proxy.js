@@ -24,6 +24,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 app.use((req, res, next) => {
     const logLine = `[Proxy Request] ${new Date().toISOString()} - ${req.method} ${req.url} - Host: ${req.headers.host}\n`;
     try {
@@ -100,6 +102,33 @@ function bitgoRequest(method, path, body = null) {
         req.end();
     });
 }
+
+// ==========================================
+// Stripe Payment Intent Creation Route
+// ==========================================
+app.post('/stripe/create-payment-intent', async (req, res) => {
+    try {
+        const { amount } = req.body;
+        if (!amount) {
+            return res.status(400).json({ error: true, message: 'Amount is required' });
+        }
+        
+        // Amount should be in cents (Math.round(amount * 100))
+        const finalAmount = Math.round(parseFloat(amount) * 100);
+        console.log(`[Stripe API] Creating payment intent for $${amount} USD (${finalAmount} cents)...`);
+        
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: finalAmount,
+            currency: 'usd',
+            automatic_payment_methods: { enabled: true }
+        });
+        
+        res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (e) {
+        console.error('[Stripe API Error]', e);
+        res.status(500).json({ error: true, message: e.message });
+    }
+});
 
 // ==========================================
 // Health Check

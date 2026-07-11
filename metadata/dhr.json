@@ -32,6 +32,22 @@
     {
       "trait_type": "Registry Status",
       "value": "Audited & Verified"
+    },
+    {
+      "trait_type": "BitGo Custody Vault",
+      "value": "Inactive"
+    },
+    {
+      "trait_type": "IPFS Proof Vaulting",
+      "value": "Active ($399/mo)"
+    },
+    {
+      "trait_type": "Go Network Seeding",
+      "value": "Active ($299/mo)"
+    },
+    {
+      "trait_type": "Charity Fee Routing",
+      "value": "Inactive"
     }
   ]
 }
